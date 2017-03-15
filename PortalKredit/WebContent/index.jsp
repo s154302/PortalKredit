@@ -20,7 +20,7 @@
 	</div>
 	&nbsp;
 	<div class="row">
-		<div class="col-md-2 offset-md-5">
+		<div class="col-4 offset-4">
 			<div class="card card-outline-primary mb-3 text-center">
 				<div class="card-block">
 					<form>
