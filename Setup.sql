@@ -1,4 +1,5 @@
--- ------------------
+-- <ScriptOptions statementTerminator=";" />
+---------------------
 -- Schema DTUGRP16 --
 ---------------------
 SET CURRENT SQLID = 'DTUGRP16';
@@ -45,7 +46,7 @@ CREATE INDEX fk_postal_idx ON DTUGRP16.Banker (postal ASC);
 ------------
 CREATE TABLE DTUGRP16.Client (
     clientID INT NOT NULL,
-    cpr INT NOT NULL,
+    cpr BIGINT NOT NULL,
     first_name VARCHAR(45) NOT NULL,
     last_name VARCHAR(45) NOT NULL,
     banker INT NOT NULL,
