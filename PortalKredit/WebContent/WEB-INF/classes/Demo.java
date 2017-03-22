@@ -33,11 +33,11 @@ public class Demo extends HttpServlet {
 			response.getWriter().println("Users:");
 			Connection con = ds1.getConnection();
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM \"DTUGRP16\".\"User\"");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM \"DTUGRP16\".\"USER\"");
 
 			while (rs.next()) {
-				response.getWriter().println("Username: " + rs.getString("username"));
-				response.getWriter().println("Password: " + rs.getString("password"));
+				response.getWriter().println("Username: " + rs.getString("USERID"));
+				response.getWriter().println("Password: " + rs.getString("PASSWORD"));
 			}
 			rs.close();
 			stmt.close();
