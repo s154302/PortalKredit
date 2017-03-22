@@ -23,16 +23,16 @@
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary mb-3 text-center">
 				<div class="card-block">
-					<form>
+					<form action="LoginServlet" method="post">
 						<div class="form-group">
-							<input type="email" class="form-control" id="exampleInputEmail1"
-								aria-describedby="emailHelp" placeholder="Enter email">
+							<input type="text" class="form-control" name="userID"
+								aria-describedby="textHelp" placeholder="Enter User ID">
 						</div>
 						<div class="form-group">
 							<input type="password" class="form-control"
-								id="exampleInputPassword1" placeholder="Password">
+								name="password" placeholder="Password">
 						</div>
-						<button class="btn btn-primary btn-block" type="submit">Log
+						<button class="btn btn-primary btn-block" type="submit" value="login">Log
 							in</button>
 
 					</form>
