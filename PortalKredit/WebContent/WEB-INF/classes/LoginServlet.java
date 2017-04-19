@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 /**
@@ -31,27 +32,31 @@ public class LoginServlet extends HttpServlet {
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+		HttpSession session = request.getSession(true);	
 		PrintWriter out = response.getWriter();
 		String userID = request.getParameter("userID");
 		String password = request.getParameter("password");
 		boolean st = false;
-		
-		try {
-			response.getWriter().println("Users:");
-			Connection con = ds1.getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=? AND \"PASSWORD\"=?");
 			
-			ps.setString(1, userID);
-			ps.setString(2, password);
-			ResultSet rs = ps.executeQuery();
-			st = rs.next();
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		//TODO: Move the method to an utility class and call it authenticate
+			try {
+				response.getWriter().println("Users:");
+				Connection con = ds1.getConnection();
+				PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=? AND \"PASSWORD\"=?");
+				
+				ps.setString(1, userID);
+				ps.setString(2, password);
+				ResultSet rs = ps.executeQuery();
+				st = rs.next();
+				
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		
 		if(st) {
-			System.out.print("Welcome");
+			
+			session.setAttribute("userID", userID);
+			System.out.print(session.getAttribute("userID"));
 			response.sendRedirect(request.getContextPath() + "/demo");
 		} else {
 			response.sendRedirect(request.getContextPath());
