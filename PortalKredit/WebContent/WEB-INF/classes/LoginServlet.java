@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.annotation.Resource;
 import javax.servlet.RequestDispatcher;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import classes.Controller;
+
 /**
  * Servlet implementation class LoginServlet
  */
@@ -25,7 +28,6 @@ public class LoginServlet extends HttpServlet {
 
     public LoginServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     @Resource(name = "jdbc/DB2")
@@ -37,21 +39,9 @@ public class LoginServlet extends HttpServlet {
 		String userID = request.getParameter("userID");
 		String password = request.getParameter("password");
 		boolean st = false;
-			
+
 		//TODO: Move the method to an utility class and call it authenticate
-			try {
-				response.getWriter().println("Users:");
-				Connection con = ds1.getConnection();
-				PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=? AND \"PASSWORD\"=?");
-				
-				ps.setString(1, userID);
-				ps.setString(2, password);
-				ResultSet rs = ps.executeQuery();
-				st = rs.next();
-				
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
+		st = Controller.authenticate(userID, password, ds1);
 		
 		if(st) {
 			

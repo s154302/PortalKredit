@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import classes.Controller;
+
 @WebServlet("/demo")
 public class Demo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -41,6 +43,7 @@ public class Demo extends HttpServlet {
 					response.getWriter().println("Username: " + rs.getString("USERID"));
 					response.getWriter().println("Password: " + rs.getString("PASSWORD"));
 				}
+				response.getWriter().println(Controller.getList("Client", "Banker", 1, "First_name", ds1).toString());
 				rs.close();
 				stmt.close();
 			} catch (Exception e) {
