@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 @WebServlet("/demo")
@@ -28,23 +29,24 @@ public class Demo extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().println("Hello, World!");
-		
-		try {
-			response.getWriter().println("Users:");
-			Connection con = ds1.getConnection();
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM \"DTUGRP16\".\"USER\"");
-
-			while (rs.next()) {
-				response.getWriter().println("Username: " + rs.getString("USERID"));
-				response.getWriter().println("Password: " + rs.getString("PASSWORD"));
+		HttpSession session = request.getSession(true);
+		if(session.getAttribute("userID") != null){
+			try {
+				response.getWriter().println("Users:");
+				Connection con = ds1.getConnection();
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT * FROM \"DTUGRP16\".\"USER\"");
+	
+				while (rs.next()) {
+					response.getWriter().println("Username: " + rs.getString("USERID"));
+					response.getWriter().println("Password: " + rs.getString("PASSWORD"));
+				}
+				rs.close();
+				stmt.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			rs.close();
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
