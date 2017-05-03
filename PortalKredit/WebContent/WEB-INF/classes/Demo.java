@@ -32,15 +32,15 @@ public class Demo extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().println("Hello, World!");
 		HttpSession session = request.getSession(true);
-		if(session.getAttribute("userID") != null){
+		if(session.getAttribute("clientID") != null){
 			try {
 				response.getWriter().println("Users:");
 				Connection con = ds1.getConnection();
 				Statement stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT * FROM \"DTUGRP16\".\"USER\"");
+				ResultSet rs = stmt.executeQuery("SELECT * FROM \"DTUGRP16\".\"CLIENT\"");
 	
 				while (rs.next()) {
-					response.getWriter().println("Username: " + rs.getString("USERID"));
+					response.getWriter().println("Username: " + rs.getString("CLIENTID"));
 					response.getWriter().println("Password: " + rs.getString("PASSWORD"));
 				}
 				response.getWriter().println(Controller.getList("Client", "Banker", 1, "First_name", ds1).toString());

@@ -12,15 +12,33 @@ public final class Controller {
 
 	public static boolean authenticate(String userID, String password, DataSource ds1) {
 		boolean st = false;
+		
+		if(userID.substring(userID.length() - 1).equals("C")){
+			
+			return clientAuthenticate(userID,password,ds1);
+		}
+		else if(userID.substring(userID.length() - 1).equals("B")){
+			return bankerAuthenticate(userID,password,ds1);
+		}
+		else
+		{
+			return adminAuthenticate(userID,password,ds1);
+		}
+		
+	}
+	
+	
+	//consider making these private??
+	public static boolean clientAuthenticate(String clientID, String password, DataSource ds1){
+		boolean st = false;
 		try {
 			Connection con;
 			con = ds1.getConnection();
-			// TODO: Create separate prepared statements for bankers and
-			// clients.
-			PreparedStatement ps = con
-					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=? AND \"PASSWORD\"=?");
 
-			ps.setString(1, userID);
+			PreparedStatement ps = con
+					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=? AND \"PASSWORD\"=?");
+
+			ps.setString(1, clientID);
 			ps.setString(2, password);
 			ResultSet rs = ps.executeQuery();
 			st = rs.next();
@@ -30,6 +48,50 @@ public final class Controller {
 		}
 		return st;
 	}
+	//maybe private
+	public static boolean bankerAuthenticate(String bankerID, String password, DataSource ds1){
+		boolean st = false;
+		try {
+			Connection con;
+			con = ds1.getConnection();
+		
+
+			PreparedStatement ps = con
+					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=? AND \"PASSWORD\"=?");
+
+			ps.setString(1, bankerID);
+			ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
+			st = rs.next();
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return st;
+	}
+	
+	//maybe private ??
+	public static boolean adminAuthenticate(String adminID, String password, DataSource ds1){
+		boolean st = false;
+		try {
+			Connection con;
+			con = ds1.getConnection();
+	
+			PreparedStatement ps = con
+					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=? AND \"PASSWORD\"=?");
+
+			ps.setString(1, adminID);
+			ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
+			st = rs.next();
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return st;
+	}
+	
+	
 
 	public static Banker getBankerInfo(String userID, DataSource ds1) {
 		Banker banker = new Banker();
@@ -55,7 +117,7 @@ public final class Controller {
 		return banker;
 	}
 
-	public static Client getClientInfo(String userID, DataSource ds1) {
+	public static Client getClientInfo(String clientID, DataSource ds1) {
 		Client client = new Client();
 		Connection con;
 
@@ -63,9 +125,9 @@ public final class Controller {
 			con = ds1.getConnection();
 
 			// TODO: Edit ps to correct table
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?");
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
 
-			ps.setString(1, userID);
+			ps.setString(1, clientID);
 			ResultSet rs = ps.executeQuery();
 
 			// TODO: Set all client's data (Requires database to be set up)

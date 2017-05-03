@@ -36,17 +36,17 @@ public class LoginServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);	
 		PrintWriter out = response.getWriter();
-		String userID = request.getParameter("userID");
+		String clientID = request.getParameter("userID");
 		String password = request.getParameter("password");
 		boolean st = false;
 
 		//TODO: Move the method to an utility class and call it authenticate
-		st = Controller.authenticate(userID, password, ds1);
+		st = Controller.authenticate(clientID, password, ds1);
 		
 		if(st) {
 			
-			session.setAttribute("userID", userID);
-			System.out.print(session.getAttribute("userID"));
+			session.setAttribute("clientID", clientID);
+			System.out.print(session.getAttribute("clientID"));
 			response.sendRedirect(request.getContextPath() + "/demo");
 		} else {
 			response.sendRedirect(request.getContextPath());
