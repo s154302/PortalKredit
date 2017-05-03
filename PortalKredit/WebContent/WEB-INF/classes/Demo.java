@@ -45,7 +45,7 @@ public class Demo extends HttpServlet {
 					response.getWriter().println("Username: " + rs.getString("CLIENTID"));
 					response.getWriter().println("Password: " + rs.getString("PASSWORD"));
 				}
-				response.getWriter().println(Controller.getList("Client", "Banker", 1, "First_name", ds1).toString());
+				//response.getWriter().println(Controller.getList("client", "",(String)session.getAttribute("userID") , "bankerid", ds1).toString());
 				rs.close();
 				stmt.close();
 			} catch (Exception e) {

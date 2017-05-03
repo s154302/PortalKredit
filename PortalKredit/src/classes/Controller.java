@@ -147,7 +147,7 @@ public final class Controller {
 		return client;
 	}
 
-	public static ArrayList<String> getList(String tableName, String columnName, int key, String resultColumn,
+	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,
 			DataSource ds1) {
 		ArrayList<String> list = new ArrayList<>();
 		Connection con;
@@ -155,10 +155,10 @@ public final class Controller {
 			con = ds1.getConnection();
 
 			// TODO: This works but needs to be sanitized to avoid SQL injections. Create whitelist
-			
+			//											"SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?"
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"" + tableName.toUpperCase()
 					+ "\" WHERE \"" + columnName.toUpperCase() + "\"=?");
-			ps.setInt(1, key);
+			ps.setString(1, key);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				list.add(rs.getString(resultColumn));

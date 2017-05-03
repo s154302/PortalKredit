@@ -16,12 +16,14 @@
     padding: 3px;
 }
 .list {
+	text-decoration: none;
     color: #fff;
     list-style: none;
     padding-left: 0px;
 }
 
 .list> li, h5 {
+	 color: #fff;
     padding: 5px 5px 5px 40px;
 }
 .list>li:hover {

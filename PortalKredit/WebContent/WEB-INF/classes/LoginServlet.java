@@ -44,10 +44,22 @@ public class LoginServlet extends HttpServlet {
 		st = Controller.authenticate(userID, password, ds1, session);
 		
 		if(st) {
-			
+			// TODO: overvej at sætte attributter til henholdsvis clientID, bankerID og adminID
 			session.setAttribute("userID", userID);
-			System.out.print(session.getAttribute("userID"));
-			response.sendRedirect(request.getContextPath() + "/demo");
+			switch((Controller.Type)session.getAttribute("type")){
+			case client:
+				response.sendRedirect(request.getContextPath() + "/welcome.jsp");
+				break;
+			case banker:
+				response.sendRedirect(request.getContextPath() + "/banktest123");
+				break;
+			case admin:
+				response.sendRedirect(request.getContextPath() + "/admin/AdminControl.jsp");
+				break;
+			default:
+				break;
+			}
+			
 		} else {
 			response.sendRedirect(request.getContextPath());
 		}

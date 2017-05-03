@@ -1,3 +1,5 @@
 eclipse.preferences.version=1
+encoding//WebContent/admin/AdminControl.jsp=ISO-8859-1
+encoding//WebContent/admin/AdminCreateClient.jsp=ISO-8859-1
 encoding//WebContent/index.jsp=ISO-8859-1
 encoding//WebContent/welcome.jsp=ISO-8859-1
