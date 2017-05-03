@@ -4,18 +4,6 @@
 ---------------------
 SET CURRENT SQLID = 'DTUGRP16';
 
-----------
--- User --
-----------
-CREATE TABLE DTUGRP16.User (
-    userID INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
-    password VARCHAR(45) NOT NULL,
-    type CHAR(1) NOT NULL,
-    PRIMARY KEY (userID)
-    ,
-    CONSTRAINT bool CHECK (type in ('B', 'C'))
-  );
-
 -----------
 -- Place --
 -----------
@@ -23,102 +11,108 @@ CREATE TABLE DTUGRP16.Place (
     postal INT NOT NULL,
     city VARCHAR(45) NOT NULL,
     country VARCHAR(45) NOT NULL,
-    PRIMARY KEY (postal)
+    PRIMARY KEY (postal, country)
   );
+------------
+-- Branch --
+------------
+CREATE TABLE DTUGRP16. Branch (
+	regNo INT NOT NULL,
+	bankName VARCHAR(20) NOT NULL,
+	postal INT NOT NULL,
+	country VARCHAR(45) NOT NULL,
+	street VARCHAR(45) NOT NULL,
+	phone CHAR(11),
+	PRIMARY KEY (regNo),
+	FOREIGN KEY (postal, country) REFERENCES DTUGRP16. Place (postal, country)
+);
 
 ------------
 -- Banker --
 ------------
 CREATE TABLE DTUGRP16.Banker (
-    bankerID INT NOT NULL,
-    banker_name VARCHAR(45) NOT NULL,
-    postal INT NOT NULL,
+    bankerID CHAR(7) NOT NULL,
+    firstName VARCHAR(45) NOT NULL,
+    lastName VARCHAR(45) NOT NULL,
+    regNo INT NOT NULL,
+    email VARCHAR(45) NOT NULL,
+    mobile CHAR(11),
     PRIMARY KEY (bankerID)
  ,
-    CONSTRAINT fk_userID FOREIGN KEY (bankerID) REFERENCES DTUGRP16. User (userID),
-    CONSTRAINT fk_postal FOREIGN KEY (postal) REFERENCES DTUGRP16. Place (postal)
+ 	CONSTRAINT fk_banker_branch FOREIGN KEY (regNo) REFERENCES DTUGRP16. Branch (regNo)
   );
-
-CREATE INDEX fk_postal_idx ON DTUGRP16.Banker (postal ASC);
 
 ------------
 -- Client --
 ------------
 CREATE TABLE DTUGRP16.Client (
-    clientID INT NOT NULL,
+    clientID CHAR(9) NOT NULL,
+    password VARCHAR(20) NOT NULL,
     cpr BIGINT NOT NULL,
     first_name VARCHAR(45) NOT NULL,
     last_name VARCHAR(45) NOT NULL,
-    banker INT NOT NULL,
     email VARCHAR(45),
-    mobile VARCHAR(45),
-    postal INT NOT NULL,
+    mobile CHAR(11),
     street VARCHAR(45),
-    street_no VARCHAR(45),
-    PRIMARY KEY (clientID)
- ,
-    CONSTRAINT fk_userID FOREIGN KEY (clientID) REFERENCES DTUGRP16. User (userID),
-    CONSTRAINT fk_banker FOREIGN KEY (banker) REFERENCES DTUGRP16. Banker (bankerID),
-    CONSTRAINT fk_postal FOREIGN KEY (postal) REFERENCES DTUGRP16. Place (postal)
+    bankerID CHAR(7) NOT NULL,
+    postal INT NOT NULL,
+    country VARCHAR(45),
+    
+    PRIMARY KEY (clientID),
+    FOREIGN KEY (postal, country) REFERENCES DTUGRP16. Place (postal, country),
+	FOREIGN KEY (bankerID) REFERENCES DTUGRP16. Banker (bankerID)
   );
 
-CREATE INDEX fk_banker_idx ON DTUGRP16.Client (banker ASC);
-
-CREATE INDEX fk_city_idx ON DTUGRP16.Client (postal ASC);
-
------------
--- RegNo --
------------
-CREATE TABLE DTUGRP16.RegNo (
-    reg_no INT NOT NULL,
-    bank_name VARCHAR(45) NOT NULL,
-    PRIMARY KEY (reg_no)
-  );
+------------------
+-- Account Type --
+------------------
+CREATE TABLE DTUGRP16.AccountType (
+	accountType VARCHAR(45) NOT NULL,
+	interestRate DECIMAL(5,2),
+	PRIMARY KEY(accountType)
+);
 
 -------------
 -- Account --
 -------------
 CREATE TABLE DTUGRP16.Account (
-    account_number INT NOT NULL,
-    reg_no INT NOT NULL,
-    clientID INT NOT NULL,
-    balance DECIMAL(5,2),
-    interest_rate DECIMAL(5,2),
-    PRIMARY KEY (account_number, clientID, reg_no)
- ,
-    CONSTRAINT unq_acc UNIQUE(account_number),
-    CONSTRAINT fk_reg_no FOREIGN KEY (reg_no) REFERENCES DTUGRP16. RegNo (reg_no),
-    CONSTRAINT fk_clientID FOREIGN KEY (clientID) REFERENCES DTUGRP16. Client (clientID)
+    accountNumber CHAR(10) NOT NULL,
+    regNo INT NOT NULL,
+    accountType VARCHAR(45) NOT NULL,
+    clientID CHAR(9) NOT NULL,
+    balance DECIMAL(10,2),
+    currency VARCHAR(10),
+    PRIMARY KEY (accountNumber, regNo),
+    FOREIGN KEY (clientID) REFERENCES DTUGRP16. Client (clientID),
+    FOREIGN KEY (accountType) REFERENCES DTUGRP16. AccountType (accountType),
+    FOREIGN KEY (currency) REFERENCES DTUGRP16. Currency (currency)
   );
 
-CREATE INDEX fk_clientID_acc_idx ON DTUGRP16.Account (clientID ASC);
-
 ------------
--- Valuta --
+-- Currency --
 ------------
-CREATE TABLE DTUGRP16.Valuta (
-    valuta VARCHAR(45) NOT NULL,
-    currency DECIMAL(5,2),
-    PRIMARY KEY (valuta)
+CREATE TABLE DTUGRP16.Currency (
+    currency VARCHAR(10) NOT NULL,
+    exchangeRate DECIMAL(5,2) NOT NULL,
+    PRIMARY KEY (currency)
   );
 
 -----------------
 -- Transaction --
 -----------------
 CREATE TABLE DTUGRP16.Transaction (
-    transactionID INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
-    account_number INT NOT NULL,
-    clientID INT NOT NULL,
-    date_of_transaction DATE,
-    recieve_account VARCHAR(45) NOT NULL,
-    value DECIMAL(5,2) NOT NULL,
-    valuta VARCHAR(45) NOT NULL,
+    transactionID INT NOT NULL,
+    accountNumber CHAR(10) NOT NULL,
+    regNo INT NOT NULL,
+    recieveAccount CHAR(10) NOT NULL,
+    recieveRegNo INT NOT NULL,
+    dateOfTransaction DATE,
+    amount DECIMAL(5,2) NOT NULL,		-- Changed from value since value appears to be a reserved keyword
+    currency VARCHAR(10) NOT NULL,
     note CLOB,
-    PRIMARY KEY (transactionID, account_number)
+    PRIMARY KEY (transactionID, accountNumber) --Using both as PK so multiple accounts can use same transaction ID
  ,
-    CONSTRAINT fk_account_number FOREIGN KEY (account_number) REFERENCES DTUGRP16. Account (account_number),
-    CONSTRAINT fk_clientID FOREIGN KEY (clientID) REFERENCES DTUGRP16. Client (clientID),
-    CONSTRAINT fk_valuta FOREIGN KEY (valuta) REFERENCES DTUGRP16. Valuta (valuta)
+    CONSTRAINT fk_transaction_currency FOREIGN KEY (currency) REFERENCES DTUGRP16. Currency (currency),
+    CONSTRAINT fk_transaction_account1 FOREIGN KEY (accountNumber, regNo) REFERENCES DTUGRP16. Account (accountNumber, regNo),
+    CONSTRAINT fk_transaction_account2 FOREIGN KEY (recieveAccount, recieveRegNo) REFERENCES DTUGRP16. Account (accountNumber, regNo)
   );
-
-CREATE INDEX fk_clientID_trans_idx ON DTUGRP16.Transaction (clientID ASC);
