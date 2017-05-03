@@ -1,0 +1,35 @@
+@CHARSET "ISO-8859-1";
+.sidebar1 {
+    background-color: #505060;
+    /* Standard syntax */
+    padding: 0px;
+    min-height: 100%;
+}
+.logo {
+    max-height: 130px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+.logo>img {
+    margin-top: 30px;
+    padding: 3px;
+}
+.list {
+    color: #fff;
+    list-style: none;
+    padding-left: 0px;
+}
+
+.list> li, h5 {
+    padding: 5px 5px 5px 40px;
+}
+.list>li:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-left: 5px solid white;
+    color: white;
+    font-weight: bolder;
+    padding-left: 35px;
+}.main-content{
+text-align:center;
+}
