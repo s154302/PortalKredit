@@ -1,5 +1,6 @@
 package classes;
 
+import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,19 +10,25 @@ import java.util.ArrayList;
 import javax.sql.DataSource;
 
 public final class Controller {
+	public static enum Type{
+		client, banker, admin
+	}
 
-	public static boolean authenticate(String userID, String password, DataSource ds1) {
+	public static boolean authenticate(String userID, String password, DataSource ds1, HttpSession session) {
 		boolean st = false;
 		
 		if(userID.substring(userID.length() - 1).equals("C")){
 			
+			session.setAttribute("type", Type.client);
 			return clientAuthenticate(userID,password,ds1);
 		}
 		else if(userID.substring(userID.length() - 1).equals("B")){
+			session.setAttribute("type", Type.banker);
 			return bankerAuthenticate(userID,password,ds1);
 		}
 		else
 		{
+			session.setAttribute("type", Type.admin);
 			return adminAuthenticate(userID,password,ds1);
 		}
 		

@@ -32,8 +32,10 @@ public class Demo extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().println("Hello, World!");
 		HttpSession session = request.getSession(true);
-		if(session.getAttribute("clientID") != null){
+		if(session.getAttribute("userID") != null){
 			try {
+				response.getWriter().println("type: "+ session.getAttribute("type").toString() +" \n ");
+				
 				response.getWriter().println("Users:");
 				Connection con = ds1.getConnection();
 				Statement stmt = con.createStatement();
