@@ -171,4 +171,30 @@ public final class Controller {
 		return list;
 	}
 
+	public static String generateID(DataSource ds1) {
+		String ID;
+		int intID;
+		Connection con;
+		
+		try {
+			con = ds1.getConnection();
+			
+			// Select the latest ID, and extract only the ID number as an integer
+			PreparedStatement ps = con.prepareStatement("(SELECT INTEGER(SUBSTR(clientID, 1, 8)) FROM \"DTUGRP16\". \"CLIENT\" ORDER BY clientID DESC FETCH FIRST 1 ROWS ONLY)");
+			ResultSet rs = ps.executeQuery();
+			intID = rs.getInt(0);
+			
+			if(intID > 0) {
+				String.format("%08d", intID + "C");
+			} else {
+				ID = "00000001C";
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 }
