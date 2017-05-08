@@ -6,6 +6,7 @@
 <title>index</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/custom.css" rel="stylesheet">
 </head>
 <body>
 
@@ -21,7 +22,7 @@
 	&nbsp;
 	<div class="row">
 		<div class="col-4 offset-4">
-			<div class="card card-outline-primary mb-3 text-center">
+			<div class="card card-outline-primary mb-3 text-center blue-outline">
 				<div class="card-block">
 					<form action="LoginServlet" method="post">
 						<div class="form-group">
@@ -32,7 +33,7 @@
 							<input type="password" class="form-control"
 								name="password" placeholder="Password">
 						</div>
-						<button class="btn btn-primary btn-block" type="submit" value="login">Log
+						<button class="btn btn-primary btn-block btn-action" type="submit" value="login">Log
 							in</button>
 
 					</form>

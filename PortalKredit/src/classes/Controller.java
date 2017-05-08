@@ -1,12 +1,14 @@
 package classes;
 
-import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 public final class Controller {
@@ -141,6 +143,32 @@ public final class Controller {
 		return client;
 	}
 
+	public static void createClient(String firstName, String lastName, String password, BigDecimal CPR, String email, String mobile,
+			String street, String bankerID, int postal, String country, DataSource ds1) {
+		Connection con;
+
+		try {
+			con = ds1.getConnection();
+
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO \"DTUGRP16\".\"CLIENT\" (CLIENTID, PASSWORD, CPR, FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			ps.setString(1, generateClientID(ds1));
+			ps.setString(2, password);
+			ps.setBigDecimal(3, CPR);
+			ps.setString(4, firstName);
+			ps.setString(5, lastName);
+			ps.setString(6, email);
+			ps.setString(7, mobile);
+			ps.setString(8, street);
+			ps.setString(9, bankerID);
+			ps.setInt(10, postal);
+			ps.setString(11, country);
+			ps.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,
 			DataSource ds1) {
 		ArrayList<String> list = new ArrayList<>();
@@ -166,8 +194,8 @@ public final class Controller {
 		return list;
 	}
 
-	public static String generateID(DataSource ds1) {
-		String ID;
+	public static String generateClientID(DataSource ds1) {
+		String ID = null;
 		int intID = 0;
 		Connection con;
 
@@ -185,7 +213,6 @@ public final class Controller {
 
 			if (intID > 0) {
 				ID = String.format("%08d", intID + 1) + "C";
-				System.out.println(ID + " " + intID);
 			} else {
 				ID = "00000001C";
 			}
@@ -194,7 +221,7 @@ public final class Controller {
 			e.printStackTrace();
 		}
 
-		return null;
+		return ID;
 	}
 
 }

@@ -42,3 +42,12 @@
 .main-content {
 	text-align: center;
 }
+
+.btn-action {
+    background-color: #fd6600 !important;
+    border-color: #fd6600 !important;
+}
+
+.blue-outline {
+	border-color: #0078ff;
+}
