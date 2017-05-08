@@ -2,32 +2,43 @@
 <title>Welcome</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+<link href="../assets/css/theme.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2 col-sm-4 sidebar1">
-                <div class="logo">
-                    <img src="../assets/images/logo.png" class="img-responsive center-block" alt="Logo" style="width: 110">
-                </div>
-                <br>
-                <div class="left-navigation">
-                    <ul class="list">
-                        <h5 style="color: rgba(255, 255, 255, 0.5)"><strong>"SKAL DET HER BRUGES"</strong></h5>
-                        <li><a style = "color: #fff" href="AdminCreateClient.jsp" >Create Client</a></li>
-                        <li><a style = "color: #fff" href="AdminCreateBanker.jsp" >Create Banker</a></li>
-                        <li><a style = "color: #fff" href="AdminCreateAdmin.jsp" >Create Admin</a></li>
-                        <li><a style = "color: #fff" href="AdminDeleteClient.jsp" >Delete Client</a></li>
-                        <li><a style = "color: #fff" href="AdminDeleteBanker.jsp" >Delete Banker</a></li>
-                        <li><a style = "color: #fff" href="AdminDeleteAdmin.jsp" >Delete Admin</a></li>
-                        
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-10 col-sm-8 main-content">
-            <h1>Welcome MASTER!</h1>
+	<div class="container-fluid">
+		<div class="row">
+			<div id="sidebar" class="col-md-2 col-sm-4 sidebar1">
+				<div class="logo">
+					<img src="../assets/images/logo.png"
+						class="img-responsive center-block" alt="Logo" style="width: 110">
+				</div>
+				<br>
+				<div class="left-navigation">
+					<h5 style="color: rgba(255, 255, 255, 0.5)">
+						<strong>HOME</strong>
+					</h5>
+					<ul class="list">
+						<li><a style="color: #fff" href="AdminCreateClient.jsp">Create
+								Client</a></li>
+						<li><a style="color: #fff" href="AdminCreateBanker.jsp">Create
+								Banker</a></li>
+						<li><a style="color: #fff" href="AdminCreateAdmin.jsp">Create
+								Admin</a></li>
+						<li><a style="color: #fff" href="AdminDeleteClient.jsp">Delete
+								Client</a></li>
+						<li><a style="color: #fff" href="AdminDeleteBanker.jsp">Delete
+								Banker</a></li>
+						<li><a style="color: #fff" href="AdminDeleteAdmin.jsp">Delete
+								Admin</a></li>
+					</ul>
+				</div>
 			</div>
-    </div>
+			<div id="main" class="col-md-10 col-sm-8 main-content">
+				<h1>Welcome MASTER!</h1>
+			</div>
+		</div>
+	</div>
+
 </body>

@@ -2,13 +2,8 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.annotation.Resource;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,7 +35,7 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		boolean st = false;
 
-		//TODO: Move the method to an utility class and call it authenticate
+		//TODO: Move the method to a utility class and call it authenticate
 		st = Controller.authenticate(userID, password, ds1, session);
 		
 		if(st) {

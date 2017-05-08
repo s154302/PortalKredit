@@ -12,7 +12,16 @@
 		<servlet-name>Demo</servlet-name>
 		<url-pattern>/demo</url-pattern>
 	</servlet-mapping>
-	
+
+	<servlet>
+		<servlet-name>CreateClientServlet</servlet-name>
+		<servlet-class>CreateClientServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CreateClientServlet</servlet-name>
+		<url-pattern>/admin/CreateClientServlet</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
 		<servlet-class>LoginServlet</servlet-class>

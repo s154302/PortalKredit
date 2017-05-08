@@ -10,33 +10,29 @@ import java.util.ArrayList;
 import javax.sql.DataSource;
 
 public final class Controller {
-	public static enum Type{
+	public static enum Type {
 		client, banker, admin
 	}
 
 	public static boolean authenticate(String userID, String password, DataSource ds1, HttpSession session) {
 		boolean st = false;
-		
-		if(userID.substring(userID.length() - 1).equals("C")){
-			
+
+		if (userID.substring(userID.length() - 1).equals("C")) {
+
 			session.setAttribute("type", Type.client);
-			return clientAuthenticate(userID,password,ds1);
-		}
-		else if(userID.substring(userID.length() - 1).equals("B")){
+			return clientAuthenticate(userID, password, ds1);
+		} else if (userID.substring(userID.length() - 1).equals("B")) {
 			session.setAttribute("type", Type.banker);
-			return bankerAuthenticate(userID,password,ds1);
-		}
-		else
-		{
+			return bankerAuthenticate(userID, password, ds1);
+		} else {
 			session.setAttribute("type", Type.admin);
-			return adminAuthenticate(userID,password,ds1);
+			return adminAuthenticate(userID, password, ds1);
 		}
-		
+
 	}
-	
-	
-	//consider making these private??
-	public static boolean clientAuthenticate(String clientID, String password, DataSource ds1){
+
+	// consider making these private??
+	public static boolean clientAuthenticate(String clientID, String password, DataSource ds1) {
 		boolean st = false;
 		try {
 			Connection con;
@@ -55,13 +51,13 @@ public final class Controller {
 		}
 		return st;
 	}
-	//maybe private
-	public static boolean bankerAuthenticate(String bankerID, String password, DataSource ds1){
+
+	// maybe private
+	public static boolean bankerAuthenticate(String bankerID, String password, DataSource ds1) {
 		boolean st = false;
 		try {
 			Connection con;
 			con = ds1.getConnection();
-		
 
 			PreparedStatement ps = con
 					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=? AND \"PASSWORD\"=?");
@@ -76,14 +72,14 @@ public final class Controller {
 		}
 		return st;
 	}
-	
-	//maybe private ??
-	public static boolean adminAuthenticate(String adminID, String password, DataSource ds1){
+
+	// maybe private ??
+	public static boolean adminAuthenticate(String adminID, String password, DataSource ds1) {
 		boolean st = false;
 		try {
 			Connection con;
 			con = ds1.getConnection();
-	
+
 			PreparedStatement ps = con
 					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=? AND \"PASSWORD\"=?");
 
@@ -97,8 +93,6 @@ public final class Controller {
 		}
 		return st;
 	}
-	
-	
 
 	public static Banker getBankerInfo(String userID, DataSource ds1) {
 		Banker banker = new Banker();
@@ -154,8 +148,9 @@ public final class Controller {
 		try {
 			con = ds1.getConnection();
 
-			// TODO: This works but needs to be sanitized to avoid SQL injections. Create whitelist
-			//											"SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?"
+			// TODO: This works but needs to be sanitized to avoid SQL
+			// injections. Create whitelist
+			// "SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?"
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"" + tableName.toUpperCase()
 					+ "\" WHERE \"" + columnName.toUpperCase() + "\"=?");
 			ps.setString(1, key);
@@ -173,28 +168,33 @@ public final class Controller {
 
 	public static String generateID(DataSource ds1) {
 		String ID;
-		int intID;
+		int intID = 0;
 		Connection con;
-		
+
 		try {
 			con = ds1.getConnection();
-			
-			// Select the latest ID, and extract only the ID number as an integer
-			PreparedStatement ps = con.prepareStatement("(SELECT INTEGER(SUBSTR(clientID, 1, 8)) FROM \"DTUGRP16\". \"CLIENT\" ORDER BY clientID DESC FETCH FIRST 1 ROWS ONLY)");
+
+			// Select the latest ID, and extract only the ID number as an
+			// integer
+			PreparedStatement ps = con.prepareStatement(
+					"(SELECT INTEGER(SUBSTR(clientID, 1, 8)) FROM \"DTUGRP16\". \"CLIENT\" ORDER BY clientID DESC FETCH FIRST 1 ROWS ONLY)");
 			ResultSet rs = ps.executeQuery();
-			intID = rs.getInt(0);
-			
-			if(intID > 0) {
-				String.format("%08d", intID + "C");
+			if (rs.next()) {
+				intID = rs.getInt(1);
+			}
+
+			if (intID > 0) {
+				ID = String.format("%08d", intID + 1) + "C";
+				System.out.println(ID + " " + intID);
 			} else {
 				ID = "00000001C";
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
-	
+
 }
