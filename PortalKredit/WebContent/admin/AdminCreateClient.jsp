@@ -93,7 +93,7 @@
 
 									<div class="form-group">
 										<input type="text" class="form-control" name="clientCountry"
-											placeholder="Country">
+											placeholder="*Country">
 									</div>
 
 									<button class="btn btn-primary btn-block btn-action" type="submit"
