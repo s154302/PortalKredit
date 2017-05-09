@@ -39,22 +39,27 @@
 				<h1>Create Client!</h1>
 				<div class="row">
 					<div class="col-4 offset-4">
-						<div class="card card-outline-primary mb-3 text-center">
+						<div class="card card-outline-primary mb-3 text-center blue-outline">
 							<div class="card-block">
 								<form action="CreateClientServlet" method="post">
 									<div class="form-group">
 										<input type="text" class="form-control" id=clientFirstName
-											placeholder="First Name">
+											placeholder="*First Name">
 									</div>
 
 									<div class="form-group">
 										<input type="text" class="form-control" id=clientLastName
-											placeholder="Last Name">
+											placeholder="*Last Name">
+									</div>
+									
+									<div class="form-group">
+										<input type="text" class="form-control" id=clientPassword
+											placeholder="*Password">
 									</div>
 
 									<div class="form-group">
 										<input type="text" class="form-control" id=clientCPR
-											placeholder="CPR">
+											placeholder="*CPR">
 									</div>
 
 									<div class="form-group">
@@ -69,7 +74,7 @@
 
 									<div class="form-group">
 										<input type="text" class="form-control" id=clientBankerID
-											placeholder="Associated Banker">
+											placeholder="*Associated Banker">
 									</div>
 
 									<div class="form-group">
@@ -79,7 +84,7 @@
 
 									<div class="form-group">
 										<input type="text" class="form-control" id=clientCity
-											placeholder="City Postal Code">
+											placeholder="*City Postal Code">
 									</div>
 
 									<div class="form-group">
@@ -87,7 +92,7 @@
 											placeholder="Country">
 									</div>
 
-									<button class="btn btn-primary btn-block" type="submit"
+									<button class="btn btn-primary btn-block btn-action" type="submit"
 										value="createClient">Create Client</button>
 								</form>
 							</div>
