@@ -33,7 +33,7 @@
 								Client</a></li>
 						<li><a href="AdminDeleteBanker.jsp">Delete
 								Banker</a></li>
-						<li><a href="AdminDeleteAdmin.jsp">Delete
+						<li><a href="AdminDeleteAdmin">Delete
 								Admin</a></li>
 
 					</ul>

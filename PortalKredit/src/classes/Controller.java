@@ -238,5 +238,46 @@ public final class Controller {
 
 		return ID;
 	}
+	
+	public static ArrayList<Admin> getAdminList(DataSource ds1){
+		ArrayList<Admin> adminList = new ArrayList<>();
+		Connection con;
+		
+		try{
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\"");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				adminList.add(new Admin(rs.getString(1),rs.getString(2)));
+			}
+			
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return adminList;
+	}
+
+	public static void deleteAdmin(String adminID, DataSource ds1) {
+		Connection con;
+		try{
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=?");
+			ps.setString(1, adminID);
+			ps.executeUpdate();
+			
+
+			
+		
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+	
 
 }

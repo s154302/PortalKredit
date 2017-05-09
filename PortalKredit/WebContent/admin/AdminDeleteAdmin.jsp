@@ -1,9 +1,5 @@
-<%@ page import="java.sql.ResultSet" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="javax.sql.DataSource" %>
-<%@ page import="javax.annotation.Resource" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <head>
 <title>Welcome</title>
@@ -28,7 +24,7 @@
                         <li><a style = "color: #fff" href="AdminCreateAdmin.jsp" >Create Admin</a></li>
                         <li><a style = "color: #fff" href="AdminDeleteClient.jsp" >Delete Client</a></li>
                         <li><a style = "color: #fff" href="AdminDeleteBanker.jsp" >Delete Banker</a></li>
-                        <li><a style = "color: #fff" href="AdminDeleteAdmin.jsp" >Delete Admin</a></li>
+                        <li><a style = "color: #fff" href="AdminDeleteAdmin" >Delete Admin</a></li>
                         
                     </ul>
                 </div>
@@ -36,31 +32,36 @@
             <div class="col-md-10 col-sm-8 main-content">
             <h1>Delete Admin!</h1>
             
-             <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Login</th>
-        <th>Password</th>
-      </tr>
-    </thead>
+            <table class="table table-bordered">
+    			<thead>
+    
+    
+    
+			    	<tr>
+			        	<th>Login</th>
+			        	<th>Password</th>
+			        	<th> Delete </th>
+			      	</tr>
+			    </thead>
 
-    <tbody>
-      <tr>
-        <td>John</td>
-        <td>Doe</td>
-
-      </tr>
-      <tr>
-        <td>Mary</td>
-        <td>Moe</td>
-
-      </tr>
-      <tr>
-        <td>July</td>
-        <td>Dooley</td>
-      </tr>
-    </tbody>
-  </table>
+		    	<tbody >
+			
+		  			<c:forEach var="ob" items="${list}">
+		     			<tr>
+		       				<td><c:out value="${ob.username}"/></td>
+		       				<td><c:out value="${ob.password}"/></td>
+		       				
+		       				<td> <form action="" method="post">
+		       					<button class="btn btn-primary btn-block btn-action"
+										type="submit" name="username" value="${ob.username}">Delete</button> 
+								</form>
+							
+		    			</tr>
+		 			</c:forEach>
+		
+		    	</tbody>
+		  		</table>
+	
   
 			</div>
     </div>

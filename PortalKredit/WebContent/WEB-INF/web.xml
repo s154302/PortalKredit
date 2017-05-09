@@ -28,7 +28,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>DeleteAdminServlet</servlet-name>
-		<url-pattern>/admin/DeleteAdminServlet</url-pattern>
+		<url-pattern>/admin/AdminDeleteAdmin</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

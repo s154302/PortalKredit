@@ -36,6 +36,7 @@ public class CreateAdminServlet extends HttpServlet {
 		String adminPassword = request.getParameter("adminPassword");
 		
 		Controller.createAdmin(adminID, adminPassword, ds1);
+
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateAdmin.jsp");
 	}
 
