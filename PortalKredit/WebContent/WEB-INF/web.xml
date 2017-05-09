@@ -39,6 +39,22 @@
 		<servlet-name>DeleteAdminServlet</servlet-name>
 		<url-pattern>/admin/AdminDeleteAdmin</url-pattern>
 	</servlet-mapping>
+		<servlet>
+		<servlet-name>DeleteBankerServlet</servlet-name>
+		<servlet-class>DeleteBankerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteBankerServlet</servlet-name>
+		<url-pattern>/admin/AdminDeleteBanker</url-pattern>
+	</servlet-mapping>
+		<servlet>
+		<servlet-name>DeleteClientServlet</servlet-name>
+		<servlet-class>DeleteClientServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteClientServlet</servlet-name>
+		<url-pattern>/admin/AdminDeleteClient</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>CreateAdminServlet</servlet-name>

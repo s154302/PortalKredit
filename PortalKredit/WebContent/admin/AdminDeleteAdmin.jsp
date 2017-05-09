@@ -22,8 +22,8 @@
                         <li><a style = "color: #fff" href="AdminCreateClient.jsp" >Create Client</a></li>
                         <li><a style = "color: #fff" href="AdminCreateBanker.jsp" >Create Banker</a></li>
                         <li><a style = "color: #fff" href="AdminCreateAdmin.jsp" >Create Admin</a></li>
-                        <li><a style = "color: #fff" href="AdminDeleteClient.jsp" >Delete Client</a></li>
-                        <li><a style = "color: #fff" href="AdminDeleteBanker.jsp" >Delete Banker</a></li>
+                        <li><a style = "color: #fff" href="AdminDeleteClient" >Delete Client</a></li>
+                        <li><a style = "color: #fff" href="AdminDeleteBanker" >Delete Banker</a></li>
                         <li><a style = "color: #fff" href="AdminDeleteAdmin" >Delete Admin</a></li>
                         
                     </ul>

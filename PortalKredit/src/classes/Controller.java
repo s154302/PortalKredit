@@ -390,4 +390,81 @@ public final class Controller {
 		
 	}
 
+	public static void deleteClient(String clientID, DataSource ds1) {
+		Connection con;
+		try{
+		con = ds1.getConnection();
+		PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
+		ps.setString(1, clientID);
+		ps.executeUpdate();
+		
+
+		
+	
+	}
+	catch(SQLException e){
+		e.printStackTrace();
+	}
+		
+	}
+
+	public static ArrayList<Client> getClientList(DataSource ds1) {
+		
+		ArrayList<Client> clientList = new ArrayList<>();
+		Connection con;
+		
+		try{
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\"");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				//TODO: fill out this shit
+			}
+			
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return clientList;
+	}
+	public static ArrayList<Banker> getBankerList(DataSource ds1) {
+		
+		ArrayList<Banker> bankerList = new ArrayList<>();
+		Connection con;
+		
+		try{
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BANKER\"");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				//TODO: fill out this shit
+			}
+			
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return bankerList;
+	}
+	public static void deleteBanker(String bankerID, DataSource ds1){
+		Connection con;
+		try{
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=?");
+			ps.setString(1, bankerID);
+			ps.executeUpdate();
+		
+
+		
+	
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+	
+	}
+
 }
