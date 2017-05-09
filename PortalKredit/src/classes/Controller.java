@@ -161,14 +161,14 @@ public final class Controller {
 			con = ds1.getConnection();
 
 			// TODO: Edit ps to correct table
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?");
-
-			ps.setString(1, userID);
-			ResultSet rs = ps.executeQuery();
+//			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?");
+//
+//			ps.setString(1, userID);
+//			ResultSet rs = ps.executeQuery();
 
 			// TODO: Set all banker's data (Requires database to be set up)
 
-			rs.close();
+//			rs.close();
 		} catch (SQLException e) {
 
 			e.printStackTrace();
@@ -318,7 +318,7 @@ public final class Controller {
 			ps.setString(5, regno);
 			ps.setString(6, email);
 			ps.setString(7, telephone);
-			
+			ps.executeUpdate(); 
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
