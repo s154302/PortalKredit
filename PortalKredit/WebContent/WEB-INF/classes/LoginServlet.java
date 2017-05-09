@@ -43,12 +43,15 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("userID", userID);
 			switch((Controller.Type)session.getAttribute("type")){
 			case client:
+				session.setAttribute("user", Controller.getClientInfo(userID, ds1));
 				response.sendRedirect(request.getContextPath() + "/welcome.jsp");
 				break;
 			case banker:
-				response.sendRedirect(request.getContextPath() + "/banktest123");
+				session.setAttribute("user", Controller.getBankerInfo(userID, ds1));
+				response.sendRedirect(request.getContextPath() + "/welcome.jsp");
 				break;
 			case admin:
+				session.setAttribute("user", Controller.getAdminInfo(userID, ds1));
 				response.sendRedirect(request.getContextPath() + "/admin/AdminControl.jsp");
 				break;
 			default:

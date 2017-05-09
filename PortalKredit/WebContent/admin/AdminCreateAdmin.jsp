@@ -15,7 +15,7 @@
 			<div class="col-md-2 col-sm-4 sidebar1">
 				<div class="logo">
 					<img src="../assets/images/logo.png"
-						class="img-responsive center-block" alt="Logo" style="width: 110">
+						class="img-responsive center-block" alt="Logo" style="width: 70%">
 				</div>
 				<br>
 				<div class="left-navigation">

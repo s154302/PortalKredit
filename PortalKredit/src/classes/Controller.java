@@ -1,7 +1,5 @@
 package classes;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -96,21 +94,32 @@ public final class Controller {
 		return st;
 	}
 
-	public static Banker getBankerInfo(String userID, DataSource ds1) {
+	public static Banker getBankerInfo(String userId, DataSource ds1) {
 		Banker banker = new Banker();
 		Connection con;
 
 		try {
 			con = ds1.getConnection();
 
-			// TODO: Edit ps to correct table
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?");
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=?");
 
-			ps.setString(1, userID);
+			ps.setString(1, userId);
 			ResultSet rs = ps.executeQuery();
 
-			// TODO: Set all banker's data (Requires database to be set up)
-
+			rs.next();
+			
+			banker.setFirstName(rs.getString("FIRSTNAME"));
+			banker.setLastName(rs.getString("LASTNAME"));
+			banker.setBankerID(rs.getInt("REGNO"));
+			banker.setEmail(rs.getString("EMAIL"));
+			banker.setPhoneNo(rs.getInt("MOBILE"));
+			ArrayList<String> clientsID  = getList("CLIENT", "BANKERID", userId, "CLIENTID", ds1);
+			ArrayList<Client> clients = new ArrayList<Client>();
+			for(String clientId : clientsID){
+				clients.add(getClientInfo(clientId, ds1));
+			}
+			banker.setClients(clients);
+			
 			rs.close();
 		} catch (SQLException e) {
 
@@ -120,20 +129,20 @@ public final class Controller {
 		return banker;
 	}
 
-	public static Client getClientInfo(String clientID, DataSource ds1) {
+	public static Client getClientInfo(String userId, DataSource ds1) {
 		Client client = new Client();
 		Connection con;
 
 		try {
 			con = ds1.getConnection();
 
-			// TODO: Edit ps to correct table
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
 
-			ps.setString(1, clientID);
+			ps.setString(1, userId);
 			ResultSet rs = ps.executeQuery();
 
 			// TODO: Set all client's data (Requires database to be set up)
+			
 
 			rs.close();
 		} catch (SQLException e) {
@@ -141,6 +150,31 @@ public final class Controller {
 		}
 
 		return client;
+	}
+	
+	public static Admin getAdminInfo(String userID, DataSource ds1){
+		Admin admin = new Admin();
+		
+		Connection con;
+
+		try {
+			con = ds1.getConnection();
+
+			// TODO: Edit ps to correct table
+//			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?");
+//
+//			ps.setString(1, userID);
+//			ResultSet rs = ps.executeQuery();
+
+			// TODO: Set all banker's data (Requires database to be set up)
+
+//			rs.close();
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		
+		return admin;
 	}
 
 	public static void createClient(String firstName, String lastName, String password, String CPR, String email,
@@ -162,7 +196,7 @@ public final class Controller {
 			ps.setString(8, street);
 			ps.setString(9, bankerID);
 			ps.setInt(10, postal);
-			ps.setString(11, country);
+			ps.setString(11, country.toUpperCase());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -278,6 +312,58 @@ public final class Controller {
 		
 		
 	}
-	
+
+	private static String generateBankerID(DataSource ds1) {
+		String ID = null;
+		int intID = 0;
+		Connection con;
+
+		try {
+			con = ds1.getConnection();
+
+			// Select the latest ID, and extract only the ID number as an
+			// integer
+			PreparedStatement ps = con.prepareStatement(
+					"(SELECT INTEGER(SUBSTR(bankerID, 1, 6)) FROM \"DTUGRP16\". \"BANKER\" ORDER BY bankerID DESC FETCH FIRST 1 ROWS ONLY)");
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				intID = rs.getInt(1);
+			}
+
+			if (intID > 0) {
+				ID = String.format("%06d", intID + 1) + "B";
+			} else {
+				ID = "000001B";
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return ID;
+	}
+
+	public static void createBanker(String firstName, String lastName, String password, String email, String telephone,
+			String regno, DataSource ds1) {
+		Connection con;
+
+		try {
+			con = ds1.getConnection();
+
+			PreparedStatement ps = con.prepareStatement("INSERT INTO \"DTUGRP16\".\"BANKER\" (BANKERID, PASSWORD, FIRSTNAME, LASTNAME, REGNO, EMAIL, MOBILE) VALUES(?, ?, ?, ?, ?, ?, ?)");
+			ps.setString(1, generateBankerID(ds1));
+			ps.setString(2, password);
+			ps.setString(3, firstName);
+			ps.setString(4, lastName);
+			ps.setString(5, regno);
+			ps.setString(6, email);
+			ps.setString(7, telephone);
+			ps.executeUpdate(); 
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 }
