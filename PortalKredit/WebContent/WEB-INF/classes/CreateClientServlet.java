@@ -39,17 +39,6 @@ public class CreateClientServlet extends HttpServlet {
 		String postal = request.getParameter("clientCity");
 		String country = request.getParameter("clientCountry");
 		
-		System.out.println(firstName);
-		System.out.println(lastName);
-		System.out.println(password);
-		System.out.println(CPR);
-		System.out.println(email);
-		System.out.println(mobile);
-		System.out.println(street);
-		System.out.println(bankerID);
-		System.out.println(postal);
-		System.out.println(country);
-		
 		Controller.createClient(firstName, lastName, password, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateClient.jsp");
 	}

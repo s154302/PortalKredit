@@ -1,7 +1,5 @@
 package classes;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -179,7 +177,7 @@ public final class Controller {
 	}
 	
 	public static Admin getAdminInfo(String userID, DataSource ds1){
-		Admin admin = new Admin();
+		Admin admin = new Admin("", "");
 		
 		Connection con;
 
@@ -187,14 +185,14 @@ public final class Controller {
 			con = ds1.getConnection();
 
 			// TODO: Edit ps to correct table
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?");
-
-			ps.setString(1, userID);
-			ResultSet rs = ps.executeQuery();
+//			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?");
+//
+//			ps.setString(1, userID);
+//			ResultSet rs = ps.executeQuery();
 
 			// TODO: Set all banker's data (Requires database to be set up)
 
-			rs.close();
+//			rs.close();
 		} catch (SQLException e) {
 
 			e.printStackTrace();
@@ -222,7 +220,7 @@ public final class Controller {
 			ps.setString(8, street);
 			ps.setString(9, bankerID);
 			ps.setInt(10, postal);
-			ps.setString(11, country);
+			ps.setString(11, country.toUpperCase());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -297,6 +295,99 @@ public final class Controller {
 		}
 
 		return ID;
+	}
+	
+	public static ArrayList<Admin> getAdminList(DataSource ds1){
+		ArrayList<Admin> adminList = new ArrayList<>();
+		Connection con;
+		
+		try{
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\"");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				adminList.add(new Admin(rs.getString(1),rs.getString(2)));
+			}
+			
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return adminList;
+	}
+
+	public static void deleteAdmin(String adminID, DataSource ds1) {
+		Connection con;
+		try{
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=?");
+			ps.setString(1, adminID);
+			ps.executeUpdate();
+			
+
+			
+		
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+
+	private static String generateBankerID(DataSource ds1) {
+		String ID = null;
+		int intID = 0;
+		Connection con;
+
+		try {
+			con = ds1.getConnection();
+
+			// Select the latest ID, and extract only the ID number as an
+			// integer
+			PreparedStatement ps = con.prepareStatement(
+					"(SELECT INTEGER(SUBSTR(bankerID, 1, 6)) FROM \"DTUGRP16\". \"BANKER\" ORDER BY bankerID DESC FETCH FIRST 1 ROWS ONLY)");
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				intID = rs.getInt(1);
+			}
+
+			if (intID > 0) {
+				ID = String.format("%06d", intID + 1) + "B";
+			} else {
+				ID = "000001B";
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return ID;
+	}
+
+	public static void createBanker(String firstName, String lastName, String password, String email, String telephone,
+			String regno, DataSource ds1) {
+		Connection con;
+
+		try {
+			con = ds1.getConnection();
+
+			PreparedStatement ps = con.prepareStatement("INSERT INTO \"DTUGRP16\".\"BANKER\" (BANKERID, PASSWORD, FIRSTNAME, LASTNAME, REGNO, EMAIL, MOBILE) VALUES(?, ?, ?, ?, ?, ?, ?)");
+			ps.setString(1, generateBankerID(ds1));
+			ps.setString(2, password);
+			ps.setString(3, firstName);
+			ps.setString(4, lastName);
+			ps.setString(5, regno);
+			ps.setString(6, email);
+			ps.setString(7, telephone);
+			ps.executeUpdate(); 
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

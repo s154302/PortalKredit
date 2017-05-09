@@ -33,7 +33,7 @@
 								Client</a></li>
 						<li><a href="AdminDeleteBanker.jsp">Delete
 								Banker</a></li>
-						<li><a href="AdminDeleteAdmin.jsp">Delete
+						<li><a href="AdminDeleteAdmin">Delete
 								Admin</a></li>
 
 					</ul>
@@ -93,7 +93,7 @@
 
 									<div class="form-group">
 										<input type="text" class="form-control" name="clientCountry"
-											placeholder="Country">
+											placeholder="*Country">
 									</div>
 
 									<button class="btn btn-primary btn-block btn-action" type="submit"

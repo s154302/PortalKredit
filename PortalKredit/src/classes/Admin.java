@@ -3,6 +3,11 @@ package classes;
 public class Admin {
 	private String username;
 	private String password;
+	
+	public Admin(String username, String password){
+		setUsername(username);
+		setPassword(password);
+	}
 	public String getUsername() {
 		return username;
 	}
@@ -16,6 +21,9 @@ public class Admin {
 		this.password = password;
 	}
 	
+	public String toString(){
+		return "username: " + username +" password: " + password;
+	}
 	
 
 }

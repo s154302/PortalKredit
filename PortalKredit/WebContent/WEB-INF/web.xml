@@ -21,14 +21,23 @@
 		<servlet-name>CreateClientServlet</servlet-name>
 		<url-pattern>/admin/CreateClientServlet</url-pattern>
 	</servlet-mapping>
-	
+
+	<servlet>
+		<servlet-name>CreateBankerServlet</servlet-name>
+		<servlet-class>CreateBankerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CreateBankerServlet</servlet-name>
+		<url-pattern>/admin/CreateBankerServlet</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>DeleteAdminServlet</servlet-name>
 		<servlet-class>DeleteAdminServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>DeleteAdminServlet</servlet-name>
-		<url-pattern>/admin/DeleteAdminServlet</url-pattern>
+		<url-pattern>/admin/AdminDeleteAdmin</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

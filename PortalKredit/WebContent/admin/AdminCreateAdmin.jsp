@@ -28,7 +28,7 @@
 						<li><a href="AdminCreateAdmin.jsp">Create Admin</a></li>
 						<li><a href="AdminDeleteClient.jsp">Delete Client</a></li>
 						<li><a href="AdminDeleteBanker.jsp">Delete Banker</a></li>
-						<li><a href="AdminDeleteAdmin.jsp">Delete Admin</a></li>
+						<li><a href="AdminDeleteAdmin">Delete Admin</a></li>
 
 					</ul>
 				</div>
