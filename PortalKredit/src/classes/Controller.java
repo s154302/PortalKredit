@@ -110,9 +110,10 @@ public final class Controller {
 
 			rs.next();
 			
+			banker.setBankerID(rs.getString(userId));
 			banker.setFirstName(rs.getString("FIRSTNAME"));
 			banker.setLastName(rs.getString("LASTNAME"));
-			banker.setBankerID(rs.getInt("REGNO"));
+			banker.setRegNo(rs.getInt("REGNO"));
 			banker.setEmail(rs.getString("EMAIL"));
 			banker.setPhoneNo(rs.getInt("MOBILE"));
 			ArrayList<String> clientsID  = getList("CLIENT", "BANKERID", userId, "CLIENTID", ds1);
@@ -144,6 +145,24 @@ public final class Controller {
 			ResultSet rs = ps.executeQuery();
 
 			// TODO: Set all client's data (Requires database to be set up)
+			rs.next();
+			
+			client.setClientID(rs.getString("CLIENTID"));
+			client.setFirstName(rs.getString("FIRST_NAME"));
+			client.setLastName(rs.getString("LAST_NAME"));
+			client.setEmail(rs.getString("EMAIL"));
+			client.setPhoneNo(rs.getInt("MOBILE"));
+			client.setCPR(rs.getInt("CPR"));
+			client.setCountry(rs.getString("COUNTRY"));
+			client.setPostal(rs.getInt("POSTAL"));
+			client.setStreet(rs.getString("STREET"));
+			
+			
+			ps = con.prepareStatement("SELECT CITY FROM \"DTUGRP16\".\"CLIENT FULL OUTER JOIN \"DTUGRP16\".\"PLACE\" "
+					+ "ON \"DTUGRP16\".\"CLIENT\".\"COUNTRY\" = \"DTUGRP16\".\"PLACE\".\"COUNTRY\" "
+					+ "AND \"DTUGRP16\".\"CLIENT\".\"POSTAL\" = \"DTUGRP16\".\"PLACE\".\"POSTAL\" WHERE \"CLIENTID \"= ?");
+			ResultSet city = ps.executeQuery();
+			client.setCity(city.getString("CITY"));
 			
 
 			rs.close();
@@ -152,6 +171,11 @@ public final class Controller {
 		}
 
 		return client;
+	}
+	
+	public static Account getAccountInfo(){
+		Account account = new Account();
+		return account;
 	}
 	
 	public static Admin getAdminInfo(String userID, DataSource ds1){

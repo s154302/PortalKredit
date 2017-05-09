@@ -6,9 +6,9 @@ import java.util.ArrayList;
  */
 public class Client {
 
-	private int clientID, CPR, telephone;
-	private String clientName, email, address, password;
-	private ArrayList accounts;
+	private int CPR, phoneNo, postal;
+	private String email, fullAddress, fullName, firstName, lastName, clientID, street, country, city;
+	private ArrayList<Account> accounts;
 
 	public void transaction() {
 
@@ -30,38 +30,118 @@ public class Client {
 
 	}
 
-	public void setClientID(int clientID) {
+	public void setClientID(String clientID) {
 		this.clientID = clientID;
 	}
-
-	public void setCPR(int cPR) {
-		CPR = cPR;
+	
+	public String getClientID(){
+		return clientID;
 	}
 
-	public void setTelephone(int telephone) {
-		this.telephone = telephone;
+	public void setCPR(int CPR) {
+		this.CPR = CPR;
+	}
+	
+	public int getCpr (){
+		return CPR;
 	}
 
-	public void setClientName(String clientName) {
-		this.clientName = clientName;
+	public void setPhoneNo(int phoneNo) {
+		this.phoneNo = phoneNo;
+	}
+	
+	public int getPhoneNo (){
+		return phoneNo;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public void setAddress(String address) {
-		this.address = address;
+	
+	public String getEmail(){
+		return email;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setFullAddress() {
+		try{
+			this.fullAddress = getStreet() + " " + getPostal() + " " + getCity() + " " + getCountry();
+		}catch(Exception e){}
+	}
+	
+	public String getFullAddress(){
+		return fullAddress;
 	}
 
-	public void setAccounts(ArrayList accounts) {
+	public void setAccounts(ArrayList<Account> accounts) {
 		this.accounts = accounts;
 	}
 	
-	
+	public ArrayList<Account> getAccounts(){
+		return accounts;
+	}
 
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName() {
+		try{
+			this.fullName = getFirstName() + " " + getLastName();
+		}catch(Exception e){}
+		
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+		setFullName();
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+		setFullName();
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+		setFullAddress();
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+		setFullAddress();
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+		setFullAddress();
+	}
+
+	public int getPostal() {
+		return postal;
+	}
+
+	public void setPostal(int postal) {
+		this.postal = postal;
+		setFullAddress();
+	}
 }

@@ -6,9 +6,9 @@ import java.util.ArrayList;
  */
 public class Banker {
 
-	private int bankerID, phoneNo, regNo;
-	private String firstName, lastName, fullName, password, email;
-	private ArrayList clients;
+	private int phoneNo, regNo;
+	private String firstName, lastName, fullName, email, bankerID;
+	private ArrayList<Client> clients;
 
 	public void createClient() {
 
@@ -38,12 +38,15 @@ public class Banker {
 
 	}
 
-	public void setBankerID(int bankerID) {
+	public void setBankerID(String bankerID) {
 		this.bankerID = bankerID;
 	}
 	
+	public String getBankerID(){
+		return bankerID;
+	}
+	
 	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public void setFullName() {
@@ -67,6 +70,10 @@ public class Banker {
 
 	public void setClients(ArrayList<Client> clients) {
 		this.clients = clients;
+	}
+	
+	public ArrayList<Client> getClients(){
+		return clients;
 	}
 
 	public String getFirstName() {
