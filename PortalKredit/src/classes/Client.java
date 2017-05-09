@@ -43,6 +43,13 @@ public class Client {
 			+ " Country: " + getCountry()
 			+ " Postal: " + getPostal()
 			+ " FullAddress: " + getFullAddress();
+		int i = 0;
+		for(Account account : accounts){
+			try{
+				clientString = clientString + "Account: " + i +  " AccountNum: " + account.getAccountNumber() + " RegNo: " + account.getRegno() + " ";
+				i++;
+			}catch(Exception e){}
+		}
 				
 		return clientString;
 	}

@@ -49,7 +49,7 @@ public class Banker {
 		int i = 0;
 		for(Client client : clients){
 			try{
-				bankerString = bankerString + "Client: " + i + " id: " +  client.getClientID();
+				bankerString = bankerString + "Client: " + i + " id: " +  client.getClientID() + " ";
 				i++;
 			}catch(Exception e){}
 

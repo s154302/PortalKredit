@@ -8,7 +8,7 @@ import java.util.Date;
 public class Account {
 
 	private int accountNumber, regno;
-	private String accountName, valuta;
+	private String accountName, currency;
 	private double balance;
 	private ArrayList<Transaction> transactions;
 
@@ -16,6 +16,16 @@ public class Account {
 
 	}
 
+	public String toString(){
+		String accountString = 
+				"AccountNumber: " + getAccountNumber()
+				+ " RegNo: " + getRegno()
+				+ " Balance: " + getBalance()
+				+ " Currency: " + getCurrency();
+		
+		return accountString;
+	}
+	
 	public int getAccountNumber() {
 		return accountNumber;
 	}
@@ -32,6 +42,7 @@ public class Account {
 		this.regno = regno;
 	}
 
+	//TODO - there is no accountName in the database
 	public String getAccountName() {
 		return accountName;
 	}
@@ -40,12 +51,12 @@ public class Account {
 		this.accountName = accountName;
 	}
 
-	public String getValuta() {
-		return valuta;
+	public String getCurrency() {
+		return currency;
 	}
 
 	public void setValuta(String valuta) {
-		this.valuta = valuta;
+		this.currency = valuta;
 	}
 
 	public double getBalance() {
