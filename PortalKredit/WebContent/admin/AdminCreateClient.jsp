@@ -1,3 +1,7 @@
+<!DOCTYPE HTML><%@page language="java"
+	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<html>
+
 <head>
 <title>Welcome</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -11,7 +15,7 @@
 			<div class="col-md-2 col-sm-4 sidebar1">
 				<div class="logo">
 					<img src="../assets/images/logo.png"
-						class="img-responsive center-block" alt="Logo" style="width: 110">
+						class="img-responsive center-block" alt="Logo" style="width: 70%">
 				</div>
 				<br>
 				<div class="left-navigation">
@@ -43,52 +47,52 @@
 							<div class="card-block">
 								<form action="CreateClientServlet" method="post">
 									<div class="form-group">
-										<input type="text" class="form-control" id=clientFirstName
+										<input type="text" class="form-control" name="clientFirstName"
 											placeholder="*First Name">
 									</div>
 
 									<div class="form-group">
-										<input type="text" class="form-control" id=clientLastName
+										<input type="text" class="form-control" name="clientLastName"
 											placeholder="*Last Name">
 									</div>
 									
 									<div class="form-group">
-										<input type="text" class="form-control" id=clientPassword
+										<input type="text" class="form-control" name="clientPassword"
 											placeholder="*Password">
 									</div>
 
 									<div class="form-group">
-										<input type="text" class="form-control" id=clientCPR
+										<input type="text" class="form-control" name="clientCPR"
 											placeholder="*CPR">
 									</div>
 
 									<div class="form-group">
-										<input type="email" class="form-control" id=clientEmail
+										<input type="email" class="form-control" name="clientEmail"
 											placeholder="E-mail">
 									</div>
 
 									<div class="form-group">
-										<input type="text" class="form-control" id=clientTelephone
+										<input type="text" class="form-control" name="clientTelephone"
 											placeholder="Phone Number">
 									</div>
 
 									<div class="form-group">
-										<input type="text" class="form-control" id=clientBankerID
+										<input type="text" class="form-control" name="clientBankerID"
 											placeholder="*Associated Banker">
 									</div>
 
 									<div class="form-group">
-										<input type="text" class="form-control" id=clientStreet
+										<input type="text" class="form-control" name="clientStreet"
 											placeholder="Address">
 									</div>
 
 									<div class="form-group">
-										<input type="text" class="form-control" id=clientCity
+										<input type="text" class="form-control" name="clientCity"
 											placeholder="*City Postal Code">
 									</div>
 
 									<div class="form-group">
-										<input type="text" class="form-control" id=clientCountry
+										<input type="text" class="form-control" name="clientCountry"
 											placeholder="Country">
 									</div>
 
@@ -102,4 +106,6 @@
 			</div>
 		</div>
 	</div>
+	<script src="/assets/js/bootstrap.min.js"></script>
 </body>
+</html>

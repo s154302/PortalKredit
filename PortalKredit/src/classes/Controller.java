@@ -143,8 +143,8 @@ public final class Controller {
 		return client;
 	}
 
-	public static void createClient(String firstName, String lastName, String password, BigDecimal CPR, String email, String mobile,
-			String street, String bankerID, int postal, String country, DataSource ds1) {
+	public static void createClient(String firstName, String lastName, String password, String CPR, String email,
+			String mobile, String street, String bankerID, Integer postal, String country, DataSource ds1) {
 		Connection con;
 
 		try {
@@ -154,7 +154,7 @@ public final class Controller {
 					"INSERT INTO \"DTUGRP16\".\"CLIENT\" (CLIENTID, PASSWORD, CPR, FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			ps.setString(1, generateClientID(ds1));
 			ps.setString(2, password);
-			ps.setBigDecimal(3, CPR);
+			ps.setString(3, CPR);
 			ps.setString(4, firstName);
 			ps.setString(5, lastName);
 			ps.setString(6, email);
@@ -163,7 +163,7 @@ public final class Controller {
 			ps.setString(9, bankerID);
 			ps.setInt(10, postal);
 			ps.setString(11, country);
-			ps.executeQuery();
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
