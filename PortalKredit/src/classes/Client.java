@@ -29,6 +29,23 @@ public class Client {
 	public void fetchAccounts() {
 
 	}
+	
+	public String toString (){
+		String clientString = "ClientID: " + getClientID()
+			+ " FirstName: " + getFirstName()
+			+ " LastName: " + getLastName()
+			+ " FullName: " + getFullName()
+			+ " Email: " + getEmail()
+			+ " CPR: " + getCpr()
+			+ " PhoneNo: " + getPhoneNo()
+			+ " Street: " + getStreet()
+			+ " City: " + getCity()
+			+ " Country: " + getCountry()
+			+ " Postal: " + getPostal()
+			+ " FullAddress: " + getFullAddress();
+				
+		return clientString;
+	}
 
 	public void setClientID(String clientID) {
 		this.clientID = clientID;
