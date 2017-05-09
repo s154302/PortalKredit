@@ -168,6 +168,21 @@ public final class Controller {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void createAdmin(String username, String password, DataSource ds1) {
+		Connection con;
+		
+		try {
+			con = ds1.getConnection();
+			
+			PreparedStatement ps = con.prepareStatement("INSERT INTO \"DTUGRP16\".\"ADMIN\" (ADMINID, password) VALUES(?, ?)");
+			ps.setString(1, username);
+			ps.setString(2, password);
+			ps.executeUpdate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,
 			DataSource ds1) {
