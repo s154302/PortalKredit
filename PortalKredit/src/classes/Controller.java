@@ -94,8 +94,67 @@ public final class Controller {
 		return st;
 	}
 
-	public static Banker getBankerInfo(String userID, DataSource ds1) {
+	public static Banker getBankerInfo(String userId, DataSource ds1) {
 		Banker banker = new Banker();
+		Connection con;
+
+		try {
+			con = ds1.getConnection();
+
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=?");
+
+			ps.setString(1, userId);
+			ResultSet rs = ps.executeQuery();
+
+			rs.next();
+			
+			banker.setFirstName(rs.getString("FIRSTNAME"));
+			banker.setLastName(rs.getString("LASTNAME"));
+			banker.setBankerID(rs.getInt("REGNO"));
+			banker.setEmail(rs.getString("EMAIL"));
+			banker.setPhoneNo(rs.getInt("MOBILE"));
+			ArrayList<String> clientsID  = getList("CLIENT", "BANKERID", userId, "CLIENTID", ds1);
+			ArrayList<Client> clients = new ArrayList<Client>();
+			for(String clientId : clientsID){
+				clients.add(getClientInfo(clientId, ds1));
+			}
+			banker.setClients(clients);
+			
+			rs.close();
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+
+		return banker;
+	}
+
+	public static Client getClientInfo(String userId, DataSource ds1) {
+		Client client = new Client();
+		Connection con;
+
+		try {
+			con = ds1.getConnection();
+
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
+
+			ps.setString(1, userId);
+			ResultSet rs = ps.executeQuery();
+
+			// TODO: Set all client's data (Requires database to be set up)
+			
+
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return client;
+	}
+	
+	public static Admin getAdminInfo(String userID, DataSource ds1){
+		Admin admin = new Admin();
+		
 		Connection con;
 
 		try {
@@ -114,31 +173,8 @@ public final class Controller {
 
 			e.printStackTrace();
 		}
-
-		return banker;
-	}
-
-	public static Client getClientInfo(String clientID, DataSource ds1) {
-		Client client = new Client();
-		Connection con;
-
-		try {
-			con = ds1.getConnection();
-
-			// TODO: Edit ps to correct table
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
-
-			ps.setString(1, clientID);
-			ResultSet rs = ps.executeQuery();
-
-			// TODO: Set all client's data (Requires database to be set up)
-
-			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return client;
+		
+		return admin;
 	}
 
 	public static void createClient(String firstName, String lastName, String password, String CPR, String email,
