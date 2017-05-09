@@ -1,3 +1,7 @@
+<!DOCTYPE HTML><%@page language="java"
+	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<html>
+
 <head>
 <title>Welcome</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -36,9 +40,9 @@
 						<div
 							class="card card-outline-primary mb-3 text-center blue-outline">
 							<div class="card-block">
-								<form action="CreateClientServlet" method="post">
+								<form action="CreateAdminServlet" method="post">
 									<div class="form-group">
-										<input type="text" class="form-control" name="adminPassword"
+										<input type="text" class="form-control" name="adminID"
 											placeholder="Admin username">
 									</div>
 
@@ -57,3 +61,4 @@
 		</div>
 	</div>
 </body>
+</html>
