@@ -2,7 +2,6 @@
 <title>Welcome</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-<link href="../assets/css/theme.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
 
@@ -20,17 +19,17 @@
 						<strong>HOME</strong>
 					</h5>
 					<ul class="list">
-						<li><a style="color: #fff" href="AdminCreateClient.jsp">Create
+						<li><a href="AdminCreateClient.jsp">Create
 								Client</a></li>
-						<li><a style="color: #fff" href="AdminCreateBanker.jsp">Create
+						<li><a href="AdminCreateBanker.jsp">Create
 								Banker</a></li>
-						<li><a style="color: #fff" href="AdminCreateAdmin.jsp">Create
+						<li><a href="AdminCreateAdmin.jsp">Create
 								Admin</a></li>
-						<li><a style="color: #fff" href="AdminDeleteClient.jsp">Delete
+						<li><a href="AdminDeleteClient.jsp">Delete
 								Client</a></li>
-						<li><a style="color: #fff" href="AdminDeleteBanker.jsp">Delete
+						<li><a href="AdminDeleteBanker.jsp">Delete
 								Banker</a></li>
-						<li><a style="color: #fff" href="AdminDeleteAdmin.jsp">Delete
+						<li><a href="AdminDeleteAdmin.jsp">Delete
 								Admin</a></li>
 					</ul>
 				</div>

@@ -21,14 +21,19 @@
 
 .list {
 	text-decoration: none;
-	color: #fff;
+	color: white;
 	list-style: none;
 	padding-left: 0px;
 }
 
 .list>li, h5 {
-	color: #fff;
+	color: white;
 	padding: 5px 5px 5px 40px;
+}
+
+.list>li>a {
+	color: white;
+	text-decoration: none;
 }
 
 .list>li:hover {
