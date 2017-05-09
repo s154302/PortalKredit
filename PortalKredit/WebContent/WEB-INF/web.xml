@@ -21,6 +21,15 @@
 		<servlet-name>CreateClientServlet</servlet-name>
 		<url-pattern>/admin/CreateClientServlet</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DeleteAdminServlet</servlet-name>
+		<servlet-class>DeleteAdminServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteAdminServlet</servlet-name>
+		<url-pattern>/admin/DeleteAdminServlet</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>CreateAdminServlet</servlet-name>

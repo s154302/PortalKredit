@@ -1,3 +1,10 @@
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.Statement" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="javax.sql.DataSource" %>
+<%@ page import="javax.annotation.Resource" %>
+
 <head>
 <title>Welcome</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -28,6 +35,33 @@
             </div>
             <div class="col-md-10 col-sm-8 main-content">
             <h1>Delete Admin!</h1>
+            
+             <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Login</th>
+        <th>Password</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>John</td>
+        <td>Doe</td>
+
+      </tr>
+      <tr>
+        <td>Mary</td>
+        <td>Moe</td>
+
+      </tr>
+      <tr>
+        <td>July</td>
+        <td>Dooley</td>
+      </tr>
+    </tbody>
+  </table>
+  
 			</div>
     </div>
 </body>
