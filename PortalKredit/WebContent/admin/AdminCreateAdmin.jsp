@@ -10,55 +10,69 @@
 </head>
 
 <body>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-2 col-sm-4 sidebar1">
-				<div class="logo">
-					<img src="../assets/images/logo.png"
-						class="img-responsive center-block" alt="Logo" style="width: 70%">
-				</div>
-				<br>
-				<div class="left-navigation">
-					<ul class="list">
-						<h5 style="color: rgba(255, 255, 255, 0.5)">
-							<strong>CREATE ADMIN</strong>
-						</h5>
-						<li><a href="AdminCreateClient.jsp">Create Client</a></li>
-						<li><a href="AdminCreateBanker.jsp">Create Banker</a></li>
-						<li><a href="AdminCreateAdmin.jsp">Create Admin</a></li>
-						<li><a href="AdminDeleteClient">Delete Client</a></li>
-						<li><a href="AdminDeleteBanker">Delete Banker</a></li>
-						<li><a href="AdminDeleteAdmin">Delete Admin</a></li>
+	<nav
+		class="navbar navbar-toggleable-md navbar-inverse bg-primary custom-navbar">
+		<button class="navbar-toggler navbar-toggler-right" type="button"
+			data-toggle="collapse" data-target="#navbarNavDropdown"
+			aria-controls="navbarNavDropdown" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<a class="navbar-brand" href="#"><img
+			src="../assets/images/logo.png" width="60" height="60" alt=""></a>
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
+			<ul class="navbar-nav">
+				<li class="nav-item active"><a class="nav-link"
+					href="AdminControl.jsp">Home</a></li>
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#"
+					id="navbarDropdownMenuLink" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false">Create</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" href="AdminCreateClient.jsp">Create
+							Client</a> <a class="dropdown-item" href="AdminCreateBanker.jsp">Create
+							Banker</a> <a class="dropdown-item" href="AdminCreateAdmin.jsp">Create
+							Admin</a>
+					</div></li>
 
-					</ul>
-				</div>
-			</div>
-			<div class="col-md-10 col-sm-8 main-content">
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#"
+					id="navbarDropdownMenuLink" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false">Delete</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" href="AdminDeleteClient">Delete
+							Client</a> <a class="dropdown-item" href="AdminDeleteBanker">Delete
+							Banker</a> <a class="dropdown-item" href="AdminDeleteAdmin">Delete
+							Admin</a>
+					</div></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="row pad-row">
+		<div class="col-4 offset-4">
+			<div class="card card-outline-primary mb-3 text-center blue-outline">
 				<h1>Create Admin</h1>
-				<div class="row">
-					<div class="col-4 offset-4">
-						<div
-							class="card card-outline-primary mb-3 text-center blue-outline">
-							<div class="card-block">
-								<form action="CreateAdminServlet" method="post">
-									<div class="form-group">
-										<input type="text" class="form-control" name="adminID"
-											placeholder="Admin username">
-									</div>
-
-									<div class="form-group">
-										<input type="text" class="form-control" name="adminPassword"
-											placeholder="Password">
-									</div>
-									<button class="btn btn-primary btn-block btn-action"
-										type="submit" value="createAdmin">Create Admin</button>
-								</form>
-							</div>
+				<div class="card-block">
+					<form action="CreateAdminServlet" method="post">
+						<div class="form-group">
+							<input type="text" class="form-control" name="adminID"
+								placeholder="Admin username">
 						</div>
-					</div>
+
+						<div class="form-group">
+							<input type="text" class="form-control" name="adminPassword"
+								placeholder="Password">
+						</div>
+						<button class="btn btn-primary btn-block btn-action" type="submit"
+							value="createAdmin">Create Admin</button>
+					</form>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="../assets/js/bootstrap.min.js"></script>
 </body>
 </html>

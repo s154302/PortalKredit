@@ -1,5 +1,5 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <head>
 <title>Welcome</title>
@@ -9,70 +9,89 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2 col-sm-4 sidebar1">
-                <div class="logo">
-                    <img src="../assets/images/logo.png" class="img-responsive center-block" alt="Logo" style="width: 110">
-                </div>
-                <br>
-                <div class="left-navigation">
-                    <ul class="list">
-                        <h5 style="color: rgba(255, 255, 255, 0.5)"><strong>DELETE CLIENT</strong></h5>
-                        <li><a href="AdminCreateClient.jsp" >Create Client</a></li>
-                        <li><a href="AdminCreateBanker.jsp" >Create Banker</a></li>
-                        <li><a href="AdminCreateAdmin.jsp" >Create Admin</a></li>
-                        <li><a href="AdminDeleteClient" >Delete Client</a></li>
-                        <li><a href="AdminDeleteBanker" >Delete Banker</a></li>
-                        <li><a href="AdminDeleteAdmin" >Delete Admin</a></li>
-                        
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-10 col-sm-8 main-content">
-            <h1>Delete Client!</h1>
-            <table class="table table-bordered">
-    			<thead>
-    
-    
-    
-			    	<tr>
-			        	<th>ClientID</th>
-			        	<th>CPR</th>
-			        	<th> First name </th>
-			        	<th> Last name </th>
-			        	<th> Email </th>
-			        	<th> Mobile </th>
-			        	<th> Street </th>
-			        	<th> Postal</th>
-			        	<th> Country </th>
-			      	</tr>
-			    </thead>
+	<nav
+		class="navbar navbar-toggleable-md navbar-inverse bg-primary custom-navbar">
+		<button class="navbar-toggler navbar-toggler-right" type="button"
+			data-toggle="collapse" data-target="#navbarNavDropdown"
+			aria-controls="navbarNavDropdown" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<a class="navbar-brand" href="#"><img
+			src="../assets/images/logo.png" width="60" height="60" alt=""></a>
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
+			<ul class="navbar-nav">
+				<li class="nav-item active"><a class="nav-link" href="AdminControl.jsp">Home</a></li>
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#"
+					id="navbarDropdownMenuLink" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false">Create</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" href="AdminCreateClient.jsp">Create
+							Client</a> <a class="dropdown-item" href="AdminCreateBanker.jsp">Create
+							Banker</a> <a class="dropdown-item" href="AdminCreateAdmin.jsp">Create
+							Admin</a>
+					</div></li>
 
-		    	<tbody >
-			
-		  			<c:forEach var="ob" items="${list}">
-		     			<tr>
-		       				<td><c:out value="${ob.clientID}"/></td>
-		       				<td><c:out value="${ob.CPR}"/></td>
-		       				<td><c:out value="${ob.firstName}"/></td>
-		       				<td><c:out value="${ob.lastName}"/></td>
-		       				<td><c:out value="${ob.email}"/></td>
-		       				<td><c:out value="${ob.phoneNo}"/></td>
-		       				<td><c:out value="${ob.street}"/></td>
-		       				<td><c:out value="${ob.postal}"/></td>
-		       				<td><c:out value="${ob.country}"/></td>
-		       				
-		       				<td> <form action="" method="post">
-		       					<button class="btn btn-primary btn-block btn-action"
-										type="submit" name="username" value="${ob.clientID}">Delete</button> 
-								</form>
-							
-		    			</tr>
-		 			</c:forEach>
-		
-		    	</tbody>
-		  		</table>
-			</div>
-    </div>
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#"
+					id="navbarDropdownMenuLink" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false">Delete</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" href="AdminDeleteClient">Delete
+							Client</a> <a class="dropdown-item" href="AdminDeleteBanker">Delete
+							Banker</a> <a class="dropdown-item" href="AdminDeleteAdmin">Delete
+							Admin</a>
+					</div></li>
+			</ul>
+		</div>
+	</nav>
+	<h1 class="pad-row" style="text-align: center">Delete Client!</h1>
+	<div class="row">
+		<table class="table table-bordered">
+			<thead>
+
+
+
+				<tr>
+					<th>ClientID</th>
+					<th>CPR</th>
+					<th>First name</th>
+					<th>Last name</th>
+					<th>Email</th>
+					<th>Mobile</th>
+					<th>Street</th>
+					<th>Postal</th>
+					<th>Country</th>
+				</tr>
+			</thead>
+
+			<tbody>
+
+				<c:forEach var="ob" items="${list}">
+					<tr>
+						<td><c:out value="${ob.clientID}" /></td>
+						<td><c:out value="${ob.CPR}" /></td>
+						<td><c:out value="${ob.firstName}" /></td>
+						<td><c:out value="${ob.lastName}" /></td>
+						<td><c:out value="${ob.email}" /></td>
+						<td><c:out value="${ob.phoneNo}" /></td>
+						<td><c:out value="${ob.street}" /></td>
+						<td><c:out value="${ob.postal}" /></td>
+						<td><c:out value="${ob.country}" /></td>
+
+						<td>
+							<form action="" method="post">
+								<button class="btn btn-primary btn-block btn-action"
+									type="submit" name="username" value="${ob.clientID}">Delete</button>
+							</form>
+					</tr>
+				</c:forEach>
+
+			</tbody>
+		</table>
+	</div>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="../assets/js/bootstrap.min.js"></script>
 </body>
