@@ -6,8 +6,8 @@ import java.util.ArrayList;
  */
 public class Client {
 
-	private int CPR, phoneNo, postal;
-	private String email, fullAddress, fullName, firstName, lastName, clientID, street, country, city;
+	private int  postal;
+	private String email, fullAddress, fullName, firstName, lastName, clientID, street, country, city, CPR, phoneNo;
 	private ArrayList<Account> accounts;
 
 	public void transaction() {
@@ -36,7 +36,7 @@ public class Client {
 			+ " LastName: " + getLastName()
 			+ " FullName: " + getFullName()
 			+ " Email: " + getEmail()
-			+ " CPR: " + getCpr()
+			+ " CPR: " + getCPR()
 			+ " PhoneNo: " + getPhoneNo()
 			+ " Street: " + getStreet()
 			+ " City: " + getCity()
@@ -62,19 +62,19 @@ public class Client {
 		return clientID;
 	}
 
-	public void setCPR(int CPR) {
+	public void setCPR(String CPR) {
 		this.CPR = CPR;
 	}
 	
-	public int getCpr (){
+	public String getCPR (){
 		return CPR;
 	}
 
-	public void setPhoneNo(int phoneNo) {
+	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
 	}
 	
-	public int getPhoneNo (){
+	public String getPhoneNo (){
 		return phoneNo;
 	}
 

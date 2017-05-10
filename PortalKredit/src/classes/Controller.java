@@ -150,8 +150,8 @@ public final class Controller {
 			client.setFirstName(rs.getString("FIRST_NAME"));
 			client.setLastName(rs.getString("LAST_NAME"));
 			client.setEmail(rs.getString("EMAIL"));
-			client.setPhoneNo(rs.getInt("MOBILE"));
-			client.setCPR(rs.getInt("CPR"));
+			client.setPhoneNo(rs.getString("MOBILE"));
+			client.setCPR(rs.getString("CPR"));
 			client.setCountry(rs.getString("COUNTRY"));
 			client.setPostal(rs.getInt("POSTAL"));
 			client.setStreet(rs.getString("STREET"));
@@ -209,7 +209,7 @@ public final class Controller {
 		try {
 			con = ds1.getConnection();
 
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"adminID\"=?");
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=?");
 
 			ps.setString(1, userID);
 			ResultSet rs = ps.executeQuery();
@@ -419,6 +419,7 @@ public final class Controller {
 		Connection con;
 		try{
 		con = ds1.getConnection();
+		System.out.println(clientID);
 		PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
 		ps.setString(1, clientID);
 		ps.executeUpdate();
@@ -443,7 +444,19 @@ public final class Controller {
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\"");
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
+				Client client = new Client();
+				client.setClientID(rs.getString("CLIENTID"));
+				client.setFirstName(rs.getString("FIRST_NAME"));
+				client.setLastName(rs.getString("LAST_NAME"));
+				client.setEmail(rs.getString("EMAIL"));
+				client.setPhoneNo(rs.getString("MOBILE"));
+				client.setCPR(rs.getString("CPR"));
+				client.setCountry(rs.getString("COUNTRY"));
+				client.setPostal(rs.getInt("POSTAL"));
+				client.setStreet(rs.getString("STREET"));
+				clientList.add(client);
 				//TODO: fill out this shit
+				
 			}
 			
 		}
