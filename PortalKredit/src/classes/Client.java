@@ -29,6 +29,30 @@ public class Client {
 	public void fetchAccounts() {
 
 	}
+	
+	public String toString (){
+		String clientString = "ClientID: " + getClientID()
+			+ " FirstName: " + getFirstName()
+			+ " LastName: " + getLastName()
+			+ " FullName: " + getFullName()
+			+ " Email: " + getEmail()
+			+ " CPR: " + getCpr()
+			+ " PhoneNo: " + getPhoneNo()
+			+ " Street: " + getStreet()
+			+ " City: " + getCity()
+			+ " Country: " + getCountry()
+			+ " Postal: " + getPostal()
+			+ " FullAddress: " + getFullAddress();
+		int i = 0;
+		for(Account account : accounts){
+			try{
+				clientString = clientString + "Account: " + i +  " AccountNum: " + account.getAccountNumber() + " RegNo: " + account.getRegno() + " ";
+				i++;
+			}catch(Exception e){}
+		}
+				
+		return clientString;
+	}
 
 	public void setClientID(String clientID) {
 		this.clientID = clientID;

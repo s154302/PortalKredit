@@ -116,6 +116,7 @@ public final class Controller {
 			banker.setPhoneNo(rs.getInt("MOBILE"));
 			ArrayList<String> clientsID  = getList("CLIENT", "BANKERID", userId, "CLIENTID", ds1);
 			ArrayList<Client> clients = new ArrayList<Client>();
+			//TODO - Jeg tror al info omkring client allerde ligger i <String> listen?
 			for(String clientId : clientsID){
 				clients.add(getClientInfo(clientId, ds1));
 			}
@@ -162,6 +163,9 @@ public final class Controller {
 			ResultSet city = ps.executeQuery();
 			client.setCity(city.getString("CITY"));
 			
+			//ArrayList<String> = getAccounts(clientID , ds1);
+			//TODO- fill dat shit 
+			
 
 			rs.close();
 		} catch (SQLException e) {
@@ -171,8 +175,29 @@ public final class Controller {
 		return client;
 	}
 	
-	public static Account getAccountInfo(){
+	public static Account getAccountInfo(String accountNumber, String regNo, DataSource ds1){
+		//TODO - Værd at overveje om den ikke bare skal nuppe alle accounts til en bestemt person
 		Account account = new Account();
+		/*
+		Connection con;
+
+		try {
+			con = ds1.getConnection();
+
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\"=? AND \"REGNO\"=?");
+
+			ps.setString(1, accountNumber);
+			ps.setString(2, regNo);
+			ResultSet rs = ps.executeQuery();
+
+			
+
+			rs.close();
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		*/
 		return account;
 	}
 	
@@ -184,15 +209,15 @@ public final class Controller {
 		try {
 			con = ds1.getConnection();
 
-			// TODO: Edit ps to correct table
-//			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?");
-//
-//			ps.setString(1, userID);
-//			ResultSet rs = ps.executeQuery();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"adminID\"=?");
 
-			// TODO: Set all banker's data (Requires database to be set up)
+			ps.setString(1, userID);
+			ResultSet rs = ps.executeQuery();
 
-//			rs.close();
+			admin.setUsername(rs.getString("adminID"));
+			admin.setPassword(rs.getString("password"));
+
+			rs.close();
 		} catch (SQLException e) {
 
 			e.printStackTrace();
@@ -388,6 +413,83 @@ public final class Controller {
 			e.printStackTrace();
 		}
 		
+	}
+
+	public static void deleteClient(String clientID, DataSource ds1) {
+		Connection con;
+		try{
+		con = ds1.getConnection();
+		PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
+		ps.setString(1, clientID);
+		ps.executeUpdate();
+		
+
+		
+	
+	}
+	catch(SQLException e){
+		e.printStackTrace();
+	}
+		
+	}
+
+	public static ArrayList<Client> getClientList(DataSource ds1) {
+		
+		ArrayList<Client> clientList = new ArrayList<>();
+		Connection con;
+		
+		try{
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\"");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				//TODO: fill out this shit
+			}
+			
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return clientList;
+	}
+	public static ArrayList<Banker> getBankerList(DataSource ds1) {
+		
+		ArrayList<Banker> bankerList = new ArrayList<>();
+		Connection con;
+		
+		try{
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BANKER\"");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				//TODO: fill out this shit
+			}
+			
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		return bankerList;
+	}
+	public static void deleteBanker(String bankerID, DataSource ds1){
+		Connection con;
+		try{
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=?");
+			ps.setString(1, bankerID);
+			ps.executeUpdate();
+		
+
+		
+	
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+	
 	}
 
 }

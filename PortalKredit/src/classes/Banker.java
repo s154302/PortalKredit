@@ -37,16 +37,33 @@ public class Banker {
 	public void withdraw(double amount) {
 
 	}
+	
+	public String toString(){
+		String bankerString = "BankerID: " + getBankerID() 
+		+ " First Name: " + getFirstName() 
+		+ " Last Name: " + getLastName()
+		+ " Full Name: " + getFullName()
+		+ " Email: " + getEmail()
+		+ " PhoneNo: " + getPhoneNo()
+		+ " RegNo: " + getRegNo();
+		int i = 0;
+		for(Client client : clients){
+			try{
+				bankerString = bankerString + "Client: " + i + " id: " +  client.getClientID() + " ";
+				i++;
+			}catch(Exception e){}
 
+		}
+		
+		return bankerString;
+	}
+	
 	public void setBankerID(String bankerID) {
 		this.bankerID = bankerID;
 	}
 	
 	public String getBankerID(){
 		return bankerID;
-	}
-	
-	public void setPassword(String password) {
 	}
 
 	public void setFullName() {

@@ -12,14 +12,15 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Admin;
+import classes.Banker;
 import classes.Controller;
 
-@WebServlet("/AdminDeleteAdmin")
-public class DeleteAdminServlet extends HttpServlet {
+@WebServlet("/AdminDeleteBanker")
+public class DeleteBankerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
-	public DeleteAdminServlet(){
+	public DeleteBankerServlet(){
 		super();
 	}
 	@Resource(name = "jdbc/DB2")
@@ -31,18 +32,18 @@ public class DeleteAdminServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		
-		ArrayList<Admin> adminList = Controller.getAdminList(ds1);
-		request.setAttribute("list", adminList);
+		ArrayList<Banker> bankerList = Controller.getBankerList(ds1);
+		request.setAttribute("list", bankerList);
 
-		request.getRequestDispatcher("AdminDeleteAdmin.jsp").forward(request, response);
+		request.getRequestDispatcher("AdminDeleteBanker.jsp").forward(request, response);
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		
-		String adminID = request.getParameter("username");
+		String bankerID = request.getParameter("username");
 		
-		Controller.deleteAdmin(adminID, ds1);
+		Controller.deleteAdmin(bankerID, ds1);
 		
 		doGet(request, response);
 	}

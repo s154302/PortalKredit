@@ -25,9 +25,9 @@
 								Banker</a></li>
 						<li><a href="AdminCreateAdmin.jsp">Create
 								Admin</a></li>
-						<li><a href="AdminDeleteClient.jsp">Delete
+						<li><a href="AdminDeleteClient">Delete
 								Client</a></li>
-						<li><a href="AdminDeleteBanker.jsp">Delete
+						<li><a href="AdminDeleteBanker">Delete
 								Banker</a></li>
 						<li><a href="AdminDeleteAdmin">Delete
 								Admin</a></li>

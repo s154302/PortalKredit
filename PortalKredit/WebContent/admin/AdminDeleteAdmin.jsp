@@ -28,13 +28,12 @@
 								Banker</a></li>
 						<li><a style="color: #fff" href="AdminCreateAdmin.jsp">Create
 								Admin</a></li>
-						<li><a style="color: #fff" href="AdminDeleteClient.jsp">Delete
+						<li><a style="color: #fff" href="AdminDeleteClient">Delete
 								Client</a></li>
-						<li><a style="color: #fff" href="AdminDeleteBanker.jsp">Delete
+						<li><a style="color: #fff" href="AdminDeleteBanker">Delete
 								Banker</a></li>
 						<li><a style="color: #fff" href="AdminDeleteAdmin">Delete
 								Admin</a></li>
-
 					</ul>
 				</div>
 			</div>
@@ -73,7 +72,7 @@
 						</table>
 					</div>
 				</div>
-
 			</div>
 		</div>
+	</div>
 </body>
