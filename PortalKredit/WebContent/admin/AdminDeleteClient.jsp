@@ -37,9 +37,15 @@
     
     
 			    	<tr>
-			        	<th>Login</th>
-			        	<th>Password</th>
-			        	<th> Delete </th>
+			        	<th>ClientID</th>
+			        	<th>CPR</th>
+			        	<th> First name </th>
+			        	<th> Last name </th>
+			        	<th> Email </th>
+			        	<th> Mobile </th>
+			        	<th> Street </th>
+			        	<th> Postal</th>
+			        	<th> Country </th>
 			      	</tr>
 			    </thead>
 
@@ -47,12 +53,19 @@
 			
 		  			<c:forEach var="ob" items="${list}">
 		     			<tr>
-		       				<td><c:out value="${ob.username}"/></td>
-		       				<td><c:out value="${ob.password}"/></td>
+		       				<td><c:out value="${ob.clientID}"/></td>
+		       				<td><c:out value="${ob.CPR}"/></td>
+		       				<td><c:out value="${ob.firstName}"/></td>
+		       				<td><c:out value="${ob.lastName}"/></td>
+		       				<td><c:out value="${ob.email}"/></td>
+		       				<td><c:out value="${ob.phoneNo}"/></td>
+		       				<td><c:out value="${ob.street}"/></td>
+		       				<td><c:out value="${ob.postal}"/></td>
+		       				<td><c:out value="${ob.country}"/></td>
 		       				
 		       				<td> <form action="" method="post">
 		       					<button class="btn btn-primary btn-block btn-action"
-										type="submit" name="username" value="${ob.username}">Delete</button> 
+										type="submit" name="username" value="${ob.clientID}">Delete</button> 
 								</form>
 							
 		    			</tr>

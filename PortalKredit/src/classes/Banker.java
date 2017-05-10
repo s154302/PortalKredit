@@ -6,10 +6,23 @@ import java.util.ArrayList;
  */
 public class Banker {
 
-	private int phoneNo, regNo;
-	private String firstName, lastName, fullName, email, bankerID;
+	private int  regNo;
+	private String firstName, lastName, fullName, email, bankerID, phoneNo;
 	private ArrayList<Client> clients;
 
+	public Banker(){
+		
+	}
+	
+	public Banker(String firstName, String lastName, String email, String bankerID, String phoneNo, int regNo){
+		setFirstName(firstName);
+		setLastName(lastName);
+		this.email = email;
+		this.bankerID = bankerID;
+		this.phoneNo = phoneNo;
+		this.regNo = regNo;
+	}
+	
 	public void createClient() {
 
 	}
@@ -119,11 +132,11 @@ public class Banker {
 		this.email = email;
 	}
 
-	public int getPhoneNo() {
+	public String getPhoneNo() {
 		return phoneNo;
 	}
 
-	public void setPhoneNo(int phoneNo) {
+	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
 	}
 	
