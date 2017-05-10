@@ -21,7 +21,8 @@
 			src="../assets/images/logo.png" width="60" height="60" alt=""></a>
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 			<ul class="navbar-nav">
-				<li class="nav-item active"><a class="nav-link" href="AdminControl.jsp">Home</a></li>
+				<li class="nav-item active"><a class="nav-link"
+					href="AdminControl.jsp">Home</a></li>
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#"
 					id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -46,50 +47,51 @@
 			</ul>
 		</div>
 	</nav>
-	<h1 class="pad-row" style="text-align: center">Delete Client!</h1>
-	<div class="row">
-		<table class="table table-bordered">
-			<thead>
+	<div class="row pad-row">
+		<div class="col-4 offset-4">
+			<div class="card card-outline-primary mb-3 text-center blue-outline">
+				<h1>Delete Client!</h1>
+				<div class="card-block">
+					<table class="table table-hover">
+						<thead>
+							<th></th>
+							<th></th>
+							<th></th>
+						</thead>
 
+						<tbody>
 
-
-				<tr>
-					<th>ClientID</th>
-					<th>CPR</th>
-					<th>First name</th>
-					<th>Last name</th>
-					<th>Email</th>
-					<th>Mobile</th>
-					<th>Street</th>
-					<th>Postal</th>
-					<th>Country</th>
-				</tr>
-			</thead>
-
-			<tbody>
-
-				<c:forEach var="ob" items="${list}">
-					<tr>
-						<td><c:out value="${ob.clientID}" /></td>
-						<td><c:out value="${ob.CPR}" /></td>
-						<td><c:out value="${ob.firstName}" /></td>
-						<td><c:out value="${ob.lastName}" /></td>
-						<td><c:out value="${ob.email}" /></td>
-						<td><c:out value="${ob.phoneNo}" /></td>
-						<td><c:out value="${ob.street}" /></td>
-						<td><c:out value="${ob.postal}" /></td>
-						<td><c:out value="${ob.country}" /></td>
-
-						<td>
-							<form action="" method="post">
-								<button class="btn btn-primary btn-block btn-action"
-									type="submit" name="username" value="${ob.clientID}">Delete</button>
-							</form>
-					</tr>
-				</c:forEach>
-
-			</tbody>
-		</table>
+							<c:forEach var="ob" items="${list}">
+								<tr data-toggle="collapse" data-target="#${ob.clientID}"
+									class="clickable">
+									<td><c:out value="${ob.clientID}" /></td>
+									<td><c:out value="${ob.firstName}" /></td>
+									<td><c:out value="${ob.lastName}" /></td>
+								</tr>
+								<tr>
+									<td colspan="3">
+										<div id="${ob.clientID}" class="collapse">
+											<ul>
+												<li>CPR: ${ob.CPR}</li>
+												<li>Email: ${ob.email}</li>
+												<li>Mobile: ${ob.phoneNo}</li>
+												<li>Street: ${ob.street}</li>
+												<li>Postal: ${ob.postal}</li>
+												<li>Country: ${ob.country}</li>
+											</ul>
+											<form action="" method="post">
+												<button class="btn btn-primary btn-block btn-action"
+													type="submit" name="username" value="${ob.clientID}">Delete</button>
+											</form>
+										</div>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
