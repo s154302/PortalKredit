@@ -33,7 +33,7 @@ public class Account {
 	public void setAccountNumber(int accountNumber) {
 		this.accountNumber = accountNumber;
 	}
-
+ 
 	public int getRegno() {
 		return regno;
 	}
