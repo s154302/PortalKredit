@@ -376,7 +376,7 @@ public final class Controller {
 		try {
 			con = ds1.getConnection();
 
-			PreparedStatement ps = con.prepareStatement("SELECT CITY FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"ACCOUNTTYPE\" = ?");
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"ACCOUNTTYPE\" = ?");
 			
 			ps.setString(1, accountType);
 			ResultSet rs = ps.executeQuery();
