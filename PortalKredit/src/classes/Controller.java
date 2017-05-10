@@ -213,7 +213,7 @@ public final class Controller {
 
 			ps.setString(1, userID);
 			ResultSet rs = ps.executeQuery();
-
+			rs.next();
 			admin.setUsername(rs.getString("adminID"));
 			admin.setPassword(rs.getString("password"));
 
