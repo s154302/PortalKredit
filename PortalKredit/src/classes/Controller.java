@@ -114,13 +114,9 @@ public final class Controller {
 			banker.setRegNo(rs.getInt("REGNO"));
 			banker.setEmail(rs.getString("EMAIL"));
 			banker.setPhoneNo(rs.getString("MOBILE"));
-			ArrayList<String> clientsID  = getList("CLIENT", "BANKERID", userId, "CLIENTID", ds1);
-			ArrayList<Client> clients = new ArrayList<Client>();
-			//TODO - Jeg tror al info omkring client allerde ligger i <String> listen?
-			for(String clientId : clientsID){
-				clients.add(getClientInfo(clientId, ds1));
-			}
-			banker.setClients(clients);
+			
+			//Consider if this only should be called when the information is needed
+			banker.setClients(getClients(userId, ds1));
 			
 			rs.close();
 		} catch (SQLException e) {
@@ -267,6 +263,30 @@ public final class Controller {
 		}
 	}
 
+	public static ArrayList<Client> getClients (String clientID, DataSource ds1){
+		ArrayList<Client> clientList = new ArrayList<>();
+		Connection con;
+		try {
+			con = ds1.getConnection();
+
+			//TODO - Make a natural join with place
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\" = ?");
+			ps.setString(1, clientID);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				
+				clientList.add(new Client(rs.getString("email"), rs.getString("first_name"), rs.getString("last_name"),
+						rs.getString("clientID"), rs.getString("street"), rs.getString("country"),
+						rs.getString("city"), rs.getString("cpr"), rs.getString("phoneNo"), rs.getInt("postal")));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return clientList;
+	}
+	
 	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,
 			DataSource ds1) {
 		ArrayList<String> list = new ArrayList<>();
