@@ -42,8 +42,7 @@ public class DeleteBankerServlet extends HttpServlet {
 		response.setContentType("text/html");
 		
 		String bankerID = request.getParameter("username");
-		
-		Controller.deleteAdmin(bankerID, ds1);
+		Controller.deleteBanker(bankerID, ds1);
 		
 		doGet(request, response);
 	}

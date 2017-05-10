@@ -477,6 +477,14 @@ public final class Controller {
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				//TODO: fill out this shit
+				Banker banker = new Banker();
+				banker.setBankerID(rs.getString("BANKERID"));
+				banker.setFirstName(rs.getString("FIRSTNAME"));
+				banker.setLastName(rs.getString("LASTNAME"));
+				banker.setRegNo(rs.getInt("REGNO"));
+				banker.setEmail(rs.getString("EMAIL"));
+				banker.setPhoneNo(rs.getString("MOBILE"));
+				bankerList.add(banker);
 			}
 			
 		}
