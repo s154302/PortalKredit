@@ -73,7 +73,7 @@ public final class Controller {
 		return st;
 	}
 
-	// maybe private ??
+	// maybe private ?? - I don't think you can when we say Controller.W/E ;)
 	public static boolean adminAuthenticate(String adminID, String password, DataSource ds1) {
 		boolean st = false;
 		try {
@@ -154,7 +154,8 @@ public final class Controller {
 			client.setStreet(rs.getString("STREET"));
 			client.setCity(findCity(rs.getInt("postal"), rs.getString("country"), ds1));
 			
-			//ArrayList<String> = getAccounts(clientID , ds1);
+			//Consider if we want to fill the Client with its account info before it's used
+			client.setAccounts(getAccounts(userId, ds1));
 			
 
 			rs.close();
@@ -168,8 +169,28 @@ public final class Controller {
 	//Returns all accounts, as an ArrayList, associated with a single client
 	public static ArrayList<Account> getAccounts(String clientID, DataSource ds1){
 		
-		
-		return null;
+		ArrayList<Account> accountList = new ArrayList<Account>();
+		Connection con;
+
+		try {
+			con = ds1.getConnection();
+
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"CLIENTID\"=?");
+			ps.setString(1, clientID);
+
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()){
+				accountList.add(new Account(rs.getString("accountNumber"), rs.getInt("regNo"),
+						rs.getString("accountType"), rs.getString("clientID"), rs.getDouble("balance"), rs.getString("currency"),
+						findInterestRate(rs.getString("accountType"), ds1)));
+			}
+
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return accountList;
 	}
 	
 	//Fills a single client object with data and returns it
@@ -199,6 +220,7 @@ public final class Controller {
 		return account;
 	}
 	
+	//Fills a single admin object with data and returns it
 	public static Admin getAdminInfo(String userID, DataSource ds1){
 		Admin admin = new Admin("", "");
 		
@@ -296,7 +318,7 @@ public final class Controller {
 		try {
 			con = ds1.getConnection();
 
-			PreparedStatement ps = con.prepareStatement("SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = '?' AND \"COUNTRY\" = '?'");
+			PreparedStatement ps = con.prepareStatement("SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = ? AND \"COUNTRY\" = ?");
 			
 			ps.setInt(1, postal);
 			ps.setString(2, country);
@@ -311,6 +333,29 @@ public final class Controller {
 			e.printStackTrace();
 		}
 		return city;
+	}
+	
+	//Returns the interestRate associated with the given account type
+	public static double findInterestRate(String accountType, DataSource ds1){
+		double rate = 0;
+		Connection con;
+		try {
+			con = ds1.getConnection();
+
+			PreparedStatement ps = con.prepareStatement("SELECT CITY FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"ACCOUNTTYPE\" = ?");
+			
+			ps.setString(1, accountType);
+			ResultSet rs = ps.executeQuery();
+
+			rs.next();
+			
+			rate = rs.getDouble("interestRate ");
+			
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return rate;
 	}
 	
 	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,

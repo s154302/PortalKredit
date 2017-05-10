@@ -9,9 +9,24 @@ public class Account {
 
 	private int regNo;
 	private String currency, accountNumber, accountType, clientID;
-	private double balance;
+	private double balance, interestRate;
 	private ArrayList<Transaction> transactions;
 
+	public Account (){
+		
+	}
+	
+	public Account(String accountNumber, int regNo, String accountType,
+			String clientID, double balance, String currency, double interestRate){
+		this.accountNumber = accountNumber;
+		this.regNo = regNo;
+		this.accountType = accountType;
+		this.clientID = clientID;
+		this.balance = balance; 
+		this.currency = currency;
+		this.interestRate = interestRate;
+	}
+	
 	public void fetchData(Date beginDate, Date endDate) {
 
 	}
@@ -80,6 +95,14 @@ public class Account {
 
 	public void setClientID(String clientID) {
 		this.clientID = clientID;
+	}
+
+	public double getInterestRate() {
+		return interestRate;
+	}
+
+	public void setInterestRate(double interestRate) {
+		this.interestRate = interestRate;
 	}
 
 }
