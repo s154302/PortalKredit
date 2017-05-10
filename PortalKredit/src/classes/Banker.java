@@ -10,6 +10,19 @@ public class Banker {
 	private String firstName, lastName, fullName, email, bankerID, phoneNo;
 	private ArrayList<Client> clients;
 
+	public Banker(){
+		
+	}
+	
+	public Banker(String firstName, String lastName, String email, String bankerID, String phoneNo, int regNo){
+		setFirstName(firstName);
+		setLastName(lastName);
+		this.email = email;
+		this.bankerID = bankerID;
+		this.phoneNo = phoneNo;
+		this.regNo = regNo;
+	}
+	
 	public void createClient() {
 
 	}

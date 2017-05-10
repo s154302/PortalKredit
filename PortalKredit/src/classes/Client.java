@@ -10,6 +10,24 @@ public class Client {
 	private String email, fullAddress, fullName, firstName, lastName, clientID, street, country, city, CPR, phoneNo;
 	private ArrayList<Account> accounts;
 
+	public Client(){
+		
+	}
+	
+	public Client(String email, String firstName, String lastName, String clientID,
+			String street, String country, String city, String CPR, String phoneNo, int postal){
+		this.email = email;
+		setFirstName(firstName);
+		setLastName(lastName);
+		this.clientID = clientID;
+		setStreet(street);
+		setCountry(country);
+		setCity(city);
+		this.CPR = CPR;
+		this.phoneNo = phoneNo;
+		setPostal(postal);
+	}
+	
 	public void transaction() {
 
 	}
