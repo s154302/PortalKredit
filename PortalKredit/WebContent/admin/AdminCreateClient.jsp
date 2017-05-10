@@ -23,7 +23,7 @@
 		<div class="collapse navbar-collapse"
 			id="navbarNavDropdown">
 			<ul class="navbar-nav">
-				<li class="nav-item active"><a class="nav-link" href="#">Home</a></li>
+				<li class="nav-item active"><a class="nav-link" href="AdminControl.jsp">Home</a></li>
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#"
 					id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -49,7 +49,7 @@
 
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
-			<div class="card card-outline-primary mb-3 text-center blue-outline"">
+			<div class="card card-outline-primary mb-3 text-center blue-outline">
 				<h1>Create Client!</h1>
 				<div class="card-block">
 					<form action="CreateClientServlet" method="post">

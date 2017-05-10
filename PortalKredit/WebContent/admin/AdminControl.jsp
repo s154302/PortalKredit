@@ -6,38 +6,44 @@
 </head>
 
 <body>
-	<div class="container-fluid">
-		<div class="row">
-			<div id="sidebar" class="col-md-2 col-sm-4 sidebar1">
-				<div class="logo">
-					<img src="../assets/images/logo.png"
-						class="img-responsive center-block" alt="Logo" style="width: 110">
-				</div>
-				<br>
-				<div class="left-navigation">
-					<h5 style="color: rgba(255, 255, 255, 0.5)">
-						<strong>HOME</strong>
-					</h5>
-					<ul class="list">
-						<li><a href="AdminCreateClient.jsp">Create
-								Client</a></li>
-						<li><a href="AdminCreateBanker.jsp">Create
-								Banker</a></li>
-						<li><a href="AdminCreateAdmin.jsp">Create
-								Admin</a></li>
-						<li><a href="AdminDeleteClient">Delete
-								Client</a></li>
-						<li><a href="AdminDeleteBanker">Delete
-								Banker</a></li>
-						<li><a href="AdminDeleteAdmin">Delete
-								Admin</a></li>
-					</ul>
-				</div>
-			</div>
-			<div id="main" class="col-md-10 col-sm-8 main-content">
-				<h1>Welcome MASTER!</h1>
-			</div>
-		</div>
-	</div>
+	<nav
+		class="navbar navbar-toggleable-md navbar-inverse bg-primary custom-navbar">
+		<button class="navbar-toggler navbar-toggler-right" type="button"
+			data-toggle="collapse" data-target="#navbarNavDropdown"
+			aria-controls="navbarNavDropdown" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<a class="navbar-brand" href="#"><img
+			src="../assets/images/logo.png" width="60" height="60" alt=""></a>
+		<div class="collapse navbar-collapse"
+			id="navbarNavDropdown">
+			<ul class="navbar-nav">
+				<li class="nav-item active"><a class="nav-link" href="AdminControl.jsp">Home</a></li>
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#"
+					id="navbarDropdownMenuLink" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false">Create</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" href="AdminCreateClient.jsp">Create Client</a> <a
+							class="dropdown-item" href="AdminCreateBanker.jsp">Create Banker</a> <a
+							class="dropdown-item" href="AdminCreateAdmin.jsp">Create Admin</a>
+					</div></li>
 
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#"
+					id="navbarDropdownMenuLink" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false">Delete</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item" href="AdminDeleteClient">Delete Client</a> <a
+							class="dropdown-item" href="AdminDeleteBanker">Delete Banker</a> <a
+							class="dropdown-item" href="AdminDeleteAdmin">Delete Admin</a>
+					</div></li>
+			</ul>
+		</div>
+	</nav>
+				<h1>Welcome MASTER!</h1>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="../assets/js/bootstrap.min.js"></script>
 </body>
