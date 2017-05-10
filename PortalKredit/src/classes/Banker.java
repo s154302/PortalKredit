@@ -6,8 +6,8 @@ import java.util.ArrayList;
  */
 public class Banker {
 
-	private int phoneNo, regNo;
-	private String firstName, lastName, fullName, email, bankerID;
+	private int  regNo;
+	private String firstName, lastName, fullName, email, bankerID, phoneNo;
 	private ArrayList<Client> clients;
 
 	public void createClient() {
@@ -119,11 +119,11 @@ public class Banker {
 		this.email = email;
 	}
 
-	public int getPhoneNo() {
+	public String getPhoneNo() {
 		return phoneNo;
 	}
 
-	public void setPhoneNo(int phoneNo) {
+	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
 	}
 	

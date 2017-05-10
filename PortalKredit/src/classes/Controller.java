@@ -113,7 +113,7 @@ public final class Controller {
 			banker.setLastName(rs.getString("LASTNAME"));
 			banker.setRegNo(rs.getInt("REGNO"));
 			banker.setEmail(rs.getString("EMAIL"));
-			banker.setPhoneNo(rs.getInt("MOBILE"));
+			banker.setPhoneNo(rs.getString("MOBILE"));
 			ArrayList<String> clientsID  = getList("CLIENT", "BANKERID", userId, "CLIENTID", ds1);
 			ArrayList<Client> clients = new ArrayList<Client>();
 			//TODO - Jeg tror al info omkring client allerde ligger i <String> listen?
