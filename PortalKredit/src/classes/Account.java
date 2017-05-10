@@ -7,8 +7,8 @@ import java.util.Date;
  */
 public class Account {
 
-	private int accountNumber, regno;
-	private String accountName, currency;
+	private int regNo;
+	private String currency, accountNumber, accountType, clientID;
 	private double balance;
 	private ArrayList<Transaction> transactions;
 
@@ -19,36 +19,19 @@ public class Account {
 	public String toString(){
 		String accountString = 
 				"AccountNumber: " + getAccountNumber()
-				+ " RegNo: " + getRegno()
+				+ " RegNo: " + getRegNo()
 				+ " Balance: " + getBalance()
 				+ " Currency: " + getCurrency();
 		
 		return accountString;
 	}
 	
-	public int getAccountNumber() {
+	public String getAccountNumber() {
 		return accountNumber;
 	}
 
-	public void setAccountNumber(int accountNumber) {
+	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
-	}
-
-	public int getRegno() {
-		return regno;
-	}
-
-	public void setRegno(int regno) {
-		this.regno = regno;
-	}
-
-	//TODO - there is no accountName in the database
-	public String getAccountName() {
-		return accountName;
-	}
-
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
 	}
 
 	public String getCurrency() {
@@ -73,6 +56,30 @@ public class Account {
 
 	public void setTransactions(ArrayList<Transaction> transactions) {
 		this.transactions = transactions;
+	}
+
+	public int getRegNo() {
+		return regNo;
+	}
+
+	public void setRegNo(int regNo) {
+		this.regNo = regNo;
+	}
+
+	public String getAccountType() {
+		return accountType;
+	}
+
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
+	}
+
+	public String getClientID() {
+		return clientID;
+	}
+
+	public void setClientID(String clientID) {
+		this.clientID = clientID;
 	}
 
 }

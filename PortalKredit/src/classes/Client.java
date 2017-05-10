@@ -64,7 +64,7 @@ public class Client {
 		int i = 0;
 		for(Account account : accounts){
 			try{
-				clientString = clientString + "Account: " + i +  " AccountNum: " + account.getAccountNumber() + " RegNo: " + account.getRegno() + " ";
+				clientString = clientString + "Account: " + i +  " AccountNum: " + account.getAccountNumber() + " RegNo: " + account.getRegNo() + " ";
 				i++;
 			}catch(Exception e){}
 		}

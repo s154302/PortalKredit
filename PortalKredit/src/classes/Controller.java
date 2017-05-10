@@ -94,6 +94,7 @@ public final class Controller {
 		return st;
 	}
 
+	//Fills a banker client object with data and returns it
 	public static Banker getBankerInfo(String userId, DataSource ds1) {
 		Banker banker = new Banker();
 		Connection con;
@@ -115,7 +116,7 @@ public final class Controller {
 			banker.setEmail(rs.getString("EMAIL"));
 			banker.setPhoneNo(rs.getString("MOBILE"));
 			
-			//Consider if this only should be called when the information is needed
+			//TODO - Consider if this only should be called when the information is needed
 			banker.setClients(getClients(userId, ds1));
 			
 			rs.close();
@@ -126,7 +127,8 @@ public final class Controller {
 
 		return banker;
 	}
-
+	
+	//Fills a single client object with data and returns it
 	public static Client getClientInfo(String userId, DataSource ds1) {
 		Client client = new Client();
 		Connection con;
@@ -139,7 +141,6 @@ public final class Controller {
 			ps.setString(1, userId);
 			ResultSet rs = ps.executeQuery();
 
-			// TODO: Set all client's data (Requires database to be set up)
 			rs.next();
 			
 			client.setClientID(rs.getString("CLIENTID"));
@@ -151,16 +152,9 @@ public final class Controller {
 			client.setCountry(rs.getString("COUNTRY"));
 			client.setPostal(rs.getInt("POSTAL"));
 			client.setStreet(rs.getString("STREET"));
-			
-			
-			ps = con.prepareStatement("SELECT CITY FROM \"DTUGRP16\".\"CLIENT FULL OUTER JOIN \"DTUGRP16\".\"PLACE\" "
-					+ "ON \"DTUGRP16\".\"CLIENT\".\"COUNTRY\" = \"DTUGRP16\".\"PLACE\".\"COUNTRY\" "
-					+ "AND \"DTUGRP16\".\"CLIENT\".\"POSTAL\" = \"DTUGRP16\".\"PLACE\".\"POSTAL\" WHERE \"CLIENTID \"= ?");
-			ResultSet city = ps.executeQuery();
-			client.setCity(city.getString("CITY"));
+			client.setCity(findCity(rs.getInt("postal"), rs.getString("country"), ds1));
 			
 			//ArrayList<String> = getAccounts(clientID , ds1);
-			//TODO- fill dat shit 
 			
 
 			rs.close();
@@ -171,6 +165,14 @@ public final class Controller {
 		return client;
 	}
 	
+	//Returns all accounts, as an ArrayList, associated with a single client
+	public static ArrayList<Account> getAccounts(String clientID, DataSource ds1){
+		
+		
+		return null;
+	}
+	
+	//Fills a single client object with data and returns it
 	public static Account getAccountInfo(String accountNumber, String regNo, DataSource ds1){
 		//TODO - Værd at overveje om den ikke bare skal nuppe alle accounts til en bestemt person
 		Account account = new Account();
@@ -263,28 +265,52 @@ public final class Controller {
 		}
 	}
 
-	public static ArrayList<Client> getClients (String clientID, DataSource ds1){
+	//Returns all clients associated with a single banker
+	public static ArrayList<Client> getClients (String bankerID, DataSource ds1){
 		ArrayList<Client> clientList = new ArrayList<>();
 		Connection con;
 		try {
 			con = ds1.getConnection();
-
-			//TODO - Make a natural join with place
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\" = ?");
-			ps.setString(1, clientID);
+			
+			ps.setString(1, bankerID);
+			
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				
 				clientList.add(new Client(rs.getString("email"), rs.getString("first_name"), rs.getString("last_name"),
 						rs.getString("clientID"), rs.getString("street"), rs.getString("country"),
-						rs.getString("city"), rs.getString("cpr"), rs.getString("phoneNo"), rs.getInt("postal")));
+						findCity(rs.getInt("postal"), rs.getString("country"), ds1), rs.getString("cpr"), rs.getString("phoneNo"), rs.getInt("postal")));
 			}
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return clientList;
+	}
+	
+	//Returns the city associated with the postal and country
+	public static String findCity(int postal, String country, DataSource ds1){
+		String city = "Orgrimmar";
+		Connection con;
+		try {
+			con = ds1.getConnection();
+
+			PreparedStatement ps = con.prepareStatement("SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = '?' AND \"COUNTRY\" = '?'");
+			
+			ps.setInt(1, postal);
+			ps.setString(2, country);
+			ResultSet rs = ps.executeQuery();
+
+			rs.next();
+			
+			city = rs.getString("city");
+			
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return city;
 	}
 	
 	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,
@@ -342,6 +368,7 @@ public final class Controller {
 		return ID;
 	}
 	
+	//Returns all admins in the database
 	public static ArrayList<Admin> getAdminList(DataSource ds1){
 		ArrayList<Admin> adminList = new ArrayList<>();
 		Connection con;
@@ -454,6 +481,7 @@ public final class Controller {
 		
 	}
 
+	//Returns all clients in the database
 	public static ArrayList<Client> getClientList(DataSource ds1) {
 		
 		ArrayList<Client> clientList = new ArrayList<>();
@@ -486,6 +514,8 @@ public final class Controller {
 		
 		return clientList;
 	}
+	
+	//Returns all bankers in the database
 	public static ArrayList<Banker> getBankerList(DataSource ds1) {
 		
 		ArrayList<Banker> bankerList = new ArrayList<>();
@@ -514,6 +544,7 @@ public final class Controller {
 		
 		return bankerList;
 	}
+	
 	public static void deleteBanker(String bankerID, DataSource ds1){
 		Connection con;
 		try{
