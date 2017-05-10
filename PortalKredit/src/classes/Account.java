@@ -53,8 +53,8 @@ public class Account {
 		return currency;
 	}
 
-	public void setValuta(String valuta) {
-		this.currency = valuta;
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	public double getBalance() {

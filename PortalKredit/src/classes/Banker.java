@@ -60,13 +60,13 @@ public class Banker {
 		+ " PhoneNo: " + getPhoneNo()
 		+ " RegNo: " + getRegNo();
 		int i = 0;
-		for(Client client : clients){
+		/*for(Client client : clients){
 			try{
 				bankerString = bankerString + "Client: " + i + " id: " +  client.getClientID() + " ";
 				i++;
 			}catch(Exception e){}
 
-		}
+		}*/
 		
 		return bankerString;
 	}
