@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+// REMEMBER st IS STATEMENT
+
 public final class Controller {
 	public static enum Type {
 		client, banker, admin
