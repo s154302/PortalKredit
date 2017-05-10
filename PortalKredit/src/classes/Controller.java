@@ -219,7 +219,7 @@ public final class Controller {
 			ps.setString(7, mobile);
 			ps.setString(8, street);
 			ps.setString(9, bankerID);
-			ps.setInt(10, postal);
+			ps.setInt(10, postal); 
 			ps.setString(11, country.toUpperCase());
 			ps.executeUpdate();
 		} catch (SQLException e) {

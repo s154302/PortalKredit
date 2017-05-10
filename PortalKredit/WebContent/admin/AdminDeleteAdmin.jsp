@@ -1,5 +1,5 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <head>
 <title>Welcome</title>
@@ -9,60 +9,71 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2 col-sm-4 sidebar1">
-                <div class="logo">
-                    <img src="../assets/images/logo.png" class="img-responsive center-block" alt="Logo" style="width: 110">
-                </div>
-                <br>
-                <div class="left-navigation">
-                    <ul class="list">
-                        <h5 style="color: rgba(255, 255, 255, 0.5)"><strong>DELETE ADMIN</strong></h5>
-                        <li><a style = "color: #fff" href="AdminCreateClient.jsp" >Create Client</a></li>
-                        <li><a style = "color: #fff" href="AdminCreateBanker.jsp" >Create Banker</a></li>
-                        <li><a style = "color: #fff" href="AdminCreateAdmin.jsp" >Create Admin</a></li>
-                        <li><a style = "color: #fff" href="AdminDeleteClient.jsp" >Delete Client</a></li>
-                        <li><a style = "color: #fff" href="AdminDeleteBanker.jsp" >Delete Banker</a></li>
-                        <li><a style = "color: #fff" href="AdminDeleteAdmin" >Delete Admin</a></li>
-                        
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-10 col-sm-8 main-content">
-            <h1>Delete Admin!</h1>
-            
-            <table class="table table-bordered">
-    			<thead>
-    
-    
-    
-			    	<tr>
-			        	<th>Login</th>
-			        	<th>Password</th>
-			        	<th> Delete </th>
-			      	</tr>
-			    </thead>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2 col-sm-4 sidebar1">
+				<div class="logo">
+					<img src="../assets/images/logo.png"
+						class="img-responsive center-block" alt="Logo" style="width: 110">
+				</div>
+				<br>
+				<div class="left-navigation">
+					<ul class="list">
+						<h5 style="color: rgba(255, 255, 255, 0.5)">
+							<strong>DELETE ADMIN</strong>
+						</h5>
+						<li><a style="color: #fff" href="AdminCreateClient.jsp">Create
+								Client</a></li>
+						<li><a style="color: #fff" href="AdminCreateBanker.jsp">Create
+								Banker</a></li>
+						<li><a style="color: #fff" href="AdminCreateAdmin.jsp">Create
+								Admin</a></li>
+						<li><a style="color: #fff" href="AdminDeleteClient.jsp">Delete
+								Client</a></li>
+						<li><a style="color: #fff" href="AdminDeleteBanker.jsp">Delete
+								Banker</a></li>
+						<li><a style="color: #fff" href="AdminDeleteAdmin">Delete
+								Admin</a></li>
 
-		    	<tbody >
-			
-		  			<c:forEach var="ob" items="${list}">
-		     			<tr>
-		       				<td><c:out value="${ob.username}"/></td>
-		       				<td><c:out value="${ob.password}"/></td>
-		       				
-		       				<td> <form action="" method="post">
-		       					<button class="btn btn-primary btn-block btn-action"
-										type="submit" name="username" value="${ob.username}">Delete</button> 
-								</form>
-							
-		    			</tr>
-		 			</c:forEach>
-		
-		    	</tbody>
-		  		</table>
-	
-  
+					</ul>
+				</div>
 			</div>
-    </div>
+			<div class="container main-content">
+				<div class="row">
+					<div class="col-md-12">
+						<h1>Delete Admin!</h1>
+						<table class="table table-sm table-bordered">
+							<thead>
+
+
+
+								<tr>
+									<th>Login</th>
+									<th>Password</th>
+									<th>Delete</th>
+								</tr>
+							</thead>
+
+							<tbody>
+
+								<c:forEach var="ob" items="${list}">
+									<tr>
+										<td><c:out value="${ob.username}" /></td>
+										<td><c:out value="${ob.password}" /></td>
+
+										<td>
+											<form action="" method="post">
+												<button class="btn btn-sm btn-primary btn-block btn-action"
+													type="submit" name="username" value="${ob.username}">Delete</button>
+											</form>
+									</tr>
+								</c:forEach>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+			</div>
+		</div>
 </body>
