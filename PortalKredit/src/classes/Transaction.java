@@ -28,6 +28,18 @@ public class Transaction {
 		this.currency = currency;
 	}
 	
+	public String toString(){
+		String transactionString  = "TransactionId: " + transactionID + " AccountNumber: " + accountNumber + " RegNo: "
+				+ regNo + " RecieveAccount " + recieveAccount + " RecieveRegNo: " + recieveRegNo +  " Amount: " + amount
+				+ " Currency: " + currency;
+		try{
+			transactionString = transactionString + " Date: "
+					+ dateOfTransaction.toString();
+		}catch(NullPointerException e){}
+		
+		return transactionString;
+	}
+	
 	public int getTransactionID() {
 		return transactionID;
 	}

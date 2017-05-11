@@ -248,7 +248,9 @@ public final class Controller {
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				
+				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO")
+						, rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"), rs.getDate("DATEOFTRANSACTION")
+						, rs.getDouble("AMOUNT"), rs.getString("CURRENCY")));
 			}
 			rs.close();
 		} catch (SQLException e) {

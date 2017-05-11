@@ -37,6 +37,13 @@ public class Account {
 				+ " RegNo: " + getRegNo()
 				+ " Balance: " + getBalance()
 				+ " Currency: " + getCurrency();
+		for(Transaction transaction : transactions){
+			int i = 1;
+			try{
+				accountString = accountString + " Transaction: " + i + " " + transaction.getTransactionID();
+				i++;
+			}catch(NullPointerException e) {}
+		}
 		
 		return accountString;
 	}
