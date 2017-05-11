@@ -11,6 +11,23 @@ public class Transaction {
 	private double amount ;
 	private Date dateOfTransaction;
 	
+	public Transaction(){
+		
+	}
+	
+	public Transaction(int transactionID, String accountNumber,
+			int regNo, String recieveAccount, int recieveRegNo,
+			Date dateOfTransaction, double amount, String currency){
+		this.transactionID = transactionID;
+		this.accountNumber = accountNumber;
+		this.regNo = regNo;
+		this.recieveAccount = recieveAccount;
+		this.recieveRegNo = recieveRegNo;
+		this.dateOfTransaction = dateOfTransaction;
+		this.amount = amount;
+		this.currency = currency;
+	}
+	
 	public int getTransactionID() {
 		return transactionID;
 	}

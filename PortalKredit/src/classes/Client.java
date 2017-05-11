@@ -61,10 +61,10 @@ public class Client {
 			+ " Country: " + getCountry()
 			+ " Postal: " + getPostal()
 			+ " FullAddress: " + getFullAddress();
-		int i = 0;
+		int i = 1;
 		for(Account account : accounts){
 			try{
-				clientString = clientString + "Account: " + i +  " AccountNum: " + account.getAccountNumber() + " RegNo: " + account.getRegNo() + " ";
+				clientString = clientString + " " + "Account: " + i +  " AccountNum: " + account.getAccountNumber() + " RegNo: " + account.getRegNo() + " ";
 				i++;
 			}catch(Exception e){}
 		}

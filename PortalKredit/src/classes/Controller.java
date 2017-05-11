@@ -78,7 +78,7 @@ public final class Controller {
 		return st;
 	}
 
-	// maybe private ??
+	// maybe private ?? - I don't think you can when we say Controller.W/E ;)
 	public static boolean adminAuthenticate(String adminID, String password, DataSource ds1) {
 		boolean st = false;
 		try {
@@ -114,7 +114,7 @@ public final class Controller {
 
 			rs.next();
 			
-			banker.setBankerID(rs.getString(userId));
+			banker.setBankerID(rs.getString("BANKERID"));
 			banker.setFirstName(rs.getString("FIRSTNAME"));
 			banker.setLastName(rs.getString("LASTNAME"));
 			banker.setRegNo(rs.getInt("REGNO"));
@@ -157,9 +157,10 @@ public final class Controller {
 			client.setCountry(rs.getString("COUNTRY"));
 			client.setPostal(rs.getInt("POSTAL"));
 			client.setStreet(rs.getString("STREET"));
-			client.setCity(findCity(rs.getInt("postal"), rs.getString("country"), ds1));
+			client.setCity(findCity(rs.getInt("POSTAL"), rs.getString("COUNTRY"), ds1));
 			
-			//ArrayList<String> = getAccounts(clientID , ds1);
+			//Consider if we want to fill the Client with its account info before it's used
+			client.setAccounts(getAccounts(userId, ds1));
 			
 
 			rs.close();
@@ -173,15 +174,34 @@ public final class Controller {
 	//Returns all accounts, as an ArrayList, associated with a single client
 	public static ArrayList<Account> getAccounts(String clientID, DataSource ds1){
 		
-		
-		return null;
+		ArrayList<Account> accountList = new ArrayList<Account>();
+		Connection con;
+
+		try {
+			con = ds1.getConnection();
+
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"CLIENTID\"=?");
+			ps.setString(1, clientID);
+
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()){
+				accountList.add(new Account(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"),
+						rs.getString("ACCOUNTTYPE"), rs.getString("CLIENTID"), rs.getDouble("BALANCE"), rs.getString("CURRENCY"),
+						findInterestRate(rs.getString("ACCOUNTTYPE"), ds1)));
+			}
+
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return accountList;
 	}
 	
-	//Fills a single client object with data and returns it
+	//Fills a single account object with data and returns it
 	public static Account getAccountInfo(String accountNumber, String regNo, DataSource ds1){
-		//TODO - Værd at overveje om den ikke bare skal nuppe alle accounts til en bestemt person
 		Account account = new Account();
-		/*
+		
 		Connection con;
 
 		try {
@@ -193,6 +213,15 @@ public final class Controller {
 			ps.setString(2, regNo);
 			ResultSet rs = ps.executeQuery();
 
+			account.setAccountNumber(rs.getString("ACCOUNTNUMBER"));
+			account.setRegNo(rs.getInt("REGNO"));
+			account.setAccountType(rs.getString("ACCOUNTTYPE"));
+			account.setClientID(rs.getString("CLIENTID"));
+			account.setBalance(rs.getDouble("BALANCE"));
+			account.setCurrency("CURRENCY");
+			
+			//TODO - Consider if this only should be done when the information is actually needed
+			account.setTransactions(getNewTransactions(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"), ds1));
 			
 
 			rs.close();
@@ -200,10 +229,35 @@ public final class Controller {
 
 			e.printStackTrace();
 		}
-		*/
+		
 		return account;
 	}
 	
+	//Returns all 'new' transactions associated with an account
+	public static ArrayList<Transaction> getNewTransactions(String accountNumber, int regNo, DataSource ds1){
+		
+		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
+		Connection con;
+		try {
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+			
+			ps.setString(1, accountNumber);
+			ps.setInt(2, regNo);
+			
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return transactionList;
+	}
+	
+	//Fills a single Admin object with data and returns it
 	public static Admin getAdminInfo(String userID, DataSource ds1){
 		Admin admin = new Admin("", "");
 		
@@ -217,8 +271,8 @@ public final class Controller {
 			ps.setString(1, userID);
 			ResultSet rs = ps.executeQuery();
 			rs.next();
-			admin.setUsername(rs.getString("adminID"));
-			admin.setPassword(rs.getString("password"));
+			admin.setUsername(rs.getString("ADMINID"));
+			admin.setPassword(rs.getString("PASSWORD"));
 
 			rs.close();
 		} catch (SQLException e) {
@@ -283,9 +337,9 @@ public final class Controller {
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				clientList.add(new Client(rs.getString("email"), rs.getString("first_name"), rs.getString("last_name"),
-						rs.getString("clientID"), rs.getString("street"), rs.getString("country"),
-						findCity(rs.getInt("postal"), rs.getString("country"), ds1), rs.getString("cpr"), rs.getString("phoneNo"), rs.getInt("postal")));
+				clientList.add(new Client(rs.getString("EMAIL"), rs.getString("FIRST_NAME"), rs.getString("LAST_NAME"),
+						rs.getString("CLIENTID"), rs.getString("STREET"), rs.getString("COUNTRY"),
+						findCity(rs.getInt("POSTAL"), rs.getString("COUNTRY"), ds1), rs.getString("CPR"), rs.getString("PHONENO"), rs.getInt("POSTAL")));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -301,7 +355,7 @@ public final class Controller {
 		try {
 			con = ds1.getConnection();
 
-			PreparedStatement ps = con.prepareStatement("SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = '?' AND \"COUNTRY\" = '?'");
+			PreparedStatement ps = con.prepareStatement("SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = ? AND \"COUNTRY\" = ?");
 			
 			ps.setInt(1, postal);
 			ps.setString(2, country);
@@ -309,13 +363,36 @@ public final class Controller {
 
 			rs.next();
 			
-			city = rs.getString("city");
+			city = rs.getString("CITY");
 			
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return city;
+	}
+	
+	//Returns the interestRate associated with the given account type
+	public static double findInterestRate(String accountType, DataSource ds1){
+		double rate = 0;
+		Connection con;
+		try {
+			con = ds1.getConnection();
+
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"ACCOUNTTYPE\" = ?");
+			
+			ps.setString(1, accountType);
+			ResultSet rs = ps.executeQuery();
+
+			rs.next();
+			
+			rate = rs.getDouble("INTERESTRATE");
+			
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return rate;
 	}
 	
 	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,
