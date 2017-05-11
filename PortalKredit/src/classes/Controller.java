@@ -36,22 +36,25 @@ public final class Controller {
 	// consider making these private??
 	public static boolean clientAuthenticate(String clientID, String password, DataSource ds1) {
 		boolean st = false;
+		String hash = null;
 		try {
 			Connection con;
 			con = ds1.getConnection();
-
+			
 			PreparedStatement ps = con
-					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=? AND \"PASSWORD\"=?");
+					.prepareStatement("SELECT PASSWORD FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
 
 			ps.setString(1, clientID);
-			ps.setString(2, password);
+
 			ResultSet rs = ps.executeQuery();
-			st = rs.next();
+			rs.next();
+			hash = rs.getString("PASSWORD");
+			System.out.println(hash);
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return st;
+		return BCrypt.checkpw(password, hash);
 	}
 
 	// maybe private

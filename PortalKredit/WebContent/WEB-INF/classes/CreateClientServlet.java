@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import classes.BCrypt;
 import classes.Controller;
 
 @WebServlet("/admin/CreateClientServlet")
@@ -31,6 +31,8 @@ public class CreateClientServlet extends HttpServlet {
 		String firstName = request.getParameter("clientFirstName");
 		String lastName = request.getParameter("clientLastName");
 		String password = request.getParameter("clientPassword");
+		String hashed = BCrypt.hashpw(password, BCrypt.gensalt(14));
+		System.out.println(hashed);
 		String CPR = request.getParameter("clientCPR");
 		String email = request.getParameter("clientEmail");
 		String mobile = request.getParameter("clientTelephone");
@@ -39,7 +41,7 @@ public class CreateClientServlet extends HttpServlet {
 		String postal = request.getParameter("clientCity");
 		String country = request.getParameter("clientCountry");
 		
-		Controller.createClient(firstName, lastName, password, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
+		Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateClient.jsp");
 	}
 }
