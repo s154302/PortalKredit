@@ -188,10 +188,13 @@ public final class Controller {
 
 			ResultSet rs = ps.executeQuery();
 
+			Account account;
 			while(rs.next()){
-				accountList.add(new Account(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"),
+				account = new Account(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"),
 						rs.getString("ACCOUNTTYPE"), rs.getString("CLIENTID"), rs.getDouble("BALANCE"), rs.getString("CURRENCY"),
-						findInterestRate(rs.getString("ACCOUNTTYPE"), ds1)));
+						findInterestRate(rs.getString("ACCOUNTTYPE"), ds1));
+				account.setTransactions(get3NewestTransactions(account.getAccountNumber(), account.getRegNo(), ds1));
+				accountList.add(account);
 			}
 
 			rs.close();
@@ -202,7 +205,7 @@ public final class Controller {
 	}
 	
 	//Fills a single account object with data and returns it
-	public static Account getAccountInfo(String accountNumber, String regNo, DataSource ds1){
+	public static Account getAccountInfo(String accountNumber, int regNo, DataSource ds1){
 		Account account = new Account();
 		
 		Connection con;
@@ -213,7 +216,7 @@ public final class Controller {
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\"=? AND \"REGNO\"=?");
 
 			ps.setString(1, accountNumber);
-			ps.setString(2, regNo);
+			ps.setInt(2, regNo);
 			ResultSet rs = ps.executeQuery();
 
 			account.setAccountNumber(rs.getString("ACCOUNTNUMBER"));
@@ -236,6 +239,36 @@ public final class Controller {
 		return account;
 	}
 	
+	//Returns the 3 newest transactions associated with an account number and regno
+	public static ArrayList<Transaction> get3NewestTransactions(String accountNumber, int regNo, DataSource ds1){
+		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
+		
+		Connection con;
+		try {
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?) "
+					+ "ORDER BY DATEOFTRANSACTION DESC FETCH FIRST 3 ROWS ONLY");
+			
+			ps.setString(1, accountNumber);
+			ps.setInt(2, regNo);
+			ps.setString(3, accountNumber);
+			ps.setInt(4, regNo);
+			
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO")
+						, rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"), rs.getDate("DATEOFTRANSACTION")
+						, rs.getDouble("AMOUNT"), rs.getString("CURRENCY")));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return transactionList;
+	}
+	
 	//Returns all 'new' transactions associated with an account
 	public static ArrayList<Transaction> getNewTransactions(String accountNumber, int regNo, DataSource ds1){
 		
@@ -243,10 +276,12 @@ public final class Controller {
 		Connection con;
 		try {
 			con = ds1.getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?)");
 			
 			ps.setString(1, accountNumber);
 			ps.setInt(2, regNo);
+			ps.setString(3, accountNumber);
+			ps.setInt(4, regNo);
 			
 			ResultSet rs = ps.executeQuery();
 

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import classes.Client;
 import classes.Controller;
 
 /**
@@ -44,8 +45,10 @@ public class LoginServlet extends HttpServlet {
 			switch((Controller.Type)session.getAttribute("type")){
 			case client:
 				session.setAttribute("user", Controller.getClientInfo(userID, ds1));
-				System.out.println(session.getAttribute("user").toString());
-				response.sendRedirect(request.getContextPath() + "/welcome.jsp");
+				Client client = (Client)session.getAttribute("user");
+				System.out.println(client.toString());
+				System.out.println(client.getAccounts().get(1).getTransactions().get(0).toString());
+				response.sendRedirect(request.getContextPath() + "/client/frontpage.jsp");
 				break;
 			case banker:
 				session.setAttribute("user", Controller.getBankerInfo(userID, ds1));
