@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import classes.BCrypt;
 import classes.Controller;
 
 /**
@@ -35,11 +36,12 @@ public class CreateBankerServlet extends HttpServlet {
 		String firstName = request.getParameter("bankerFirstName");
 		String lastName = request.getParameter("bankerLastName");
 		String password = request.getParameter("bankerPassword");
+		String hashed = BCrypt.hashpw(password, BCrypt.gensalt(14));
 		String email = request.getParameter("bankerEmail");
 		String telephone = request.getParameter("bankerTelephone");
 		String regno = request.getParameter("bankerReg");
 		
-		Controller.createBanker(firstName, lastName, password, email, telephone, regno, ds1);
+		Controller.createBanker(firstName, lastName, hashed, email, telephone, regno, ds1);
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateBanker.jsp");
 	}
 

@@ -49,7 +49,6 @@ public final class Controller {
 			ResultSet rs = ps.executeQuery();
 			rs.next();
 			hash = rs.getString("PASSWORD");
-			System.out.println(hash);
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,27 +59,30 @@ public final class Controller {
 	// maybe private
 	public static boolean bankerAuthenticate(String bankerID, String password, DataSource ds1) {
 		boolean st = false;
+		String hash = null;
 		try {
 			Connection con;
 			con = ds1.getConnection();
 
 			PreparedStatement ps = con
-					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=? AND \"PASSWORD\"=?");
+					.prepareStatement("SELECT PASSWORD FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=?");
 
 			ps.setString(1, bankerID);
-			ps.setString(2, password);
+
 			ResultSet rs = ps.executeQuery();
-			st = rs.next();
+			rs.next();
+			hash = rs.getString("PASSWORD");
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return st;
+		return BCrypt.checkpw(password, hash);
 	}
 
 	// maybe private ?? - I don't think you can when we say Controller.W/E ;)
 	public static boolean adminAuthenticate(String adminID, String password, DataSource ds1) {
 		boolean st = false;
+		String hash = null;
 		try {
 			Connection con;
 			con = ds1.getConnection();
@@ -89,14 +91,15 @@ public final class Controller {
 					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=? AND \"PASSWORD\"=?");
 
 			ps.setString(1, adminID);
-			ps.setString(2, password);
+			
 			ResultSet rs = ps.executeQuery();
-			st = rs.next();
+			rs.next();
+			hash = rs.getString("PASSWORD");
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return st;
+		return BCrypt.checkpw(password, hash);
 	}
 
 	//Fills a banker client object with data and returns it

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import classes.BCrypt;
 import classes.Controller;
 
 /**
@@ -34,8 +35,9 @@ public class CreateAdminServlet extends HttpServlet {
 		
 		String adminID = request.getParameter("adminID");
 		String adminPassword = request.getParameter("adminPassword");
+		String hashed = BCrypt.hashpw(adminPassword, BCrypt.gensalt(14));
 		
-		Controller.createAdmin(adminID, adminPassword, ds1);
+		Controller.createAdmin(adminID, hashed, ds1);
 
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateAdmin.jsp");
 	}
