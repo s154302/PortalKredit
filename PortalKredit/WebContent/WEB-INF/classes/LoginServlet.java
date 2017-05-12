@@ -40,7 +40,6 @@ public class LoginServlet extends HttpServlet {
 		st = Controller.authenticate(userID, password, ds1, session);
 		
 		if(st) {
-			// TODO: overvej at sætte attributter til henholdsvis clientID, bankerID og adminID
 			session.setAttribute("userID", userID);
 			switch((Controller.Type)session.getAttribute("type")){
 			case client:

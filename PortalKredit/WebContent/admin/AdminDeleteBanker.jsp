@@ -48,22 +48,19 @@
 		</div>
 	</nav>
 	<div class="row pad-row">
-		<div class="col-6 offset-3">
-			<div class="card card-outline-primary mb-3 text-center blue-outline">
+			<div class="card card-outline-primary text-center blue-outline">
 				<h1>Delete Banker!</h1>
 				<div class="card-block">
 					<table class="table table-bordered">
 						<thead>
-
-
-
 							<tr>
 								<th>bankerID</th>
 								<th>First name</th>
 								<th>Last name</th>
-								<th>regNo</th>
-								<th>phoneNo</th>
-								<th>email</th>
+								<th>Reg No.</th>
+								<th>Phone No.</th>
+								<th>E-mail</th>
+								<th>Delete</th>
 							</tr>
 						</thead>
 

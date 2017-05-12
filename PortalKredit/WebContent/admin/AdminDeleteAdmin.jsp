@@ -47,15 +47,12 @@
 			</ul>
 		</div>
 	</nav>
-	<div class="row pad-row">
-		<div class="col-4 offset-4">
-			<div class="card card-outline-primary mb-3 text-center blue-outline">
+	<div class="row pad-row" style="align: center">
+			<div class="card card-outline-primary text-center blue-outline">
 				<h1>Delete Admin!</h1>
 				<div class="card-block">
 					<table class="table table-sm table-bordered">
 						<thead>
-
-
 
 							<tr>
 								<th>Login</th>

@@ -32,7 +32,6 @@ public class CreateClientServlet extends HttpServlet {
 		String lastName = request.getParameter("clientLastName");
 		String password = request.getParameter("clientPassword");
 		String hashed = BCrypt.hashpw(password, BCrypt.gensalt(14));
-		System.out.println(hashed);
 		String CPR = request.getParameter("clientCPR");
 		String email = request.getParameter("clientEmail");
 		String mobile = request.getParameter("clientTelephone");

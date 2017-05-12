@@ -7,10 +7,13 @@
 
 .blue-outline {
 	border-color: #0078ff;
+	margin: 0 auto; /* Added */
+	float: none; /* Added */
+	margin-bottom: 10px; /* Added */
 }
 
 .pad-row {
-    padding-top: 50px; /* Whatever the height of your navbar is; the
+	padding-top: 50px; /* Whatever the height of your navbar is; the
                              default is 50px */
 }
 

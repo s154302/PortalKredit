@@ -49,7 +49,7 @@
 	</nav>
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
-			<div class="card card-outline-primary mb-3 text-center blue-outline">
+			<div class="card card-outline-primary text-center blue-outline">
 				<h1>Delete Client!</h1>
 				<div class="card-block">
 					<table class="table table-hover">
@@ -76,7 +76,7 @@
 												<li>Email: ${ob.email}</li>
 												<li>Mobile: ${ob.phoneNo}</li>
 												<li>Street: ${ob.street}</li>
-												<li>Postal: ${ob.postal}</li>
+												<li>City: ${ob.postal}</li>
 												<li>Country: ${ob.country}</li>
 											</ul>
 											<form action="" method="post">

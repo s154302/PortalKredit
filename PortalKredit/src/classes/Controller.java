@@ -588,7 +588,6 @@ public final class Controller {
 		Connection con;
 		try{
 		con = ds1.getConnection();
-		System.out.println(clientID);
 		PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
 		ps.setString(1, clientID);
 		ps.executeUpdate();
