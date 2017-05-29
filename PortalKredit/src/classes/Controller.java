@@ -88,7 +88,7 @@ public final class Controller {
 			con = ds1.getConnection();
 
 			PreparedStatement ps = con
-					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=? AND \"PASSWORD\"=?");
+					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=?");
 
 			ps.setString(1, adminID);
 			
