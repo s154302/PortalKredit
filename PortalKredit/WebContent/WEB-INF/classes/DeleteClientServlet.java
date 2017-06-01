@@ -23,7 +23,7 @@ public class DeleteClientServlet extends HttpServlet {
 	public DeleteClientServlet(){
 		super();
 	}
-	@Resource(name = "jdbc/DB2")
+	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	
 	@Override

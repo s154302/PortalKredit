@@ -22,7 +22,7 @@ public class DeleteAdminServlet extends HttpServlet {
 	public DeleteAdminServlet(){
 		super();
 	}
-	@Resource(name = "jdbc/DB2")
+	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	
 	@Override

@@ -21,7 +21,7 @@ public final class Controller {
 
 		if (userID.substring(userID.length() - 1).equals("C")) {
 
-			session.setAttribute("type", Type.client);
+			session.setAttribute("type", Type.client);	
 			return clientAuthenticate(userID, password, ds1);
 		} else if (userID.substring(userID.length() - 1).equals("B")) {
 			session.setAttribute("type", Type.banker);

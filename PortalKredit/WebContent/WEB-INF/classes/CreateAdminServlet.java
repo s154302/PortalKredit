@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 import classes.BCrypt;
 import classes.Controller;
 
-/**
+/*
  * Servlet implementation class CreateAdminServlet
  */
 @WebServlet("/CreateAdminServlet")
@@ -26,7 +26,7 @@ public class CreateAdminServlet extends HttpServlet {
         super();
 
     }
-	@Resource(name = "jdbc/DB2")
+    @Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
