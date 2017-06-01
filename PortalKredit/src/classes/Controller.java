@@ -21,7 +21,7 @@ public final class Controller {
 
 		if (userID.substring(userID.length() - 1).equals("C")) {
 
-			session.setAttribute("type", Type.client);	
+			session.setAttribute("type", Type.client);
 			return clientAuthenticate(userID, password, ds1);
 		} else if (userID.substring(userID.length() - 1).equals("B")) {
 			session.setAttribute("type", Type.banker);
@@ -40,7 +40,7 @@ public final class Controller {
 		try {
 			Connection con;
 			con = ds1.getConnection();
-			
+
 			PreparedStatement ps = con
 					.prepareStatement("SELECT PASSWORD FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
 
@@ -87,11 +87,10 @@ public final class Controller {
 			Connection con;
 			con = ds1.getConnection();
 
-			PreparedStatement ps = con
-					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=?");
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=?");
 
 			ps.setString(1, adminID);
-			
+
 			ResultSet rs = ps.executeQuery();
 			rs.next();
 			hash = rs.getString("PASSWORD");
@@ -102,7 +101,7 @@ public final class Controller {
 		return BCrypt.checkpw(password, hash);
 	}
 
-	//Fills a banker client object with data and returns it
+	// Fills a banker client object with data and returns it
 	public static Banker getBankerInfo(String userId, DataSource ds1) {
 		Banker banker = new Banker();
 		Connection con;
@@ -116,17 +115,18 @@ public final class Controller {
 			ResultSet rs = ps.executeQuery();
 
 			rs.next();
-			
+
 			banker.setBankerID(rs.getString("BANKERID"));
 			banker.setFirstName(rs.getString("FIRSTNAME"));
 			banker.setLastName(rs.getString("LASTNAME"));
 			banker.setRegNo(rs.getInt("REGNO"));
 			banker.setEmail(rs.getString("EMAIL"));
 			banker.setPhoneNo(rs.getString("MOBILE"));
-			
-			//TODO - Consider if this only should be called when the information is needed
+
+			// TODO - Consider if this only should be called when the
+			// information is needed
 			banker.setClients(getClients(userId, ds1));
-			
+
 			rs.close();
 		} catch (SQLException e) {
 
@@ -135,8 +135,8 @@ public final class Controller {
 
 		return banker;
 	}
-	
-	//Fills a single client object with data and returns it
+
+	// Fills a single client object with data and returns it
 	public static Client getClientInfo(String userId, DataSource ds1) {
 		Client client = new Client();
 		Connection con;
@@ -150,7 +150,7 @@ public final class Controller {
 			ResultSet rs = ps.executeQuery();
 
 			rs.next();
-			
+
 			client.setClientID(rs.getString("CLIENTID"));
 			client.setFirstName(rs.getString("FIRST_NAME"));
 			client.setLastName(rs.getString("LAST_NAME"));
@@ -161,10 +161,10 @@ public final class Controller {
 			client.setPostal(rs.getInt("POSTAL"));
 			client.setStreet(rs.getString("STREET"));
 			client.setCity(findCity(rs.getInt("POSTAL"), rs.getString("COUNTRY"), ds1));
-			
-			//Consider if we want to fill the Client with its account info before it's used
+
+			// Consider if we want to fill the Client with its account info
+			// before it's used
 			client.setAccounts(getAccounts(userId, ds1));
-			
 
 			rs.close();
 		} catch (SQLException e) {
@@ -173,10 +173,10 @@ public final class Controller {
 
 		return client;
 	}
-	
-	//Returns all accounts, as an ArrayList, associated with a single client
-	public static ArrayList<Account> getAccounts(String clientID, DataSource ds1){
-		
+
+	// Returns all accounts, as an ArrayList, associated with a single client
+	public static ArrayList<Account> getAccounts(String clientID, DataSource ds1) {
+
 		ArrayList<Account> accountList = new ArrayList<Account>();
 		Connection con;
 
@@ -189,9 +189,9 @@ public final class Controller {
 			ResultSet rs = ps.executeQuery();
 
 			Account account;
-			while(rs.next()){
-				account = new Account(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"),
-						rs.getString("ACCOUNTTYPE"), rs.getString("CLIENTID"), rs.getDouble("BALANCE"), rs.getString("CURRENCY"),
+			while (rs.next()) {
+				account = new Account(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"), rs.getString("ACCOUNTTYPE"),
+						rs.getString("CLIENTID"), rs.getDouble("BALANCE"), rs.getString("CURRENCY"),
 						findInterestRate(rs.getString("ACCOUNTTYPE"), ds1));
 				account.setTransactions(get3NewestTransactions(account.getAccountNumber(), account.getRegNo(), ds1));
 				accountList.add(account);
@@ -203,17 +203,18 @@ public final class Controller {
 		}
 		return accountList;
 	}
-	
-	//Fills a single account object with data and returns it
-	public static Account getAccountInfo(String accountNumber, int regNo, DataSource ds1){
+
+	// Fills a single account object with data and returns it
+	public static Account getAccountInfo(String accountNumber, int regNo, DataSource ds1) {
 		Account account = new Account();
-		
+
 		Connection con;
 
 		try {
 			con = ds1.getConnection();
 
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\"=? AND \"REGNO\"=?");
+			PreparedStatement ps = con.prepareStatement(
+					"SELECT * FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\"=? AND \"REGNO\"=?");
 
 			ps.setString(1, accountNumber);
 			ps.setInt(2, regNo);
@@ -225,70 +226,73 @@ public final class Controller {
 			account.setClientID(rs.getString("CLIENTID"));
 			account.setBalance(rs.getDouble("BALANCE"));
 			account.setCurrency("CURRENCY");
-			
-			//TODO - Consider if this only should be done when the information is actually needed
+
+			// TODO - Consider if this only should be done when the information
+			// is actually needed
 			account.setTransactions(getNewTransactions(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"), ds1));
-			
 
 			rs.close();
 		} catch (SQLException e) {
 
 			e.printStackTrace();
 		}
-		
+
 		return account;
 	}
-	
-	//Returns the 3 newest transactions associated with an account number and regno
-	public static ArrayList<Transaction> get3NewestTransactions(String accountNumber, int regNo, DataSource ds1){
+
+	// Returns the 3 newest transactions associated with an account number and
+	// regno
+	public static ArrayList<Transaction> get3NewestTransactions(String accountNumber, int regNo, DataSource ds1) {
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
-		
+
 		Connection con;
 		try {
 			con = ds1.getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?) "
-					+ "ORDER BY DATEOFTRANSACTION DESC FETCH FIRST 3 ROWS ONLY");
-			
+			PreparedStatement ps = con.prepareStatement(
+					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?) "
+							+ "ORDER BY DATEOFTRANSACTION DESC FETCH FIRST 3 ROWS ONLY");
+
 			ps.setString(1, accountNumber);
 			ps.setInt(2, regNo);
 			ps.setString(3, accountNumber);
 			ps.setInt(4, regNo);
-			
+
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO")
-						, rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"), rs.getDate("DATEOFTRANSACTION")
-						, rs.getDouble("AMOUNT"), rs.getString("CURRENCY")));
+				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
+						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
+						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY")));
 			}
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return transactionList;
 	}
-	
-	//Returns all 'new' transactions associated with an account
-	public static ArrayList<Transaction> getNewTransactions(String accountNumber, int regNo, DataSource ds1){
-		
+
+	// Returns all 'new' transactions associated with an account
+	public static ArrayList<Transaction> getNewTransactions(String accountNumber, int regNo, DataSource ds1) {
+
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 		Connection con;
 		try {
 			con = ds1.getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?)");
-			
+			PreparedStatement ps = con.prepareStatement(
+					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?)");
+
 			ps.setString(1, accountNumber);
 			ps.setInt(2, regNo);
 			ps.setString(3, accountNumber);
 			ps.setInt(4, regNo);
-			
+
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO")
-						, rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"), rs.getDate("DATEOFTRANSACTION")
-						, rs.getDouble("AMOUNT"), rs.getString("CURRENCY")));
+				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
+						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
+						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY")));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -296,11 +300,11 @@ public final class Controller {
 		}
 		return transactionList;
 	}
-	
-	//Fills a single Admin object with data and returns it
-	public static Admin getAdminInfo(String userID, DataSource ds1){
+
+	// Fills a single Admin object with data and returns it
+	public static Admin getAdminInfo(String userID, DataSource ds1) {
 		Admin admin = new Admin("", "");
-		
+
 		Connection con;
 
 		try {
@@ -319,7 +323,7 @@ public final class Controller {
 
 			e.printStackTrace();
 		}
-		
+
 		return admin;
 	}
 
@@ -341,45 +345,47 @@ public final class Controller {
 			ps.setString(7, mobile);
 			ps.setString(8, street);
 			ps.setString(9, bankerID);
-			ps.setInt(10, postal); 
+			ps.setInt(10, postal);
 			ps.setString(11, country.toUpperCase());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void createAdmin(String username, String password, DataSource ds1) {
 		Connection con;
-		
+
 		try {
 			con = ds1.getConnection();
-			
-			PreparedStatement ps = con.prepareStatement("INSERT INTO \"DTUGRP16\".\"ADMIN\" (ADMINID, password) VALUES(?, ?)");
+
+			PreparedStatement ps = con
+					.prepareStatement("INSERT INTO \"DTUGRP16\".\"ADMIN\" (ADMINID, password) VALUES(?, ?)");
 			ps.setString(1, username);
 			ps.setString(2, password);
 			ps.executeUpdate();
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	//Returns all clients associated with a single banker
-	public static ArrayList<Client> getClients (String bankerID, DataSource ds1){
+	// Returns all clients associated with a single banker
+	public static ArrayList<Client> getClients(String bankerID, DataSource ds1) {
 		ArrayList<Client> clientList = new ArrayList<>();
 		Connection con;
 		try {
 			con = ds1.getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\" = ?");
-			
+
 			ps.setString(1, bankerID);
-			
+
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
 				clientList.add(new Client(rs.getString("EMAIL"), rs.getString("FIRST_NAME"), rs.getString("LAST_NAME"),
 						rs.getString("CLIENTID"), rs.getString("STREET"), rs.getString("COUNTRY"),
-						findCity(rs.getInt("POSTAL"), rs.getString("COUNTRY"), ds1), rs.getString("CPR"), rs.getString("PHONENO"), rs.getInt("POSTAL")));
+						findCity(rs.getInt("POSTAL"), rs.getString("COUNTRY"), ds1), rs.getString("CPR"),
+						rs.getString("PHONENO"), rs.getInt("POSTAL")));
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -387,54 +393,56 @@ public final class Controller {
 		}
 		return clientList;
 	}
-	
-	//Returns the city associated with the postal and country
-	public static String findCity(int postal, String country, DataSource ds1){
+
+	// Returns the city associated with the postal and country
+	public static String findCity(int postal, String country, DataSource ds1) {
 		String city = "Orgrimmar";
 		Connection con;
 		try {
 			con = ds1.getConnection();
 
-			PreparedStatement ps = con.prepareStatement("SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = ? AND \"COUNTRY\" = ?");
-			
+			PreparedStatement ps = con.prepareStatement(
+					"SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = ? AND \"COUNTRY\" = ?");
+
 			ps.setInt(1, postal);
 			ps.setString(2, country);
 			ResultSet rs = ps.executeQuery();
 
 			rs.next();
-			
+
 			city = rs.getString("CITY");
-			
+
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return city;
 	}
-	
-	//Returns the interestRate associated with the given account type
-	public static double findInterestRate(String accountType, DataSource ds1){
+
+	// Returns the interestRate associated with the given account type
+	public static double findInterestRate(String accountType, DataSource ds1) {
 		double rate = 0;
 		Connection con;
 		try {
 			con = ds1.getConnection();
 
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"ACCOUNTTYPE\" = ?");
-			
+			PreparedStatement ps = con
+					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"ACCOUNTTYPE\" = ?");
+
 			ps.setString(1, accountType);
 			ResultSet rs = ps.executeQuery();
 
 			rs.next();
-			
+
 			rate = rs.getDouble("INTERESTRATE");
-			
+
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return rate;
 	}
-	
+
 	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,
 			DataSource ds1) {
 		ArrayList<String> list = new ArrayList<>();
@@ -489,46 +497,39 @@ public final class Controller {
 
 		return ID;
 	}
-	
-	//Returns all admins in the database
-	public static ArrayList<Admin> getAdminList(DataSource ds1){
+
+	// Returns all admins in the database
+	public static ArrayList<Admin> getAdminList(DataSource ds1) {
 		ArrayList<Admin> adminList = new ArrayList<>();
 		Connection con;
-		
-		try{
+
+		try {
 			con = ds1.getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\"");
 			ResultSet rs = ps.executeQuery();
-			while(rs.next()){
-				adminList.add(new Admin(rs.getString(1),rs.getString(2)));
+			while (rs.next()) {
+				adminList.add(new Admin(rs.getString(1), rs.getString(2)));
 			}
-			
-		}
-		catch(SQLException e){
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return adminList;
 	}
 
 	public static void deleteAdmin(String adminID, DataSource ds1) {
 		Connection con;
-		try{
+		try {
 			con = ds1.getConnection();
 			PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=?");
 			ps.setString(1, adminID);
 			ps.executeUpdate();
-			
 
-			
-		
-		}
-		catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+
 	}
 
 	private static String generateBankerID(DataSource ds1) {
@@ -568,7 +569,8 @@ public final class Controller {
 		try {
 			con = ds1.getConnection();
 
-			PreparedStatement ps = con.prepareStatement("INSERT INTO \"DTUGRP16\".\"BANKER\" (BANKERID, PASSWORD, FIRSTNAME, LASTNAME, REGNO, EMAIL, MOBILE) VALUES(?, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO \"DTUGRP16\".\"BANKER\" (BANKERID, PASSWORD, FIRSTNAME, LASTNAME, REGNO, EMAIL, MOBILE) VALUES(?, ?, ?, ?, ?, ?, ?)");
 			ps.setString(1, generateBankerID(ds1));
 			ps.setString(2, password);
 			ps.setString(3, firstName);
@@ -576,78 +578,83 @@ public final class Controller {
 			ps.setString(5, regno);
 			ps.setString(6, email);
 			ps.setString(7, telephone);
-			ps.executeUpdate(); 
-			
-		} catch(SQLException e) {
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public static void deleteClient(String clientID, DataSource ds1) {
 		Connection con;
-		try{
-		con = ds1.getConnection();
-		PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
-		ps.setString(1, clientID);
-		ps.executeUpdate();
-		
+		try {
+			con = ds1.getConnection();
+			PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
+			ps.setString(1, clientID);
+			ps.executeUpdate();
 
-		
-	
-	}
-	catch(SQLException e){
-		e.printStackTrace();
-	}
-		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
-	//Returns all clients in the database
+	// Returns all clients in the database
 	public static ArrayList<Client> getClientList(DataSource ds1) {
-		
+
 		ArrayList<Client> clientList = new ArrayList<>();
 		Connection con;
-		
-		try{
+
+		try {
 			con = ds1.getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\"");
 			ResultSet rs = ps.executeQuery();
-			while(rs.next()){
-				Client client = new Client();
-				client.setClientID(rs.getString("CLIENTID"));
-				client.setFirstName(rs.getString("FIRST_NAME"));
-				client.setLastName(rs.getString("LAST_NAME"));
-				client.setEmail(rs.getString("EMAIL"));
-				client.setPhoneNo(rs.getString("MOBILE"));
-				client.setCPR(rs.getString("CPR"));
-				client.setCountry(rs.getString("COUNTRY"));
-				client.setPostal(rs.getInt("POSTAL"));
-				client.setStreet(rs.getString("STREET"));
+			while (rs.next()) {
+				Client client = setClientInfo(rs);
 				clientList.add(client);
-				//TODO: fill out this shit
-				
+				// TODO: fill out this shit
+
 			}
-			
-		}
-		catch(SQLException e){
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return clientList;
 	}
-	
-	//Returns all bankers in the database
+
+	public static Client setClientInfo(ResultSet rs) {
+		Client client = new Client();
+		try {
+			client.setClientID(rs.getString("CLIENTID"));
+			client.setFirstName(rs.getString("FIRST_NAME"));
+			client.setLastName(rs.getString("LAST_NAME"));
+			client.setEmail(rs.getString("EMAIL"));
+			client.setPhoneNo(rs.getString("MOBILE"));
+			client.setCPR(rs.getString("CPR"));
+			client.setCountry(rs.getString("COUNTRY"));
+			client.setPostal(rs.getInt("POSTAL"));
+			client.setStreet(rs.getString("STREET"));
+			return client;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return client;
+	}
+
+	// Returns all bankers in the database
 	public static ArrayList<Banker> getBankerList(DataSource ds1) {
-		
+
 		ArrayList<Banker> bankerList = new ArrayList<>();
 		Connection con;
-		
-		try{
+
+		try {
 			con = ds1.getConnection();
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BANKER\"");
 			ResultSet rs = ps.executeQuery();
-			while(rs.next()){
-				//TODO: fill out this shit
+			while (rs.next()) {
+				// TODO: fill out this shit
 				Banker banker = new Banker();
 				banker.setBankerID(rs.getString("BANKERID"));
 				banker.setFirstName(rs.getString("FIRSTNAME"));
@@ -657,32 +664,60 @@ public final class Controller {
 				banker.setPhoneNo(rs.getString("MOBILE"));
 				bankerList.add(banker);
 			}
-			
-		}
-		catch(SQLException e){
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return bankerList;
 	}
-	
-	public static void deleteBanker(String bankerID, DataSource ds1){
+
+	public static void deleteBanker(String bankerID, DataSource ds1) {
 		Connection con;
-		try{
+		try {
 			con = ds1.getConnection();
 			PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=?");
 			ps.setString(1, bankerID);
 			ps.executeUpdate();
-		
 
-		
-	
-		}
-		catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-	
+
+	}
+
+	public static ArrayList<Client> searchClient(String search, DataSource ds1) {
+		ArrayList<Client> result = new ArrayList<>();
+		ArrayList<String> terms = new ArrayList<>();
+		Connection con;
+		System.out.println(search);
+		try {
+			con = ds1.getConnection();
+			PreparedStatement ps;
+			int i = 0;
+			while (search != "") {
+				if (search.charAt(i) == ' ') {
+					terms.add(search.substring(0, i));
+					search = search.substring(i + 1);
+					terms.add(search);
+					break;
+				} else {
+					ps = con.prepareStatement(
+							"SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"FIRST_NAME\"=? OR \"LAST_NAME\"=?");
+					ps.setString(1, search);
+					ps.setString(2, search);
+					ps.executeQuery();
+					ResultSet rs = ps.getResultSet();
+					while (rs.next()) {
+						result.add(setClientInfo(rs));
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 }

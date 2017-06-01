@@ -18,7 +18,7 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<a class="navbar-brand" href="#"><img
-			src="../assets/images/logo.png" width="60" height="60" alt=""></a>
+			src="../assets/images/logo.png" width="60" height="60" alt="logo"></a>
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 			<ul class="navbar-nav">
 				<li class="nav-item active"><a class="nav-link"
@@ -48,9 +48,23 @@
 		</div>
 	</nav>
 	<div class="row pad-row">
-		<div class="col-4 offset-4">
-			<div class="card card-outline-primary text-center blue-outline">
-				<h1>Delete Client!</h1>
+		<div class="col-4 offset-4 text-center">
+			<h1>Delete Client!</h1>
+			<form action="" method="post">
+				<div class="form-inline row offset-1">
+					<input class="form-control mb-2 mr-sm-2 mb-sm-3" type="text"
+						placeholder="Search Clients" name="search-term">
+				</div>
+				<button class="btn btn-primary btn-action" type="submit"
+					value="search-client" name="search-client">
+					<img
+						src="../assets/images/glyphicons_free/glyphicons/png/glyphicons-28-search-white.png"
+						width="15" height="15" aria-hidden="true" />Search
+				</button>
+			</form>
+
+			&nbsp;
+			<div class="card card-outline-primary blue-outline">
 				<div class="card-block">
 					<table class="table table-hover">
 						<thead>

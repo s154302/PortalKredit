@@ -30,8 +30,6 @@ public class CreateAdminServlet extends HttpServlet {
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		
 		String adminID = request.getParameter("adminID");
 		String adminPassword = request.getParameter("adminPassword");
