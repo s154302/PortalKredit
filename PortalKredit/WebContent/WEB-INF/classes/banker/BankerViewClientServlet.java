@@ -35,8 +35,6 @@ public class BankerViewClientServlet extends HttpServlet {
 		Banker banker = (Banker) session.getAttribute("user");
 		
 		ArrayList<Client> clientList = banker.getClients();
-		
-		System.out.println("doGet: "+clientList);
 		session.setAttribute("list", clientList);
 
 		request.getRequestDispatcher("ViewClients.jsp").forward(request, response);
