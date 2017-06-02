@@ -42,13 +42,8 @@ public class AccountsServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-<<<<<<< HEAD
 		HttpSession session = request.getSession();
-
-=======
-		String accountNumber = request.getParameter("accountNumber");
->>>>>>> branch 'master' of https://github.com/s154302/PortalKredit.git
-		
+	
 		session.setAttribute("accountNumber", request.getParameter("accountNumber"));
 		session.setAttribute("regNo", Integer.parseInt(request.getParameter("regNo")));
 		
