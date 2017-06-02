@@ -12,6 +12,7 @@ public class Client {
 
 	public Client(){
 		
+		
 	}
 	
 	public Client(String email, String firstName, String lastName, String clientID,
@@ -62,12 +63,12 @@ public class Client {
 			+ " Postal: " + getPostal()
 			+ " FullAddress: " + getFullAddress();
 		int i = 1;
-		for(Account account : accounts){
-			try{
-				clientString = clientString + " " + "Account: " + i +  " AccountNum: " + account.getAccountNumber() + " RegNo: " + account.getRegNo() + " ";
-				i++;
-			}catch(Exception e){}
-		}
+//		for(Account account : accounts){
+//			try{
+//				clientString = clientString + " " + "Account: " + i +  " AccountNum: " + account.getAccountNumber() + " RegNo: " + account.getRegNo() + " ";
+//				i++;
+//			}catch(Exception e){}
+//		}
 				
 		return clientString;
 	}

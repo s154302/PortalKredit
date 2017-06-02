@@ -368,20 +368,30 @@ public final class Controller {
 	public static ArrayList<Client> getClients (String bankerID, DataSource ds1){
 		ArrayList<Client> clientList = new ArrayList<>();
 		Connection con;
+		
 		try {
 			con = ds1.getConnection();
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\" = ?");
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"BANKERID\" = ?");
 			
 			ps.setString(1, bankerID);
-			
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				clientList.add(new Client(rs.getString("EMAIL"), rs.getString("FIRST_NAME"), rs.getString("LAST_NAME"),
-						rs.getString("CLIENTID"), rs.getString("STREET"), rs.getString("COUNTRY"),
-						findCity(rs.getInt("POSTAL"), rs.getString("COUNTRY"), ds1), rs.getString("CPR"), rs.getString("PHONENO"), rs.getInt("POSTAL")));
+				Client client = new Client();
+				client.setClientID(rs.getString("CLIENTID"));
+				client.setFirstName(rs.getString("FIRST_NAME"));
+				client.setLastName(rs.getString("LAST_NAME"));
+				client.setEmail(rs.getString("EMAIL"));
+				client.setPhoneNo(rs.getString("MOBILE"));
+				client.setCPR(rs.getString("CPR"));
+				client.setCountry(rs.getString("COUNTRY"));
+				client.setPostal(rs.getInt("POSTAL"));
+				client.setStreet(rs.getString("STREET"));
+				clientList.add(client);	
 			}
+			
 			rs.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -682,7 +692,6 @@ public final class Controller {
 			e.printStackTrace();
 		}
 		
-	
 	}
 
 }

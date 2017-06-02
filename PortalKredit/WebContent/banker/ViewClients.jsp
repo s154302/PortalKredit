@@ -21,36 +21,17 @@
 			src="../assets/images/logo.png" width="60" height="60" alt=""></a>
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 			<ul class="navbar-nav">
-				<li class="nav-item active"><a class="nav-link"
-					href="AdminControl.jsp">Home</a></li>
-				<li class="nav-item dropdown"><a
-					class="nav-link dropdown-toggle" href="#"
-					id="navbarDropdownMenuLink" data-toggle="dropdown"
-					aria-haspopup="true" aria-expanded="false">Create</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="AdminCreateClient.jsp">Create
-							Client</a> <a class="dropdown-item" href="AdminCreateBanker.jsp">Create
-							Banker</a> <a class="dropdown-item" href="AdminCreateAdmin.jsp">Create
-							Admin</a>
-					</div></li>
-
-				<li class="nav-item dropdown"><a
-					class="nav-link dropdown-toggle" href="#"
-					id="navbarDropdownMenuLink" data-toggle="dropdown"
-					aria-haspopup="true" aria-expanded="false">Delete</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="AdminDeleteClient">Delete Client</a> 
-						<a class="dropdown-item" href="AdminDeleteBanker">Delete Banker</a> 
-						<a class="dropdown-item" href="AdminDeleteAdmin">Delete Admin</a>
-					</div>
-				</li>
+				<li class="nav-item active"><a class="nav-link" href="frontpage.jsp">Home</a></li>
+				<li class="nav-item active"><a class="nav-link" href="ViewClients">View Clients</a></li>
+				<li class="nav-item active"><a class="nav-link" href="CreateClient.jsp">Create Client</a></li>
 			</ul>
-		</div>
+		</div>			
 	</nav>
+	
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary text-center blue-outline">
-				<h1>Delete Client!</h1>
+				<h1>View Clients</h1>
 				<div class="card-block">
 					<table class="table table-hover">
 						<thead>
@@ -81,7 +62,7 @@
 											</ul>
 											<form action="" method="post">
 												<button class="btn btn-primary btn-block btn-action"
-													type="submit" name="username" value="${ob.clientID}">Delete</button>
+													type="submit" name="username" value="${ob.clientID}">View</button>
 											</form>
 										</div>
 									</td>
