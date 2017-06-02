@@ -47,7 +47,7 @@ public final class Controller {
 		String hash = null;
 		try {
 			Connection con;
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con
 					.prepareStatement("SELECT PASSWORD FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
@@ -70,7 +70,7 @@ public final class Controller {
 		String hash = null;
 		try {
 			Connection con;
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con
 					.prepareStatement("SELECT PASSWORD FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=?");
@@ -93,7 +93,7 @@ public final class Controller {
 		String hash = null;
 		try {
 			Connection con;
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=?");
 
@@ -115,7 +115,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=?");
 
@@ -150,7 +150,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
 
@@ -180,7 +180,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"CLIENTID\"=?");
 			ps.setString(1, clientID);
@@ -210,7 +210,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con.prepareStatement(
 					"SELECT * FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\"=? AND \"REGNO\"=?");
@@ -246,7 +246,7 @@ public final class Controller {
 
 		Connection con;
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement(
 					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?) "
 							+ "ORDER BY DATEOFTRANSACTION DESC FETCH FIRST 3 ROWS ONLY");
@@ -282,7 +282,7 @@ public final class Controller {
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 		Connection con;
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement(
 					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?)");
 
@@ -312,7 +312,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=?");
 
@@ -336,7 +336,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con.prepareStatement(
 					"INSERT INTO \"DTUGRP16\".\"CLIENT\" (CLIENTID, PASSWORD, CPR, FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -361,7 +361,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con
 					.prepareStatement("INSERT INTO \"DTUGRP16\".\"ADMIN\" (ADMINID, password) VALUES(?, ?)");
@@ -378,7 +378,7 @@ public final class Controller {
 		ArrayList<Client> clientList = new ArrayList<>();
 		Connection con;
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"BANKERID\" = ?");
 			
@@ -402,7 +402,7 @@ public final class Controller {
 		String city = "Orgrimmar";
 		Connection con;
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con.prepareStatement(
 					"SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = ? AND \"COUNTRY\" = ?");
@@ -427,7 +427,7 @@ public final class Controller {
 		double rate = 0;
 		Connection con;
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con
 					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"ACCOUNTTYPE\" = ?");
@@ -451,7 +451,7 @@ public final class Controller {
 		ArrayList<String> list = new ArrayList<>();
 		Connection con;
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			// TODO: This works but needs to be sanitized to avoid SQL
 			// injections. Create whitelist
@@ -477,7 +477,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			// Select the latest ID, and extract only the ID number as an
 			// integer
@@ -507,7 +507,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ADMIN\"");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -524,7 +524,7 @@ public final class Controller {
 	public static void deleteAdmin(String adminID, DataSource ds1) {
 		Connection con;
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=?");
 			ps.setString(1, adminID);
 			ps.executeUpdate();
@@ -541,7 +541,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			// Select the latest ID, and extract only the ID number as an
 			// integer
@@ -570,7 +570,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con.prepareStatement(
 					"INSERT INTO \"DTUGRP16\".\"BANKER\" (BANKERID, PASSWORD, FIRSTNAME, LASTNAME, REGNO, EMAIL, MOBILE) VALUES(?, ?, ?, ?, ?, ?, ?)");
@@ -592,7 +592,7 @@ public final class Controller {
 	public static void deleteClient(String clientID, DataSource ds1) {
 		Connection con;
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
 			ps.setString(1, clientID);
 			ps.executeUpdate();
@@ -610,7 +610,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\"");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -653,7 +653,7 @@ public final class Controller {
 		Connection con;
 
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BANKER\"");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -678,7 +678,7 @@ public final class Controller {
 	public static void deleteBanker(String bankerID, DataSource ds1) {
 		Connection con;
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"BANKER\" WHERE \"BANKERID\"=?");
 			ps.setString(1, bankerID);
 			ps.executeUpdate();
@@ -695,7 +695,7 @@ public final class Controller {
 		Connection con;
 		System.out.println(search);
 		try {
-			con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps;
 
 			if (search.contains(" ")) {
