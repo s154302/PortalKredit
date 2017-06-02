@@ -32,11 +32,16 @@ public class AccountsServlet extends HttpServlet {
 			throws ServletException, IOException{
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
-		
+		if(Controller.checkAuth(Controller.Type.client, session)){
 		Client client = (Client) session.getAttribute("user");
 		session.setAttribute("accounts", client.getAccounts());
 		
 		request.getRequestDispatcher("accounts.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
 	
 	@Override

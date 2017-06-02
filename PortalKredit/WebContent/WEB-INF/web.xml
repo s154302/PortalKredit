@@ -123,6 +123,34 @@
 		<servlet-name>AccountsServlet</servlet-name>
 		<url-pattern>/Client/AccountsServlet</url-pattern>
 	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>ClientContactServlet</servlet-name>
+		<servlet-class>ClientContactServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ClientContactServlet</servlet-name>
+		<url-pattern>/Client/ClientContactServlet</url-pattern>
+	</servlet-mapping>
+	
+			<servlet>
+		<servlet-name>ClientFrontpageServlet</servlet-name>
+		<servlet-class>ClientFrontpageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ClientFrontpageServlet</servlet-name>
+		<url-pattern>/Client/ClientFrontpageServlet</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>ClientPaymentsServlet</servlet-name>
+		<servlet-class>ClientPaymentsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ClientPaymentsServlet</servlet-name>
+		<url-pattern>/Client/ClientPaymentsServlet</url-pattern>
+	</servlet-mapping>
+	
 	<filter>
    <filter-name>JspFilter</filter-name>
    <filter-class>classes.JspFilter</filter-class>
