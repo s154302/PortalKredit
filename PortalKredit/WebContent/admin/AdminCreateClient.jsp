@@ -66,7 +66,7 @@
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="clientPassword"
+							<input type="password" class="form-control" name="clientPassword"
 								placeholder="*Password">
 						</div>
 

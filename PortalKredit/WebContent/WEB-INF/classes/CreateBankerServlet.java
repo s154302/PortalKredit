@@ -26,7 +26,7 @@ public class CreateBankerServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-    @Resource(name = "jdbc/DB2")
+    @Resource(name = "jdbc/exampleDS")
     private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");

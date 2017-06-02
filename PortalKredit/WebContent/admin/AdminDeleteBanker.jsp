@@ -76,7 +76,7 @@
 									<td><c:out value="${ob.email}" /></td>
 
 									<td>
-										<form action="" method="post">
+										<form action="DeleteBankerServlet" method="post">
 											<button class="btn btn-primary btn-block btn-action"
 												type="submit" name="username" value="${ob.bankerID}">Delete</button>
 										</form>
