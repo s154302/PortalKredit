@@ -49,7 +49,7 @@
 		<servlet-name>DeleteAdminServlet</servlet-name>
 		<url-pattern>/admin/AdminDeleteAdmin</url-pattern>
 	</servlet-mapping>
-		<servlet>
+	<servlet>
 		<servlet-name>DeleteBankerServlet</servlet-name>
 		<servlet-class>DeleteBankerServlet</servlet-class>
 	</servlet>
@@ -57,7 +57,7 @@
 		<servlet-name>DeleteBankerServlet</servlet-name>
 		<url-pattern>/admin/AdminDeleteBanker</url-pattern>
 	</servlet-mapping>
-		<servlet>
+	<servlet>
 		<servlet-name>DeleteClientServlet</servlet-name>
 		<servlet-class>DeleteClientServlet</servlet-class>
 	</servlet>
@@ -74,7 +74,7 @@
 		<servlet-name>CreateAdminServlet</servlet-name>
 		<url-pattern>/admin/AdminCreateAdmin</url-pattern>
 	</servlet-mapping>
-		<servlet>
+	<servlet>
 		<servlet-name>AdminFrontpageServlet</servlet-name>
 		<servlet-class>AdminFrontpageServlet</servlet-class>
 	</servlet>
@@ -92,7 +92,7 @@
 		<url-pattern>/LoginServlet</url-pattern>
 		<url-pattern>/index</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>BankerCreateClientServlet</servlet-name>
 		<servlet-class>BankerCreateClientServlet</servlet-class>
@@ -101,7 +101,7 @@
 		<servlet-name>BankerCreateClientServlet</servlet-name>
 		<url-pattern>/banker/BankerCreateClientServlet</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>BankerViewClientServlet</servlet-name>
 		<servlet-class>BankerViewClientServlet</servlet-class>
@@ -114,7 +114,7 @@
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
-	
+
 	<servlet>
 		<servlet-name>AccountsServlet</servlet-name>
 		<servlet-class>AccountsServlet</servlet-class>
@@ -123,8 +123,8 @@
 		<servlet-name>AccountsServlet</servlet-name>
 		<url-pattern>/Client/AccountsServlet</url-pattern>
 	</servlet-mapping>
-	
-		<servlet>
+
+	<servlet>
 		<servlet-name>ClientContactServlet</servlet-name>
 		<servlet-class>ClientContactServlet</servlet-class>
 	</servlet>
@@ -132,8 +132,8 @@
 		<servlet-name>ClientContactServlet</servlet-name>
 		<url-pattern>/Client/ClientContactServlet</url-pattern>
 	</servlet-mapping>
-	
-			<servlet>
+
+	<servlet>
 		<servlet-name>ClientFrontpageServlet</servlet-name>
 		<servlet-class>ClientFrontpageServlet</servlet-class>
 	</servlet>
@@ -141,8 +141,8 @@
 		<servlet-name>ClientFrontpageServlet</servlet-name>
 		<url-pattern>/Client/ClientFrontpageServlet</url-pattern>
 	</servlet-mapping>
-	
-		<servlet>
+
+	<servlet>
 		<servlet-name>ClientPaymentsServlet</servlet-name>
 		<servlet-class>ClientPaymentsServlet</servlet-class>
 	</servlet>
@@ -150,14 +150,14 @@
 		<servlet-name>ClientPaymentsServlet</servlet-name>
 		<url-pattern>/Client/ClientPaymentsServlet</url-pattern>
 	</servlet-mapping>
-	
+
 	<filter>
-   <filter-name>JspFilter</filter-name>
-   <filter-class>classes.JspFilter</filter-class>
-</filter>
-<filter-mapping>
-  <filter-name>JspFilter</filter-name>
-  <url-pattern>*.jsp</url-pattern>
-</filter-mapping>
+		<filter-name>JspFilter</filter-name>
+		<filter-class>classes.JspFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>JspFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
 
 </web-app>

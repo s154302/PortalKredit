@@ -6,32 +6,7 @@
 </head>
 
 <body>
-	<nav
-		class="navbar navbar-toggleable-md navbar-inverse bg-primary custom-navbar">
-		<button class="navbar-toggler navbar-toggler-right" type="button"
-			data-toggle="collapse" data-target="#navbarNavDropdown"
-			aria-controls="navbarNavDropdown" aria-expanded="false"
-			aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<a class="navbar-brand" href="#"><img
-			src="../assets/images/logo.png" width="60" height="60" alt=""></a>
-		<div class="collapse navbar-collapse"
-			id="navbarNavDropdown">
-			<ul class="navbar-nav">
-				<li class="nav-item active"><a class="nav-link" href="frontpage.jsp">Home</a></li>
-				<li class="nav-item active"><a class="nav-link" href="accounts.jsp">Accounts</a></li>
-				<li class="nav-item active"><a class="nav-link" href="payments.jsp">Payments</a></li>
-				<li class="nav-item active"><a class="nav-link" href="contact.jsp">Contact</a></li>
-			</ul>
-		</div>
-						<div>
-		<form class="form-inline my-2 my-lg-0" action="LogOutServlet" method="post">
-      
-      <button class="btn btn-primary my-2 my-sm-0" type="submit">Log Out</button>
-    </form>
-		</div>
-	</nav>
+	<jsp:include page="BankerNavbar.jsp"></jsp:include>
 				<h1>ACCOUNTS</h1>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
