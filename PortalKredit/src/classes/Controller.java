@@ -225,16 +225,15 @@ public final class Controller {
 			ps.setString(1, accountNumber);
 			ps.setInt(2, regNo);
 			ResultSet rs = ps.executeQuery();
-
+			
+			rs.next();
 			account.setAccountNumber(rs.getString("ACCOUNTNUMBER"));
 			account.setRegNo(rs.getInt("REGNO"));
 			account.setAccountType(rs.getString("ACCOUNTTYPE"));
 			account.setClientID(rs.getString("CLIENTID"));
 			account.setBalance(rs.getDouble("BALANCE"));
-			account.setCurrency("CURRENCY");
-
-			// TODO - Consider if this only should be done when the information
-			// is actually needed
+			account.setCurrency(rs.getString("CURRENCY"));
+			account.setAccountName(rs.getString("ACCOUNTNAME"));
 			account.setTransactions(getNewTransactions(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"), ds1));
 
 			rs.close();
