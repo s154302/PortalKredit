@@ -697,7 +697,6 @@ public final class Controller {
 		ArrayList<Client> result = new ArrayList<>();
 		ArrayList<String> terms = new ArrayList<>();
 		Connection con;
-		System.out.println(search);
 		try {
 			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps;

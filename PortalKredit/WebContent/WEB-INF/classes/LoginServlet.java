@@ -50,7 +50,6 @@ public class LoginServlet extends HttpServlet {
 				break;
 			case banker:
 				session.setAttribute("user", Controller.getBankerInfo(userID, ds1));
-				System.out.println(session.getAttribute("user").toString());
 				response.sendRedirect(request.getContextPath() + "/banker/frontpage.jsp");
 				break;
 			case admin:
