@@ -45,8 +45,15 @@ public class Client {
 
 	}
 
-	public void fetchAccounts() {
+	public Account findAccount(String accountNumber, int regNo) {
 
+		for(Account account : accounts){
+			if(account.getAccountNumber().equals(accountNumber) && account.getRegNo() == regNo){
+				return account;
+			}
+		}
+		
+		return null;
 	}
 	
 	public String toString (){
