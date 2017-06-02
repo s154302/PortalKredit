@@ -31,11 +31,16 @@ public class DeleteBankerServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
-		
+		if(Controller.checkAuth(Controller.Type.admin, session)){
 		ArrayList<Banker> bankerList = Controller.getBankerList(ds1);
 		request.setAttribute("list", bankerList);
 
 		request.getRequestDispatcher("AdminDeleteBanker.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

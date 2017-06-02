@@ -25,9 +25,9 @@
 					id="navbarDropdownMenuLink" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false">Create</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="AdminCreateClient.jsp">Create Client</a> <a
-							class="dropdown-item" href="AdminCreateBanker.jsp">Create Banker</a> <a
-							class="dropdown-item" href="AdminCreateAdmin.jsp">Create Admin</a>
+						<a class="dropdown-item" href="AdminCreateClient">Create Client</a> <a
+							class="dropdown-item" href="AdminCreateBanker">Create Banker</a> <a
+							class="dropdown-item" href="AdminCreateAdmin">Create Admin</a>
 					</div></li>
 
 				<li class="nav-item dropdown"><a

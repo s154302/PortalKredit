@@ -29,12 +29,18 @@ public class DeleteAdminServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		
+		
+		if(Controller.checkAuth(Controller.Type.admin, session)){
 		ArrayList<Admin> adminList = Controller.getAdminList(ds1);
 		request.setAttribute("list", adminList);
 
 		request.getRequestDispatcher("AdminDeleteAdmin.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

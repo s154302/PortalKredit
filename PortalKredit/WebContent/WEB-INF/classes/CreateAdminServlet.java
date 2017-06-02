@@ -18,7 +18,7 @@ import classes.Controller;
 /*
  * Servlet implementation class CreateAdminServlet
  */
-@WebServlet("/CreateAdminServlet")
+@WebServlet("/AdminCreateAdmin")
 public class CreateAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -38,6 +38,17 @@ public class CreateAdminServlet extends HttpServlet {
 		Controller.createAdmin(adminID, hashed, ds1);
 
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateAdmin.jsp");
+	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		HttpSession session = request.getSession();
+		if(Controller.checkAuth(Controller.Type.admin, session)){
+			request.getRequestDispatcher("AdminCreateAdmin.jsp").forward(request, response);
+			
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
 
 }
