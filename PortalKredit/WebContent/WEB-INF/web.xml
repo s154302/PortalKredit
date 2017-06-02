@@ -102,13 +102,22 @@
 		<url-pattern>/banker/BankerViewClientServlet</url-pattern>
 	</servlet-mapping>
 	
-		<servlet>
+	<servlet>
 		<servlet-name>BankerCreateAccountServlet</servlet-name>
 		<servlet-class>BankerCreateAccountServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>BankerCreateAccountServlet</servlet-name>
 		<url-pattern>/banker/BankerCreateAccountServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>BankerViewSingleClientServlet</servlet-name>
+		<servlet-class>BankerViewSingleClientServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BankerViewSingleClientServlet</servlet-name>
+		<url-pattern>/banker/BankerViewSingleClientServlet</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>

@@ -31,8 +31,7 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		
-		String clientID = (String) session.getAttribute("ClientID");
-		System.out.println("The client: "+clientID);
+		String clientID = (String) session.getAttribute("clientID");
 
 		request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
 	}
@@ -51,10 +50,13 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		double balance = Double.parseDouble(request.getParameter("clientBalance"));
 		String currency = request.getParameter("clientCurrency");
 		
-		Controller.createAccount(accountNumber, regNo, accountType, clientID, balance, currency, ds1);
-		//Client client = (Client) Controller.getClientInfo(clientID, ds1);
-		//client.setAccounts(Controller.getAccounts(clientID, ds1));
 		
-		response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient.jsp");
+		Controller.createAccount(accountNumber, regNo, accountType, clientID, balance, currency, ds1);
+		
+//		Banker banker = (Banker) session.getAttribute("user");
+//		banker.getClient(clientID).setAccounts( Controller.getAccounts(clientID, ds1));
+//		session.setAttribute("user", banker);
+		
+		response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
 	}
 }

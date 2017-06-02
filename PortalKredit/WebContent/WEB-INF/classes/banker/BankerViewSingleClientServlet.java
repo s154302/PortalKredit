@@ -13,14 +13,15 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Account;
+import classes.Banker;
 import classes.Client;
 import classes.Controller;
 
 @WebServlet("/banker/ViewSingleClient")
-public class BankerViewSingleClient extends HttpServlet {
+public class BankerViewSingleClientServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	public BankerViewSingleClient(){
+	public BankerViewSingleClientServlet(){
 		super();
 	}
 	
@@ -34,9 +35,11 @@ public class BankerViewSingleClient extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
-		Client client = (Client) session.getAttribute("user");
-		System.out.println("Andent tjek" + client.toString());
+		String clientID = (String) session.getAttribute("clientID");
+		Client client = Controller.getClientInfo(clientID, ds1);
+		
 		session.setAttribute("accounts", client.getAccounts());
+		session.setAttribute("clientName", client.getFirstName());
 		
 		request.getRequestDispatcher("ViewSingleClient.jsp").forward(request, response);
 	}
