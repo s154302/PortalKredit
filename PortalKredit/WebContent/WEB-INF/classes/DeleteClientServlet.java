@@ -47,13 +47,15 @@ public class DeleteClientServlet extends HttpServlet {
 		if(search != null) {
 			ArrayList<Client> clientList = Controller.searchClient(request.getParameter("search-term"), ds1);
 			request.setAttribute("list", clientList);
+			request.getRequestDispatcher("AdminDeleteClient.jsp").forward(request, response);
 		}
 		
 		if(delete != null) {
 			Controller.deleteClient(delete, ds1);
+			doGet(request, response);
 		}
 				
-		doGet(request, response);
+		
 	}
 	
 
