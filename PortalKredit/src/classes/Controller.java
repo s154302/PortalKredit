@@ -369,20 +369,18 @@ public final class Controller {
 	public static ArrayList<Client> getClients(String bankerID, DataSource ds1) {
 		ArrayList<Client> clientList = new ArrayList<>();
 		Connection con;
-		
 		try {
 			con = ds1.getConnection();
+			
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"BANKERID\" = ?");
 			
 			ps.setString(1, bankerID);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				
 				Client client = setClientInfo(rs);
 				clientList.add(client);	
 			}
-			
 			rs.close();
 			
 		} catch (SQLException e) {
@@ -511,7 +509,7 @@ public final class Controller {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		return adminList;
 	}
 
@@ -691,30 +689,30 @@ public final class Controller {
 		try {
 			con = ds1.getConnection();
 			PreparedStatement ps;
-			int i = 0;
-			while (search != "") {
-				if (search.charAt(i) == ' ') {
-					terms.add(search.substring(0, i));
-					search = search.substring(i + 1);
-					terms.add(search);
-					break;
-				} else {
-					ps = con.prepareStatement(
-							"SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"FIRST_NAME\"=? OR \"LAST_NAME\"=?");
-					ps.setString(1, search);
-					ps.setString(2, search);
-					ps.executeQuery();
-					ResultSet rs = ps.getResultSet();
-					while (rs.next()) {
-						result.add(setClientInfo(rs));
-					}
-				}
+			// int i = 0;
+			// while (search != "") {
+			// if (search.charAt(i) == ' ') {
+			// terms.add(search.substring(0, i));
+			// search = search.substring(i + 1);
+			// terms.add(search);
+			// break;
+			// } else {
+			//
+			// }
+			// }
+			
+			ps = con.prepareStatement(
+					"SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE (\"FIRST_NAME\" LIKE ?) OR (\"LAST_NAME\" LIKE ?)");
+			ps.setString(1, "%" + search + "%");
+			ps.setString(2, "%" + search + "%");
+			ps.executeQuery();
+			ResultSet rs = ps.getResultSet();
+			while (rs.next()) {
+				result.add(setClientInfo(rs));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-
 		return result;
 	}
 
