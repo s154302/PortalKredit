@@ -264,6 +264,11 @@ public final class Controller {
 						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
 						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY")));
 			}
+			if(transactionList.size() < 3){
+				for(int i = 0; i < 3 - transactionList.size(); i++){
+					transactionList.add(null);
+				}
+			}
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

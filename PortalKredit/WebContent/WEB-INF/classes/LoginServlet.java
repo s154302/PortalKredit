@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 import classes.Client;
 import classes.Controller;
 
-/*
+/**
  * Servlet implementation class LoginServlet
  */
 @WebServlet("/LoginServlet")
@@ -45,7 +45,8 @@ public class LoginServlet extends HttpServlet {
 			case client:
 				session.setAttribute("user", Controller.getClientInfo(userID, ds1));
 				Client client = (Client)session.getAttribute("user");
-				response.sendRedirect(request.getContextPath() + "/client/frontpage.jsp");
+				//request.getRequestDispatcher("/client/accounts").forward(request, response);
+				response.sendRedirect(request.getContextPath() + "/client/accounts");
 				break;
 			case banker:
 				session.setAttribute("user", Controller.getBankerInfo(userID, ds1));
