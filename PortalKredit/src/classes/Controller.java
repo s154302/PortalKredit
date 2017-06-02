@@ -20,19 +20,27 @@ public final class Controller {
 		boolean st = false;
 
 		if (userID.substring(userID.length() - 1).equals("C")) {
-
+			boolean bool = clientAuthenticate(userID, password, ds1);
+			if(bool){
 			session.setAttribute("type", Type.client);
-			return clientAuthenticate(userID, password, ds1);
+			}
+			return bool;
 		} else if (userID.substring(userID.length() - 1).equals("B")) {
+			boolean bool = bankerAuthenticate(userID, password, ds1); 
+			if( bool){
 			session.setAttribute("type", Type.banker);
-			return bankerAuthenticate(userID, password, ds1);
+			}
+			return bool;
 		} else {
-			session.setAttribute("type", Type.admin);
-			return adminAuthenticate(userID, password, ds1);
+			boolean bool = adminAuthenticate(userID, password, ds1);
+			if(bool){
+				session.setAttribute("type", Type.admin);
+			}
+			return bool;
 		}
 
 	}
-
+	
 	// consider making these private??
 	public static boolean clientAuthenticate(String clientID, String password, DataSource ds1) {
 		boolean st = false;

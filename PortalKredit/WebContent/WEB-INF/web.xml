@@ -30,6 +30,15 @@
 		<servlet-name>CreateBankerServlet</servlet-name>
 		<url-pattern>/admin/CreateBankerServlet</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>LogOutServlet</servlet-name>
+		<servlet-class>LogOutServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LogOutServlet</servlet-name>
+		<url-pattern>/admin/LogOutServlet</url-pattern>
+		<url-pattern>/client/LogOutServlet</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>DeleteAdminServlet</servlet-name>
