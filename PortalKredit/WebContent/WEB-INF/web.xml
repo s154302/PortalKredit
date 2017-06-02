@@ -19,7 +19,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>CreateClientServlet</servlet-name>
-		<url-pattern>/admin/CreateClientServlet</url-pattern>
+		<url-pattern>/admin/AdminCreateClient</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -28,7 +28,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>CreateBankerServlet</servlet-name>
-		<url-pattern>/admin/CreateBankerServlet</url-pattern>
+		<url-pattern>/admin/AdminCreateBanker</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>LogOutServlet</servlet-name>
@@ -72,7 +72,15 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>CreateAdminServlet</servlet-name>
-		<url-pattern>/admin/CreateAdminServlet</url-pattern>
+		<url-pattern>/admin/AdminCreateAdmin</url-pattern>
+	</servlet-mapping>
+		<servlet>
+		<servlet-name>AdminFrontpageServlet</servlet-name>
+		<servlet-class>AdminFrontpageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminFrontpageServlet</servlet-name>
+		<url-pattern>/admin/AdminFrontpage</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -82,6 +90,7 @@
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>
 		<url-pattern>/LoginServlet</url-pattern>
+		<url-pattern>/index</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -114,4 +123,13 @@
 		<servlet-name>AccountsServlet</servlet-name>
 		<url-pattern>/Client/AccountsServlet</url-pattern>
 	</servlet-mapping>
+	<filter>
+   <filter-name>JspFilter</filter-name>
+   <filter-class>classes.JspFilter</filter-class>
+</filter>
+<filter-mapping>
+  <filter-name>JspFilter</filter-name>
+  <url-pattern>*.jsp</url-pattern>
+</filter-mapping>
+
 </web-app>

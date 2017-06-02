@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 import classes.BCrypt;
 import classes.Controller;
 
-@WebServlet("/admin/CreateClientServlet")
+@WebServlet("/AdminCreateClient")
 public class CreateClientServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -42,5 +42,17 @@ public class CreateClientServlet extends HttpServlet {
 		
 		Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateClient.jsp");
+	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		HttpSession session = request.getSession();
+		System.out.println(Controller.checkAuth(Controller.Type.admin, session));
+		if(Controller.checkAuth(Controller.Type.admin, session)){
+			request.getRequestDispatcher("AdminCreateClient.jsp").forward(request, response);
+			
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
 }

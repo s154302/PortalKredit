@@ -40,6 +40,10 @@ public final class Controller {
 		}
 
 	}
+	public static boolean checkAuth(Type type, HttpSession session){
+		
+		return type.equals((Type)session.getAttribute("type"));
+	}
 	
 	// consider making these private??
 	public static boolean clientAuthenticate(String clientID, String password, DataSource ds1) {
