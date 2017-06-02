@@ -23,7 +23,7 @@ public class DeleteClientServlet extends HttpServlet {
 	public DeleteClientServlet(){
 		super();
 	}
-	@Resource(name = "jdbc/DB2")
+	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	
 	@Override
@@ -37,15 +37,25 @@ public class DeleteClientServlet extends HttpServlet {
 
 		request.getRequestDispatcher("AdminDeleteClient.jsp").forward(request, response);
 	}
+	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+		String search = request.getParameter("search-client");
+		String delete = request.getParameter("username");
+		System.out.println(search);
+		if(search != null) {
+			ArrayList<Client> clientList = Controller.searchClient(request.getParameter("search-term"), ds1);
+			request.setAttribute("list", clientList);
+			request.getRequestDispatcher("AdminDeleteClient.jsp").forward(request, response);
+		}
 		
-		String clientID = request.getParameter("username");
+		if(delete != null) {
+			Controller.deleteClient(delete, ds1);
+			doGet(request, response);
+		}
+				
 		
-		Controller.deleteClient(clientID, ds1);
-		
-		doGet(request, response);
 	}
 	
 

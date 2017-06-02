@@ -26,11 +26,11 @@ public class LoginServlet extends HttpServlet {
         super();
     }
 
-    @Resource(name = "jdbc/DB2")
+    @Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		HttpSession session = request.getSession(true);	
+		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		String userID = request.getParameter("userID");
 		String password = request.getParameter("password");
@@ -45,9 +45,8 @@ public class LoginServlet extends HttpServlet {
 			case client:
 				session.setAttribute("user", Controller.getClientInfo(userID, ds1));
 				Client client = (Client)session.getAttribute("user");
-				System.out.println(client.toString());
-				System.out.println(client.getAccounts().get(1).getTransactions().get(0).toString());
-				response.sendRedirect(request.getContextPath() + "/client/frontpage.jsp");
+				//request.getRequestDispatcher("/client/accounts").forward(request, response);
+				response.sendRedirect(request.getContextPath() + "/client/accounts");
 				break;
 			case banker:
 				session.setAttribute("user", Controller.getBankerInfo(userID, ds1));
@@ -56,7 +55,6 @@ public class LoginServlet extends HttpServlet {
 				break;
 			case admin:
 				session.setAttribute("user", Controller.getAdminInfo(userID, ds1));
-				System.out.println(session.getAttribute("user").toString());
 				response.sendRedirect(request.getContextPath() + "/admin/AdminControl.jsp");
 				break;
 			default:
