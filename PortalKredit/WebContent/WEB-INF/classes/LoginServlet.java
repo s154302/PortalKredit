@@ -18,7 +18,7 @@ import classes.Controller;
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet("/LoginServlet")
+@WebServlet("/Loginservlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -55,7 +55,7 @@ public class LoginServlet extends HttpServlet {
 				break;
 			case admin:
 				session.setAttribute("user", Controller.getAdminInfo(userID, ds1));
-				response.sendRedirect(request.getContextPath() + "/admin/AdminControl.jsp");
+				response.sendRedirect(request.getContextPath() + "/admin/AdminFrontpage");
 				break;
 			default:
 				break;
@@ -66,6 +66,11 @@ public class LoginServlet extends HttpServlet {
 		}
 		
 		
+	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		
+			request.getRequestDispatcher("index.jsp").forward(request, response);
+	
 	}
 
 }
