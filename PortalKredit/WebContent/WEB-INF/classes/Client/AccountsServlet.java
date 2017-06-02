@@ -24,13 +24,13 @@ public class AccountsServlet extends HttpServlet {
 		super();
 	}
 	
-	@Resource(name = "jdbc/DB2")
+	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException{
-		System.out.println("DoGet kører");
+		System.out.println("DoGet kÃ¸rer");
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
@@ -44,7 +44,7 @@ public class AccountsServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		System.out.println("doPost kører ");
+		System.out.println("doPost kï¿½rer ");
 		String accountNumber = request.getParameter("accountNumber");
 		
 		

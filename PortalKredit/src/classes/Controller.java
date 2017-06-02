@@ -150,16 +150,7 @@ public final class Controller {
 			ResultSet rs = ps.executeQuery();
 
 			rs.next();
-
-			client.setClientID(rs.getString("CLIENTID"));
-			client.setFirstName(rs.getString("FIRST_NAME"));
-			client.setLastName(rs.getString("LAST_NAME"));
-			client.setEmail(rs.getString("EMAIL"));
-			client.setPhoneNo(rs.getString("MOBILE"));
-			client.setCPR(rs.getString("CPR"));
-			client.setCountry(rs.getString("COUNTRY"));
-			client.setPostal(rs.getInt("POSTAL"));
-			client.setStreet(rs.getString("STREET"));
+			client = setClientInfo(rs);
 			client.setCity(findCity(rs.getInt("POSTAL"), rs.getString("COUNTRY"), ds1));
 
 			// Consider if we want to fill the Client with its account info
@@ -387,16 +378,8 @@ public final class Controller {
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				Client client = new Client();
-				client.setClientID(rs.getString("CLIENTID"));
-				client.setFirstName(rs.getString("FIRST_NAME"));
-				client.setLastName(rs.getString("LAST_NAME"));
-				client.setEmail(rs.getString("EMAIL"));
-				client.setPhoneNo(rs.getString("MOBILE"));
-				client.setCPR(rs.getString("CPR"));
-				client.setCountry(rs.getString("COUNTRY"));
-				client.setPostal(rs.getInt("POSTAL"));
-				client.setStreet(rs.getString("STREET"));
+				
+				Client client = setClientInfo(rs);
 				clientList.add(client);	
 			}
 			
