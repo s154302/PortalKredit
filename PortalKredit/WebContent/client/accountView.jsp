@@ -3,7 +3,7 @@
 
 
 <head>
-<title>Accounts overview</title>
+<title>Transactions</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/custom.css">
@@ -32,38 +32,35 @@
 		<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary text-center blue-outline">
-				<h1>Accounts</h1>
+				<h1>Transactions</h1>
+				<h2>Account: ${regNo} ${accountNumber}</h2>
+				
 				<div class="card-block">
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th>Account Number</th>
-								<th> Balance</th>
+								<th>Date</th>
+								<th>Amount</th>
 							</tr>
 						</thead>
 
 						<tbody>
 
-							<c:forEach var="ob" items="${accounts}">
-								<tr data-toggle="collapse" data-target="#${ob.accountNumber}"
+							<c:forEach var="ob" items="${transactions}">
+								<tr data-toggle="collapse" data-target="#${ob.transactionID}"
 									class="clickable">
-									<td><c:out value="${ob.accountNumber}" /></td>
-									<td><c:out value="${ob.balance}" /></td>
+									<td><c:out value="${ob.dateOfTransaction}" /></td>
+									<td><c:out value="${ob.amount}" /></td>
 								</tr>
 								<tr>
 									<td colspan="2">
-										<div id="${ob.accountNumber}" class="collapse">
+										<div id="${ob.transactionID}" class="collapse">
 											<ul>
-												<li>Date: ${ob.transactions[0].dateOfTransaction} Amount: ${ob.transactions[0].amount}</li>
-												<li>Date: ${ob.transactions[1].dateOfTransaction} Amount: ${ob.transactions[1].amount}</li>
-												<li>Date: ${ob.transactions[2].dateOfTransaction} Amount: ${ob.transactions[2].amount}</li>
+												<li>ID: ${ob.transactionID}</li>
+												<li>RegNo: ${ob.recieveRegNo}</li>
+												<li>AccountNumber: ${ob.recieveAccount}</li>
+												<li>Currency: ${ob.currency}</li>
 											</ul>
-											<form action="" method="post">
-												<input type="hidden" name="accountNumber" value="${ob.accountNumber}"/>
-												<input type="hidden" name="regNo" value="${ob.regNo}"/>	
-												<button class="btn btn-primary btn-block btn-action"
-													type="submit" value="${ob.accountNumber}">View Account</button>
-											</form>
 										</div>
 									</td>
 								</tr>

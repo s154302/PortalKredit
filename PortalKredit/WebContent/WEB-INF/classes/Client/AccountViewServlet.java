@@ -16,11 +16,11 @@ import classes.Account;
 import classes.Client;
 import classes.Controller;
 
-@WebServlet("/client/accounts")
-public class AccountsServlet extends HttpServlet {
+@WebServlet("/client/accountView")
+public class AccountViewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	public AccountsServlet(){
+	public AccountViewServlet(){
 		super();
 	}
 	
@@ -33,21 +33,11 @@ public class AccountsServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
-		Client client = (Client) session.getAttribute("user");
-		session.setAttribute("accounts", client.getAccounts());
+		String accountNumber = (String) session.getAttribute("accountNumber");
+		int regNo = (int) session.getAttribute("regNo");
 		
-		request.getRequestDispatcher("accounts.jsp").forward(request, response);
-	}
-	
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		HttpSession session = request.getSession();
-
+		session.setAttribute("transactions", Controller.getNewTransactions(accountNumber, regNo, ds1));
 		
-		session.setAttribute("accountNumber", request.getParameter("accountNumber"));
-		session.setAttribute("regNo", Integer.parseInt(request.getParameter("regNo")));
-		
-		response.sendRedirect("accountView");
+		request.getRequestDispatcher("accountView.jsp").forward(request, response);
 	}
 }
