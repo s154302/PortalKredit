@@ -1,6 +1,8 @@
 package classes;
 
+import java.sql.Clob;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,26 +23,26 @@ public final class Controller {
 
 		if (userID.substring(userID.length() - 1).equals("C")) {
 			boolean bool = clientAuthenticate(userID, password, ds1);
-			if(bool){
-			session.setAttribute("type", Type.client);
+			if (bool) {
+				session.setAttribute("type", Type.client);
 			}
 			return bool;
 		} else if (userID.substring(userID.length() - 1).equals("B")) {
-			boolean bool = bankerAuthenticate(userID, password, ds1); 
-			if( bool){
-			session.setAttribute("type", Type.banker);
+			boolean bool = bankerAuthenticate(userID, password, ds1);
+			if (bool) {
+				session.setAttribute("type", Type.banker);
 			}
 			return bool;
 		} else {
 			boolean bool = adminAuthenticate(userID, password, ds1);
-			if(bool){
+			if (bool) {
 				session.setAttribute("type", Type.admin);
 			}
 			return bool;
 		}
 
 	}
-	
+
 	// consider making these private??
 	public static boolean clientAuthenticate(String clientID, String password, DataSource ds1) {
 		boolean st = false;
@@ -379,18 +381,18 @@ public final class Controller {
 		Connection con;
 		try {
 			con = ds1.getConnection(Secret.userID, Secret.password);
-			
+
 			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE \"BANKERID\" = ?");
-			
+
 			ps.setString(1, bankerID);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
 				Client client = setClientInfo(rs);
-				clientList.add(client);	
+				clientList.add(client);
 			}
 			rs.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -517,7 +519,7 @@ public final class Controller {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return adminList;
 	}
 
@@ -733,6 +735,92 @@ public final class Controller {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	public static void transaction(String sendAcc, String reciAcc, double amount, int sendReg, int reciReg,
+			String currency, Clob message, DataSource ds1) {
+		try {
+			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+			// Make sure transaction is reversible in case of an error
+			con.setAutoCommit(false);
+
+			// Subtract amount from sending account
+			PreparedStatement subtract = con.prepareStatement(
+					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"BALANCE\" = \"BALANCE\" - ? WHERE \"ACCOUNTNUMBER\" = ?");
+			subtract.setDouble(1, amount);
+			subtract.setString(2, sendAcc);
+			subtract.executeUpdate();
+
+			// Add amount to receiving amount
+			PreparedStatement add = con.prepareStatement(
+					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"BALANCE\" = \"BALANCE\" + ? WHERE \"ACCOUNTNUMBER\" = ?");
+			add.setDouble(1, amount);
+			add.setString(2, reciAcc);
+			add.executeUpdate();
+
+			// Create a statement used to extract the new balances
+			PreparedStatement check = con
+					.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ?");
+			check.setString(1, sendAcc);
+			check.executeQuery();
+			ResultSet rs = check.getResultSet();
+
+			// Define new balance for sender
+			rs.next();
+			double sendBalance = rs.getDouble("BALANCE");
+
+			// Insert transaction for sender
+			createTransaction(sendAcc, reciAcc, amount, sendReg, reciReg, currency, message, sendBalance, ds1);
+
+			check.setString(1, reciAcc);
+			check.executeQuery();
+			rs = check.getResultSet();
+
+			// Define new balance for recipient
+			rs.next();
+			double reciBalance = rs.getDouble("BALANCE");
+
+			// Insert transaction for recipient
+			createTransaction(reciAcc, sendAcc, amount, reciReg, sendReg, currency, message, reciBalance, ds1);
+
+			// Check that no money has been lost or gained,
+			// if so then roll back all changes
+			if (Math.abs(sendBalance - reciBalance) == amount) {
+				con.commit();
+			} else {
+				con.rollback();
+			}
+			
+			con.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void createTransaction(String acc1, String acc2, double amount, int reg1, int reg2, String currency,
+			Clob message, double balance, DataSource ds1) {
+		try {
+			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+
+			// Inserts a transaction into the TRANSACTION table
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO \"DTUGRP16\".\"TRANSACTION\" VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			ps.setString(1, acc1);
+			ps.setInt(2, reg1);
+			ps.setString(3, acc2);
+			ps.setInt(4, reg2);
+			ps.setDate(5, new java.sql.Date(System.currentTimeMillis()));
+			ps.setDouble(6, amount);
+			ps.setString(7, currency);
+			ps.setClob(8, message);
+			ps.setDouble(9, balance);
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
