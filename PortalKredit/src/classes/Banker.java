@@ -139,6 +139,19 @@ public class Banker {
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
 	}
+
+	public Client getClient(String clientID) {
+		// TODO Auto-generated method stub
+		for(Client client : clients){
+			try{
+				if(client.getClientID() == clientID){
+					return client;
+				}
+			}catch(Exception e){}
+
+		}
+		return null;
+	}
 	
 	
 

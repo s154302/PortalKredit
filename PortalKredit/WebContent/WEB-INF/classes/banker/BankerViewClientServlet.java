@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Client;
+import classes.Controller;
 import classes.Banker;
 
 @WebServlet("/banker/ViewClients")
@@ -42,10 +43,12 @@ public class BankerViewClientServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+		HttpSession session = request.getSession(true);
 		
 		String clientID = request.getParameter("username");
 		
-		//Controller.deleteClient(clientID, ds1);
+		session.setAttribute("ClientID", clientID);
+		response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient.jsp");
 		
 		doGet(request, response);
 	}
