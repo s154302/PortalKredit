@@ -27,6 +27,12 @@
 				<li class="nav-item active"><a class="nav-link" href="CreateClient">Create Client</a></li>
 			</ul>
 		</div>
+						<div>
+		<form class="form-inline my-2 my-lg-0" action="LogOutServlet" method="post">
+      
+      <button class="btn btn-primary my-2 my-sm-0" type="submit">Log Out</button>
+    </form>
+		</div>
 	</nav>
 
 	<div class="row pad-row">

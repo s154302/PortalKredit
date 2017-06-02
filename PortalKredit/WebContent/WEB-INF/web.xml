@@ -38,6 +38,7 @@
 		<servlet-name>LogOutServlet</servlet-name>
 		<url-pattern>/admin/LogOutServlet</url-pattern>
 		<url-pattern>/client/LogOutServlet</url-pattern>
+		<url-pattern>/banker/LogOutServlet</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

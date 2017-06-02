@@ -24,6 +24,12 @@
 				<li class="nav-item active"><a class="nav-link" href="CreateClient">Create Client</a></li>
 			</ul>
 		</div>
+						<div>
+		<form class="form-inline my-2 my-lg-0" action="LogOutServlet" method="post">
+      
+      <button class="btn btn-primary my-2 my-sm-0" type="submit">Log Out</button>
+    </form>
+		</div>
 	</nav>
 				<h1>Welcome to Portal Kredit!</h1>
 				<small>Work hard Banker!! And have a great day!</small>
