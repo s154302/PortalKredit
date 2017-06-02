@@ -22,7 +22,7 @@
 			src="../assets/images/logo.png" width="60" height="60" alt=""></a>
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 			<ul class="navbar-nav">
-				<li class="nav-item active"><a class="nav-link" href="frontpage.jsp">Home</a></li>
+				<li class="nav-item active"><a class="nav-link" href="Frontpage.jsp">Home</a></li>
 				<li class="nav-item active"><a class="nav-link" href="ViewClients">View Clients</a></li>
 				<li class="nav-item active"><a class="nav-link" href="CreateClient">Create Client</a></li>
 			</ul>
