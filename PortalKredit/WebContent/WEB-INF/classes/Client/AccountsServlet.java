@@ -30,12 +30,10 @@ public class AccountsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException{
-		System.out.println("DoGet kører");
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
 		Client client = (Client) session.getAttribute("user");
-		System.out.println("Andent tjek" + client.toString());
 		session.setAttribute("accounts", client.getAccounts());
 		
 		request.getRequestDispatcher("accounts.jsp").forward(request, response);
@@ -44,7 +42,6 @@ public class AccountsServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		System.out.println("doPost k�rer ");
 		String accountNumber = request.getParameter("accountNumber");
 		
 		

@@ -45,7 +45,6 @@ public class CreateClientServlet extends HttpServlet {
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		HttpSession session = request.getSession();
-		System.out.println(Controller.checkAuth(Controller.Type.admin, session));
 		if(Controller.checkAuth(Controller.Type.admin, session)){
 			request.getRequestDispatcher("AdminCreateClient.jsp").forward(request, response);
 			

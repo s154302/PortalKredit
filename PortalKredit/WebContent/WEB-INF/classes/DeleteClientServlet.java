@@ -48,7 +48,6 @@ public class DeleteClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		String search = request.getParameter("search-client");
 		String delete = request.getParameter("username");
-		System.out.println(search);
 		if(search != null) {
 			ArrayList<Client> clientList = Controller.searchClient(request.getParameter("search-term"), ds1);
 			request.setAttribute("list", clientList);
