@@ -264,8 +264,8 @@ public final class Controller {
 						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
 						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY")));
 			}
-			if(transactionList.size() < 3){
-				for(int i = 0; i < 3 - transactionList.size(); i++){
+			if (transactionList.size() < 3) {
+				for (int i = 0; i < 3 - transactionList.size(); i++) {
 					transactionList.add(null);
 				}
 			}
@@ -699,26 +699,37 @@ public final class Controller {
 		try {
 			con = ds1.getConnection();
 			PreparedStatement ps;
-			// int i = 0;
-			// while (search != "") {
-			// if (search.charAt(i) == ' ') {
-			// terms.add(search.substring(0, i));
-			// search = search.substring(i + 1);
-			// terms.add(search);
-			// break;
-			// } else {
-			//
-			// }
-			// }
-			
-			ps = con.prepareStatement(
-					"SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE (\"FIRST_NAME\" LIKE ?) OR (\"LAST_NAME\" LIKE ?)");
-			ps.setString(1, "%" + search + "%");
-			ps.setString(2, "%" + search + "%");
-			ps.executeQuery();
-			ResultSet rs = ps.getResultSet();
-			while (rs.next()) {
-				result.add(setClientInfo(rs));
+
+			if (search.contains(" ")) {
+				for (int i = 0; i < search.length(); i++) {
+					if (search.charAt(i) == ' ') {
+						terms.add(search.substring(0, i));
+						terms.add(search.substring(i + 1));
+						break;
+					}
+				}
+
+				ps = con.prepareStatement(
+						"SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE ((\"FIRST_NAME\" LIKE ?) AND (\"LAST_NAME\" LIKE ?)) OR (\"LAST_NAME\" LIKE ?)");
+
+				ps.setString(1, "%" + terms.get(0) + "%");
+				ps.setString(2, "%" + terms.get(1) + "%");
+				ps.setString(3, "%" + search + "%");
+				ps.executeQuery();
+				ResultSet rs = ps.getResultSet();
+				while (rs.next()) {
+					result.add(setClientInfo(rs));
+				}
+			} else {
+				ps = con.prepareStatement(
+						"SELECT * FROM \"DTUGRP16\".\"CLIENT\" WHERE (\"FIRST_NAME\" LIKE ?) OR (\"LAST_NAME\" LIKE ?)");
+				ps.setString(1, "%" + search + "%");
+				ps.setString(2, "%" + search + "%");
+				ps.executeQuery();
+				ResultSet rs = ps.getResultSet();
+				while (rs.next()) {
+					result.add(setClientInfo(rs));
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

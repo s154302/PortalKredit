@@ -52,18 +52,19 @@
 			<h1>Delete Client!</h1>
 			<form action="" method="post">
 				<div class="form-inline row offset-1">
-					<input class="form-control mb-2 mr-sm-2 mb-sm-3" type="text"
+					<input class="form-control mb-2 mr-sm-2 mb-sm-0" type="text"
 						placeholder="Search Clients" name="search-term">
+
+					<button class="btn btn-primary btn-action" type="submit"
+						value="search-client" name="search-client">
+						<img
+							src="../assets/images/glyphicons_free/glyphicons/png/glyphicons-28-search-white.png"
+							width="15" height="15" aria-hidden="true" />Search
+					</button>
 				</div>
-				<button class="btn btn-primary btn-action" type="submit"
-					value="search-client" name="search-client">
-					<img
-						src="../assets/images/glyphicons_free/glyphicons/png/glyphicons-28-search-white.png"
-						width="15" height="15" aria-hidden="true" />Search
-				</button>
 			</form>
 
-			&nbsp;
+			
 			<div class="card card-outline-primary blue-outline">
 				<div class="card-block">
 					<table class="table table-hover">
