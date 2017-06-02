@@ -48,7 +48,7 @@ public class BankerViewClientServlet extends HttpServlet {
 		String clientID = request.getParameter("username");
 		
 		session.setAttribute("ClientID", clientID);
-		response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient.jsp");
+		response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
 		
 		doGet(request, response);
 	}

@@ -372,6 +372,26 @@ public final class Controller {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void createAccount(String accountNumber, int regNo, String accountType, String clientID, double balance, String currency, DataSource ds1) {
+		try {
+			Connection con = ds1.getConnection();
+			
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO \"DTUGRP16\".\"ACCOUNT\" (ACCOUNTNUMBER, REGNO, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY) VALUES (?, ?, ?, ?, ?, ?)");
+
+			ps.setString(1, accountNumber);
+			ps.setInt(2, regNo);
+			ps.setString(3, accountType);
+			ps.setString(4, clientID);
+			ps.setDouble(5, balance);
+			ps.setString(6, currency);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
 
 	// Returns all clients associated with a single banker
 	public static ArrayList<Client> getClients(String bankerID, DataSource ds1) {

@@ -101,6 +101,15 @@
 		<servlet-name>BankerViewClientServlet</servlet-name>
 		<url-pattern>/banker/BankerViewClientServlet</url-pattern>
 	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>BankerCreateAccountServlet</servlet-name>
+		<servlet-class>BankerCreateAccountServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BankerCreateAccountServlet</servlet-name>
+		<url-pattern>/banker/BankerCreateAccountServlet</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
