@@ -195,7 +195,7 @@ public final class Controller {
 			while (rs.next()) {
 				account = new Account(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"), rs.getString("ACCOUNTTYPE"),
 						rs.getString("CLIENTID"), rs.getDouble("BALANCE"), rs.getString("CURRENCY"),
-						findInterestRate(rs.getString("ACCOUNTTYPE"), ds1));
+						findInterestRate(rs.getString("ACCOUNTTYPE"), ds1), rs.getString("accountName"));
 				account.setTransactions(get3NewestTransactions(account.getAccountNumber(), account.getRegNo(), ds1));
 				accountList.add(account);
 			}
@@ -265,7 +265,7 @@ public final class Controller {
 			while (rs.next()) {
 				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
 						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
-						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY")));
+						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"), rs.getDouble("BALANCE"), rs.getString("NOTE")));
 			}
 			if (transactionList.size() < 3) {
 				for (int i = 0; i < 3 - transactionList.size(); i++) {
@@ -300,7 +300,7 @@ public final class Controller {
 			while (rs.next()) {
 				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
 						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
-						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY")));
+						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"), rs.getDouble("BALANCE"), rs.getString("NOTE")));
 			}
 			rs.close();
 		} catch (SQLException e) {

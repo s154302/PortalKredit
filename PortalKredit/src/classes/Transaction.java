@@ -7,8 +7,8 @@ import java.sql.Date;
  */
 public class Transaction {
 	private int transactionID, regNo, recieveRegNo ; 
-	private String accountNumber, recieveAccount, currency  ;
-	private double amount ;
+	private String accountNumber, recieveAccount, currency, note;
+	private double amount, balance;
 	private Date dateOfTransaction;
 	
 	public Transaction(){
@@ -17,7 +17,7 @@ public class Transaction {
 	
 	public Transaction(int transactionID, String accountNumber,
 			int regNo, String recieveAccount, int recieveRegNo,
-			Date dateOfTransaction, double amount, String currency){
+			Date dateOfTransaction, double amount, String currency, double balance, String note){
 		this.transactionID = transactionID;
 		this.accountNumber = accountNumber;
 		this.regNo = regNo;
@@ -26,12 +26,14 @@ public class Transaction {
 		this.dateOfTransaction = dateOfTransaction;
 		this.amount = amount;
 		this.currency = currency;
+		this.balance = balance;
+		this.note = note;
 	}
 	
 	public String toString(){
 		String transactionString  = "TransactionId: " + transactionID + " AccountNumber: " + accountNumber + " RegNo: "
 				+ regNo + " RecieveAccount " + recieveAccount + " RecieveRegNo: " + recieveRegNo +  " Amount: " + amount
-				+ " Currency: " + currency;
+				+ " Currency: " + currency + " Balance: " + balance + " Note: " + note;
 		try{
 			transactionString = transactionString + " Date: "
 					+ dateOfTransaction.toString();
@@ -87,6 +89,22 @@ public class Transaction {
 	}
 	public void setDateOfTransaction(Date dateOfTransaction) {
 		this.dateOfTransaction = dateOfTransaction;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
 	}
 	
 }

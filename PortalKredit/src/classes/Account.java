@@ -8,16 +8,17 @@ import java.util.Date;
 public class Account {
 
 	private int regNo;
-	private String currency, accountNumber, accountType, clientID;
+	private String currency, accountNumber, accountType, clientID, accountName;
 	private double balance, interestRate;
 	private ArrayList<Transaction> transactions;
+	
 
 	public Account (){
 		
 	}
 	
 	public Account(String accountNumber, int regNo, String accountType,
-			String clientID, double balance, String currency, double interestRate){
+			String clientID, double balance, String currency, double interestRate, String accountName){
 		this.accountNumber = accountNumber;
 		this.regNo = regNo;
 		this.accountType = accountType;
@@ -25,6 +26,7 @@ public class Account {
 		this.balance = balance; 
 		this.currency = currency;
 		this.interestRate = interestRate;
+		this.accountName = accountName;
 	}
 	
 	public void fetchData(Date beginDate, Date endDate) {
@@ -36,7 +38,8 @@ public class Account {
 				"AccountNumber: " + getAccountNumber()
 				+ " RegNo: " + getRegNo()
 				+ " Balance: " + getBalance()
-				+ " Currency: " + getCurrency();
+				+ " Currency: " + getCurrency()
+				+ " AccountName: " + accountName;
 		for(Transaction transaction : transactions){
 			int i = 1;
 			try{
@@ -110,6 +113,14 @@ public class Account {
 
 	public void setInterestRate(double interestRate) {
 		this.interestRate = interestRate;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
 	}
 
 }
