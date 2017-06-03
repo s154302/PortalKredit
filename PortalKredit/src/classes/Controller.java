@@ -775,6 +775,8 @@ public final class Controller {
 			double sendBalance = rs.getDouble("BALANCE");
 
 			// Insert transaction for sender
+			
+			//TODO - should'nt the amount for the sender be negative ? ;)
 			createTransaction(sendAcc, reciAcc, amount, sendReg, reciReg, currency, message, sendBalance, ds1);
 
 			check.setString(1, reciAcc);
@@ -790,6 +792,8 @@ public final class Controller {
 
 			// Check that no money has been lost or gained,
 			// if so then roll back all changes
+			
+			//TODO- IT ALWAYS DO ROLLBACK - shouldn't the equation be reversed ? 
 			if (Math.abs(sendBalance - reciBalance) == amount) {
 				con.commit();
 				status = true;
