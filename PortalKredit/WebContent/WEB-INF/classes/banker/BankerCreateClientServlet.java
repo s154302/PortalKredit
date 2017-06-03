@@ -62,6 +62,6 @@ public class BankerCreateClientServlet extends HttpServlet {
 		banker.setClients(Controller.getClients(banker.getBankerID(), ds1));
 		session.setAttribute("user", banker);
 		
-		response.sendRedirect(request.getContextPath() + "/banker/CreateClient.jsp");
+		response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
 	}
 }
