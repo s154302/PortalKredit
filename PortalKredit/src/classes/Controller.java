@@ -68,7 +68,11 @@ public final class Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return BCrypt.checkpw(password, hash);
+		if(hash != null){
+			return BCrypt.checkpw(password, hash);
+		}else{
+			return false;
+		}
 	}
 
 	// maybe private
@@ -91,7 +95,11 @@ public final class Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return BCrypt.checkpw(password, hash);
+		if(hash != null){
+			return BCrypt.checkpw(password, hash);
+		}else{
+			return false;
+		}
 	}
 
 	// maybe private ?? - I don't think you can when we say Controller.W/E ;)
@@ -113,7 +121,12 @@ public final class Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return BCrypt.checkpw(password, hash);
+		if(hash != null){
+			return BCrypt.checkpw(password, hash);
+		}else{
+			return false;
+		}
+		
 	}
 
 	// Fills a banker client object with data and returns it

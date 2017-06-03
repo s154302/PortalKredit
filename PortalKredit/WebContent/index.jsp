@@ -3,7 +3,7 @@
 <html>
 
 <head>
-<title>index</title>
+<title>Portal Kredit</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/css/custom.css" rel="stylesheet">
@@ -23,21 +23,25 @@
 	<div class="row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary mb-3 text-center blue-outline">
+				
 				<div class="card-block">
 					<form action="LoginServlet" method="post">
 						<div class="form-group">
 							<input type="text" class="form-control" name="userID"
-								aria-describedby="textHelp" placeholder="Enter User ID">
+								aria-describedby="textHelp" placeholder="Enter User ID" required value="${userID}">
 						</div>
 						<div class="form-group">
 							<input type="password" class="form-control"
-								name="password" placeholder="Password">
+								name="password" placeholder="Password" required >
 						</div>
 						<button class="btn btn-primary btn-block btn-action" type="submit" value="login">Log
 							in</button>
 
 					</form>
 				</div>
+				<p style="color:red;">
+				${logingStatus}
+				</p>
 			</div>
 		</div>
 	</div>

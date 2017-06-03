@@ -55,32 +55,32 @@
 
 						<div class="form-group">
 							<input type="text" class="form-control" name="amount"
-								placeholder="*Amount" required>
+								placeholder="*Amount" required value="${amount}">
 						</div>
 
 						<div class="form-group">
 							<input type="text" class="form-control" name="currency"
-								placeholder="*Currency" required>
+								placeholder="*Currency" required value="${currency}">
 						</div>
 
 						<div class="form-group">
 							<input type="text" class="form-control" name="message"
-								placeholder="*Message to self" required>
+								placeholder="*Message to self" required value="${message}">
 						</div>
 
 						<div class="form-group">
 							<input type="text" class="form-control" name="reciReg"
-								placeholder="*Reg no" required>
+								placeholder="*Reg no" required value="${reciReg}">
 						</div>
 
 						<div class="form-group">
 							<input type="text" class="form-control" name="reciAcc"
-								placeholder="*Account Number" required>
+								placeholder="*Account Number" required value="${reciAcc}">
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="recimessage"
-								placeholder="*Message to reciever" required>
+							<input type="text" class="form-control" name="reciMessage"
+								placeholder="*Message to reciever" required value="${reciMessage}">
 						</div>
 						
 						<div class="form-group">

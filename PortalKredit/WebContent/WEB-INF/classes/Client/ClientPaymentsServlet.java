@@ -69,6 +69,13 @@ public class ClientPaymentsServlet extends HttpServlet {
 			request.setAttribute("status", "Payment complete");
 		}else{
 			request.setAttribute("status", "Payment incomplete - somthing went wrong");
+			request.setAttribute("amount", stramount);
+			request.setAttribute("currency", currency);
+			request.setAttribute("message", strmessage);
+			request.setAttribute("reciMessage", strreciMessage);
+			request.setAttribute("reciReg", strreciReg);
+			request.setAttribute("reciAcc", reciAcc);
+			
 		}
 		
 		request.getRequestDispatcher("payments.jsp").forward(request, response);
