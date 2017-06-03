@@ -44,8 +44,6 @@ public class LoginServlet extends HttpServlet {
 			switch((Controller.Type)session.getAttribute("type")){
 			case client:
 				session.setAttribute("user", Controller.getClientInfo(userID, ds1));
-				Client client = (Client)session.getAttribute("user");
-				//request.getRequestDispatcher("/client/accounts").forward(request, response);
 				response.sendRedirect(request.getContextPath() + "/client/accounts");
 				break;
 			case banker:

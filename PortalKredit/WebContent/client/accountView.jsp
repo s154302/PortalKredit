@@ -29,11 +29,29 @@
 			</ul>
 		</div>
 	</nav>
+	<div class="row pad-row">
+		<div class="col-4 offset-4">
+			<div class="card card-outline-primary text-center blue-outline">
+				<table class="table table-hover">
+					<tbody colspan="4">
+						<tr>Name: ${account.accountName} <br></tr>
+						<tr>Reg: ${account.regNo} <br></tr>
+						<tr>Account: ${account.accountNumber} <br></tr>
+						<tr>Type: ${account.accountType} <br></tr>
+						<tr>Currency: ${account.currency} <br></tr>
+						<tr>Interest rate: ${account.interestRate} <br></tr>
+						<tr>Balance: ${account.balance}</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</div>
+	
 		<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary text-center blue-outline">
-				<h1>${accountName}</h1>
-				<h2>${regNo} ${accountNumber}</h2>
+				<h1>Transactions</h1>
+
 				
 				<div class="card-block">
 					<table class="table table-hover">

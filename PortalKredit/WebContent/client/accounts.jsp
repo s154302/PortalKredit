@@ -46,8 +46,8 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th>Account Number</th>
-								<th>Account Name</th>
+								<th>Number</th>
+								<th>Name</th>
 								<th>Balance</th>
 							</tr>
 						</thead>
@@ -57,7 +57,7 @@
 							<c:forEach var="ob" items="${accounts}">
 								<tr data-toggle="collapse" data-target="#${ob.accountNumber}"
 									class="clickable">
-									<td><c:out value="${ob.accountNumber}" /></td>
+									<td><c:out value="${ob.regNo} ${ob.accountNumber}" /></td>
 									<td><c:out value="${ob.accountName}" /></td>
 									<td><c:out value="${ob.balance}" /></td>
 								</tr>
@@ -65,9 +65,9 @@
 									<td colspan="4">
 										<div id="${ob.accountNumber}" class="collapse">
 											<ul>
-												<li>Date: ${ob.transactions[0].dateOfTransaction} ${note} Amount: ${ob.transactions[0].amount} Balance: ${ob.transactions[0].balance}</li>
-												<li>Date: ${ob.transactions[1].dateOfTransaction} ${note} Amount: ${ob.transactions[1].amount} Balance: ${ob.transactions[0].balance}</li>
-												<li>Date: ${ob.transactions[2].dateOfTransaction} ${note} Amount: ${ob.transactions[2].amount} Balance: ${ob.transactions[0].balance}</li>
+												<li>${ob.transactions[0].dateOfTransaction} ${note} Amount: ${ob.transactions[0].amount} Balance: ${ob.transactions[0].balance}</li>
+												<li>${ob.transactions[1].dateOfTransaction} ${note} Amount: ${ob.transactions[1].amount} Balance: ${ob.transactions[0].balance}</li>
+												<li>${ob.transactions[2].dateOfTransaction} ${note} Amount: ${ob.transactions[2].amount} Balance: ${ob.transactions[0].balance}</li>
 											</ul>
 											<form action="" method="post">
 												<input type="hidden" name="accountNumber" value="${ob.accountNumber}"/>

@@ -52,11 +52,8 @@ public class AccountsServlet extends HttpServlet {
 		String accountNumber = request.getParameter("accountNumber");
 		int regNo = Integer.parseInt(request.getParameter("regNo"));
 		
-		session.setAttribute("accountNumber", accountNumber);
-		session.setAttribute("regNo", regNo);
 		Account account = Controller.getAccountInfo(accountNumber, regNo, ds1);
-		System.out.println("HVAA FAEN ?");
-		session.setAttribute("accountName", account.getAccountName());
+		session.setAttribute("account", account);
 		
 		response.sendRedirect("accountView");
 	}
