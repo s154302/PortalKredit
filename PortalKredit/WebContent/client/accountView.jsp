@@ -32,15 +32,17 @@
 		<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary text-center blue-outline">
-				<h1>Transactions</h1>
-				<h2>Account: ${regNo} ${accountNumber}</h2>
+				<h1>${accountName}</h1>
+				<h2>${regNo} ${accountNumber}</h2>
 				
 				<div class="card-block">
 					<table class="table table-hover">
 						<thead>
 							<tr>
 								<th>Date</th>
+								<th>Note</th>
 								<th>Amount</th>
+								<th>Balance</th>
 							</tr>
 						</thead>
 
@@ -50,10 +52,12 @@
 								<tr data-toggle="collapse" data-target="#${ob.transactionID}"
 									class="clickable">
 									<td><c:out value="${ob.dateOfTransaction}" /></td>
+									<td><c:out value="${ob.note}" /></td>
 									<td><c:out value="${ob.amount}" /></td>
+									<td><c:out value="${ob.balance}" /></td>
 								</tr>
 								<tr>
-									<td colspan="2">
+									<td colspan="4">
 										<div id="${ob.transactionID}" class="collapse">
 											<ul>
 												<li>ID: ${ob.transactionID}</li>
