@@ -793,7 +793,7 @@ public final class Controller {
 			// Check that no money has been lost or gained,
 			// if so then roll back all changes
 			
-			//TODO- IT ALWAYS DO ROLLBACK - shouldn't the equation be reversed ? 
+			//TODO- IT ALWAYS DO ROLLBACK - shouldn't the equation be reversed ? It will also ALWAYS create 2 transaction object and place in the DB even if it should'nt ;)
 			if (Math.abs(sendBalance - reciBalance) == amount) {
 				con.commit();
 				status = true;
@@ -818,6 +818,7 @@ public final class Controller {
 			Connection con = ds1.getConnection(Secret.userID, Secret.password);
 
 			// Inserts a transaction into the TRANSACTION table
+			//TODO - need a transactionID method
 			PreparedStatement ps = con.prepareStatement(
 					"INSERT INTO \"DTUGRP16\".\"TRANSACTION\" VALUES (123, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			ps.setString(1, acc1);

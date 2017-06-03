@@ -68,7 +68,7 @@
 						<tbody>
 
 							<c:forEach var="ob" items="${transactions}">
-								<tr data-toggle="collapse" data-target="#${ob.transactionID}"
+								<tr data-toggle="collapse" data-target="#${ob.transactionID}${ob.regNo}${ob.accountNumber}"
 									class="clickable">
 									<td><c:out value="${ob.dateOfTransaction}" /></td>
 									<td><c:out value="${ob.note}" /></td>
@@ -77,7 +77,7 @@
 								</tr>
 								<tr>
 									<td colspan="4">
-										<div id="${ob.transactionID}" class="collapse">
+										<div id="${ob.transactionID}${ob.regNo}${ob.accountNumber}" class="collapse">
 											<ul>
 												<li>ID: ${ob.transactionID}</li>
 												<li>RegNo: ${ob.recieveRegNo}</li>
