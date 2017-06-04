@@ -33,10 +33,9 @@ public class AccountViewServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
-		String accountNumber = (String) session.getAttribute("accountNumber");
-		int regNo = (int) session.getAttribute("regNo");
-		
-		session.setAttribute("transactions", Controller.getNewTransactions(accountNumber, regNo, ds1));
+		Account account = (Account)session.getAttribute("account");
+	
+		session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), ds1));
 		
 		request.getRequestDispatcher("accountView.jsp").forward(request, response);
 	}

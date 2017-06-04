@@ -11,32 +11,53 @@
 
 <body>
 	<jsp:include page="ClientNavbar.jsp"></jsp:include>
+	<div class="row pad-row">
+		<div class="col-4 offset-4">
+			<div class="card card-outline-primary text-center blue-outline">
+				<table class="table table-hover">
+					<tbody colspan="4">
+						<tr>Name: ${account.accountName} <br></tr>
+						<tr>Reg: ${account.regNo} <br></tr>
+						<tr>Account: ${account.accountNumber} <br></tr>
+						<tr>Type: ${account.accountType} <br></tr>
+						<tr>Currency: ${account.currency} <br></tr>
+						<tr>Interest rate: ${account.interestRate} <br></tr>
+						<tr>Balance: ${account.balance}</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</div>
+	
 		<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary text-center blue-outline">
 				<h1>Transactions</h1>
-				<h2>Account: ${regNo} ${accountNumber}</h2>
-				
+
 				<div class="card-block">
 					<table class="table table-hover">
 						<thead>
 							<tr>
 								<th>Date</th>
+								<th>Note</th>
 								<th>Amount</th>
+								<th>Balance</th>
 							</tr>
 						</thead>
 
 						<tbody>
 
 							<c:forEach var="ob" items="${transactions}">
-								<tr data-toggle="collapse" data-target="#${ob.transactionID}"
+								<tr data-toggle="collapse" data-target="#${ob.transactionID}${ob.regNo}${ob.accountNumber}"
 									class="clickable">
 									<td><c:out value="${ob.dateOfTransaction}" /></td>
+									<td><c:out value="${ob.note}" /></td>
 									<td><c:out value="${ob.amount}" /></td>
+									<td><c:out value="${ob.balance}" /></td>
 								</tr>
 								<tr>
-									<td colspan="2">
-										<div id="${ob.transactionID}" class="collapse">
+									<td colspan="4">
+										<div id="${ob.transactionID}${ob.regNo}${ob.accountNumber}" class="collapse">
 											<ul>
 												<li>ID: ${ob.transactionID}</li>
 												<li>RegNo: ${ob.recieveRegNo}</li>

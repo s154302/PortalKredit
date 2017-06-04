@@ -16,7 +16,7 @@
 			<div class="card card-outline-primary mb-3 text-center blue-outline">
 				<h1>Create Client!</h1>
 				<div class="card-block">
-					<form action="CreateClientServlet" method="post">
+					<form action="" method="post">
 						<div class="form-group">
 							<input type="text" class="form-control" name="clientFirstName"
 								placeholder="*First Name">

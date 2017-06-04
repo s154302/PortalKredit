@@ -31,7 +31,6 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		String userID = request.getParameter("userID");
 		String password = request.getParameter("password");
 		boolean st = false;
@@ -44,8 +43,6 @@ public class LoginServlet extends HttpServlet {
 			switch((Controller.Type)session.getAttribute("type")){
 			case client:
 				session.setAttribute("user", Controller.getClientInfo(userID, ds1));
-				Client client = (Client)session.getAttribute("user");
-				//request.getRequestDispatcher("/client/accounts").forward(request, response);
 				response.sendRedirect(request.getContextPath() + "/client/accounts");
 				break;
 			case banker:
@@ -61,7 +58,9 @@ public class LoginServlet extends HttpServlet {
 			}
 			
 		} else {
-			response.sendRedirect(request.getContextPath());
+			request.setAttribute("logingStatus", "Wrong userID or Password");
+			request.setAttribute("userID", userID);
+			request.getRequestDispatcher("index.jsp").forward(request, response);
 		}
 		
 		

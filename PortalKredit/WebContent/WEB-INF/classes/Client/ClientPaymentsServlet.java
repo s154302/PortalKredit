@@ -1,6 +1,7 @@
 package Client;
 
 import java.io.IOException;
+import java.sql.Clob;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
@@ -45,8 +46,39 @@ public class ClientPaymentsServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		String accountNumber = request.getParameter("accountNumber");
 		
+		String sendAcc, reciAcc, stramount, strsendReg, strreciReg, currency, strmessage, strreciMessage, fullAcc;
+		fullAcc = request.getParameter("senderAcc");
+		String[] fullAccSplit = fullAcc.split("[.]");
+		strsendReg = fullAccSplit[0];
+		sendAcc = fullAccSplit[1];
+		reciAcc = request.getParameter("reciAcc");
+		strreciReg = request.getParameter("reciReg");
+		stramount = request.getParameter("amount");
+		currency = request.getParameter("currency");
+		strmessage = request.getParameter("message");
+		strreciMessage = request.getParameter("reciMessage");
+		int sendReg = Integer.parseInt(strsendReg);
+		int reciReg = Integer.parseInt(strreciReg);
+		double amount = Double.parseDouble(stramount);
+		
+		Boolean status = Controller.transaction(sendAcc, reciAcc, amount, sendReg, reciReg,
+				currency, strmessage, strreciMessage, ds1);
+		
+		if(status){
+			request.setAttribute("status", "Payment complete");
+		}else{
+			request.setAttribute("status", "Payment incomplete - somthing went wrong");
+			request.setAttribute("amount", stramount);
+			request.setAttribute("currency", currency);
+			request.setAttribute("message", strmessage);
+			request.setAttribute("reciMessage", strreciMessage);
+			request.setAttribute("reciReg", strreciReg);
+			request.setAttribute("reciAcc", reciAcc);
+			
+		}
+		
+		request.getRequestDispatcher("payments.jsp").forward(request, response);
 		
 	}
 }

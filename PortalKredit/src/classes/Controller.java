@@ -68,7 +68,11 @@ public final class Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return BCrypt.checkpw(password, hash);
+		if(hash != null){
+			return BCrypt.checkpw(password, hash);
+		}else{
+			return false;
+		}
 	}
 
 	// maybe private
@@ -91,7 +95,11 @@ public final class Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return BCrypt.checkpw(password, hash);
+		if(hash != null){
+			return BCrypt.checkpw(password, hash);
+		}else{
+			return false;
+		}
 	}
 
 	// maybe private ?? - I don't think you can when we say Controller.W/E ;)
@@ -113,7 +121,12 @@ public final class Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return BCrypt.checkpw(password, hash);
+		if(hash != null){
+			return BCrypt.checkpw(password, hash);
+		}else{
+			return false;
+		}
+		
 	}
 
 	// Fills a banker client object with data and returns it
@@ -225,16 +238,15 @@ public final class Controller {
 			ps.setString(1, accountNumber);
 			ps.setInt(2, regNo);
 			ResultSet rs = ps.executeQuery();
-
+			
+			rs.next();
 			account.setAccountNumber(rs.getString("ACCOUNTNUMBER"));
 			account.setRegNo(rs.getInt("REGNO"));
 			account.setAccountType(rs.getString("ACCOUNTTYPE"));
 			account.setClientID(rs.getString("CLIENTID"));
 			account.setBalance(rs.getDouble("BALANCE"));
-			account.setCurrency("CURRENCY");
-
-			// TODO - Consider if this only should be done when the information
-			// is actually needed
+			account.setCurrency(rs.getString("CURRENCY"));
+			account.setAccountName(rs.getString("ACCOUNTNAME"));
 			account.setTransactions(getNewTransactions(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"), ds1));
 
 			rs.close();
@@ -473,6 +485,7 @@ public final class Controller {
 		return rate;
 	}
 
+	//IS this used ? 
 	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,
 			DataSource ds1) {
 		ArrayList<String> list = new ArrayList<>();
@@ -761,8 +774,9 @@ public final class Controller {
 		return result;
 	}
 
-	public static void transaction(String sendAcc, String reciAcc, double amount, int sendReg, int reciReg,
-			String currency, Clob message, DataSource ds1) {
+	public static boolean transaction(String sendAcc, String reciAcc, double amount, int sendReg, int reciReg,
+			String currency, String message, String reciMessage, DataSource ds1) {
+		boolean status = false;
 		try {
 			Connection con = ds1.getConnection(Secret.userID, Secret.password);
 			// Make sure transaction is reversible in case of an error
@@ -794,6 +808,8 @@ public final class Controller {
 			double sendBalance = rs.getDouble("BALANCE");
 
 			// Insert transaction for sender
+			
+			//TODO - should'nt the amount for the sender be negative ? ;)
 			createTransaction(sendAcc, reciAcc, amount, sendReg, reciReg, currency, message, sendBalance, ds1);
 
 			check.setString(1, reciAcc);
@@ -805,32 +821,39 @@ public final class Controller {
 			double reciBalance = rs.getDouble("BALANCE");
 
 			// Insert transaction for recipient
-			createTransaction(reciAcc, sendAcc, amount, reciReg, sendReg, currency, message, reciBalance, ds1);
+			createTransaction(reciAcc, sendAcc, amount, reciReg, sendReg, currency, reciMessage, reciBalance, ds1);
 
 			// Check that no money has been lost or gained,
 			// if so then roll back all changes
+			
+			//TODO- IT ALWAYS DO ROLLBACK - shouldn't the equation be reversed ? It will also ALWAYS create 2 transaction object and place in the DB even if it should'nt ;)
 			if (Math.abs(sendBalance - reciBalance) == amount) {
 				con.commit();
+				status = true;
 			} else {
 				con.rollback();
+				status = false;
 			}
 			
 			con.close();
-
+			
+			return status;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return status;
 		}
 
 	}
 
 	public static void createTransaction(String acc1, String acc2, double amount, int reg1, int reg2, String currency,
-			Clob message, double balance, DataSource ds1) {
+			String message, double balance, DataSource ds1) {
 		try {
 			Connection con = ds1.getConnection(Secret.userID, Secret.password);
 
 			// Inserts a transaction into the TRANSACTION table
+			//TODO - need a transactionID method
 			PreparedStatement ps = con.prepareStatement(
-					"INSERT INTO \"DTUGRP16\".\"TRANSACTION\" VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					"INSERT INTO \"DTUGRP16\".\"TRANSACTION\" VALUES (123, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			ps.setString(1, acc1);
 			ps.setInt(2, reg1);
 			ps.setString(3, acc2);
@@ -838,7 +861,7 @@ public final class Controller {
 			ps.setDate(5, new java.sql.Date(System.currentTimeMillis()));
 			ps.setDouble(6, amount);
 			ps.setString(7, currency);
-			ps.setClob(8, message);
+			ps.setString(8, message);
 			ps.setDouble(9, balance);
 			ps.executeUpdate();
 
