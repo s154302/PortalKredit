@@ -786,6 +786,8 @@ public final class Controller {
 			Connection con = ds1.getConnection(Secret.userID, Secret.password);
 			// Make sure transaction is reversible in case of an error
 			con.setAutoCommit(false);
+			
+			// TODO Create two new statements to extract the old balances before they are changed.
 
 			// Subtract amount from sending account
 			PreparedStatement subtract = con.prepareStatement(
@@ -830,10 +832,12 @@ public final class Controller {
 			createTransaction(transactionID, reciAcc, sendAcc, amount, reciReg, sendReg, currency, reciMessage, reciBalance, ds1);
 
 			// Check that no money has been lost or gained,
-			// if so then roll back all changes
+			// if so roll back all changes
 			System.out.println("Amount: " + amount);
 			System.out.println("The Math: " + Math.abs(sendBalance - reciBalance));
-			//TODO - The math ain't right here. The difference in the balance of the two accounts ain't gonna be the amount transfered
+			
+			
+			//TODO This should be changed to (oldSendBalance - oldReciBalance) == (newSendBalance - newReciBalance)
 			if (Math.abs(sendBalance - reciBalance) == amount) {
 				con.commit();
 				status = true;
