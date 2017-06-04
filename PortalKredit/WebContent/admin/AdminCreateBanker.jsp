@@ -27,7 +27,7 @@
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="bankerPassword"
+							<input type="password" class="form-control" name="bankerPassword"
 								placeholder="*Password">
 						</div>
 
