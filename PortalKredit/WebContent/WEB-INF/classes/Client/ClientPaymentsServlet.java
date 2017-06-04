@@ -5,6 +5,7 @@ import java.sql.Clob;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
+import javax.jms.Session;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +21,9 @@ import classes.Controller;
 @WebServlet("/client/payments")
 public class ClientPaymentsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	String sendAcc, reciAcc, stramount, strsendReg, strreciReg, currency, strmessage, strreciMessage,
+	fullAcc, password;
+	
 	
 	public ClientPaymentsServlet(){
 		super();
@@ -46,8 +50,9 @@ public class ClientPaymentsServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+		HttpSession session = request.getSession();
 		
-		String sendAcc, reciAcc, stramount, strsendReg, strreciReg, currency, strmessage, strreciMessage, fullAcc;
+
 		fullAcc = request.getParameter("senderAcc");
 		String[] fullAccSplit = fullAcc.split("[.]");
 		strsendReg = fullAccSplit[0];
@@ -58,27 +63,42 @@ public class ClientPaymentsServlet extends HttpServlet {
 		currency = request.getParameter("currency");
 		strmessage = request.getParameter("message");
 		strreciMessage = request.getParameter("reciMessage");
+		password = request.getParameter("password");
 		int sendReg = Integer.parseInt(strsendReg);
 		int reciReg = Integer.parseInt(strreciReg);
 		double amount = Double.parseDouble(stramount);
 		
-		Boolean status = Controller.transaction(sendAcc, reciAcc, amount, sendReg, reciReg,
-				currency, strmessage, strreciMessage, ds1);
-		
-		if(status){
-			request.setAttribute("status", "Payment complete");
-		}else{
-			request.setAttribute("status", "Payment incomplete - somthing went wrong");
-			request.setAttribute("amount", stramount);
-			request.setAttribute("currency", currency);
-			request.setAttribute("message", strmessage);
-			request.setAttribute("reciMessage", strreciMessage);
-			request.setAttribute("reciReg", strreciReg);
-			request.setAttribute("reciAcc", reciAcc);
+		Client client = (Client) session.getAttribute("user");
+		Boolean correctPw = Controller.authenticate(client.getClientID(), password, ds1, session);
+
+		if(correctPw){
+			Boolean status = Controller.transaction(sendAcc, reciAcc, amount, sendReg, reciReg,
+					currency, strmessage, strreciMessage, ds1);
 			
+			if(status){
+				request.setAttribute("status", "Payment complete");
+			}else{
+				request.setAttribute("status", "Payment incomplete - somthing went wrong");
+				request = keepInputs(request); 
+				
+			}
+		}else{
+			request.setAttribute("status", "Payment incomplete - Wrong password");
+			request = keepInputs(request); 
 		}
-		
+			
 		request.getRequestDispatcher("payments.jsp").forward(request, response);
 		
+	}
+	
+	//Used to keep the written input in the input fields
+	private HttpServletRequest keepInputs(HttpServletRequest request){	
+		request.setAttribute("amount", stramount);
+		request.setAttribute("currency", currency);
+		request.setAttribute("message", strmessage);
+		request.setAttribute("reciMessage", strreciMessage);
+		request.setAttribute("reciReg", strreciReg);
+		request.setAttribute("reciAcc", reciAcc);
+		return request;
 	}
 }

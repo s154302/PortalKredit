@@ -11,8 +11,6 @@
 <body>
 
 	<jsp:include page="ClientNavbar.jsp"></jsp:include>
-	<h1>Payments</h1>
-
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary mb-3 text-center blue-outline">
