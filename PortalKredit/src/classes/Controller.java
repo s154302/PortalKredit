@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
@@ -774,6 +775,10 @@ public final class Controller {
 		return result;
 	}
 
+	public static String generateTransactionID(){
+		return UUID.randomUUID().toString();
+	}
+	
 	public static boolean transaction(String sendAcc, String reciAcc, double amount, int sendReg, int reciReg,
 			String currency, String message, String reciMessage, DataSource ds1) {
 		boolean status = false;
@@ -789,7 +794,7 @@ public final class Controller {
 			subtract.setString(2, sendAcc);
 			subtract.executeUpdate();
 
-			// Add amount to receiving amount
+			// Add amount to receiving account
 			PreparedStatement add = con.prepareStatement(
 					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"BALANCE\" = \"BALANCE\" + ? WHERE \"ACCOUNTNUMBER\" = ?");
 			add.setDouble(1, amount);
@@ -808,7 +813,8 @@ public final class Controller {
 			double sendBalance = rs.getDouble("BALANCE");
 
 			// Insert transaction for sender
-			createTransaction(sendAcc, reciAcc, -(amount), sendReg, reciReg, currency, message, sendBalance, ds1);
+			String transactionID = generateTransactionID();
+			createTransaction(transactionID, sendAcc, reciAcc, -(amount), sendReg, reciReg, currency, message, sendBalance, ds1);
 
 			PreparedStatement check2 = con
 					.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ?");
@@ -821,11 +827,13 @@ public final class Controller {
 			double reciBalance = rs.getDouble("BALANCE");
 
 			// Insert transaction for recipient
-			createTransaction(reciAcc, sendAcc, amount, reciReg, sendReg, currency, reciMessage, reciBalance, ds1);
+			createTransaction(transactionID, reciAcc, sendAcc, amount, reciReg, sendReg, currency, reciMessage, reciBalance, ds1);
 
 			// Check that no money has been lost or gained,
 			// if so then roll back all changes
-			
+			System.out.println("Amount: " + amount);
+			System.out.println("The Math: " + Math.abs(sendBalance - reciBalance));
+			//TODO - The math ain't right here. The difference in the balance of the two accounts ain't gonna be the amount transfered
 			if (Math.abs(sendBalance - reciBalance) == amount) {
 				con.commit();
 				status = true;
@@ -844,25 +852,26 @@ public final class Controller {
 
 	}
 
-	public static void createTransaction(String acc1, String acc2, double amount, int reg1, int reg2, String currency,
+	public static void createTransaction(String transactionID, String acc1, String acc2, double amount, int reg1, int reg2, String currency,
 			String message, double balance, DataSource ds1) {
 		try {
 			Connection con = ds1.getConnection(Secret.userID, Secret.password);
 			con.setAutoCommit(false);
 			
 			// Inserts a transaction into the TRANSACTION table
-			//TODO - need a transactionID method
 			PreparedStatement ps = con.prepareStatement(
-					"INSERT INTO \"DTUGRP16\".\"TRANSACTION\" VALUES (123, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			ps.setString(1, acc1);
-			ps.setInt(2, reg1);
-			ps.setString(3, acc2);
-			ps.setInt(4, reg2);
-			ps.setDate(5, new java.sql.Date(System.currentTimeMillis()));
-			ps.setDouble(6, amount);
-			ps.setString(7, currency);
-			ps.setString(8, message);
-			ps.setDouble(9, balance);
+					"INSERT INTO \"DTUGRP16\".\"TRANSACTION\" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			
+			ps.setString(1, transactionID);
+			ps.setString(2, acc1);
+			ps.setInt(3, reg1);
+			ps.setString(4, acc2);
+			ps.setInt(5, reg2);
+			ps.setDate(6, new java.sql.Date(System.currentTimeMillis()));
+			ps.setDouble(7, amount);
+			ps.setString(8, currency);
+			ps.setString(9, message);
+			ps.setDouble(10, balance);
 			ps.executeUpdate();
 
 		} catch (SQLException e) {

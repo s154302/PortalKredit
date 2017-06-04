@@ -1,11 +1,7 @@
 package Client;
 
 import java.io.IOException;
-import java.sql.Clob;
-import java.util.ArrayList;
-
 import javax.annotation.Resource;
-import javax.jms.Session;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import classes.Account;
+
 import classes.Client;
 import classes.Controller;
 
@@ -68,8 +64,8 @@ public class ClientPaymentsServlet extends HttpServlet {
 		int reciReg = Integer.parseInt(strreciReg);
 		double amount = Double.parseDouble(stramount);
 		
-		Client client = (Client) session.getAttribute("user");
-		Boolean correctPw = Controller.authenticate(client.getClientID(), password, ds1, session);
+		String userID = (String) session.getAttribute("userID");
+		Boolean correctPw = Controller.authenticate(userID, password, ds1, session);
 
 		if(correctPw){
 			Boolean status = Controller.transaction(sendAcc, reciAcc, amount, sendReg, reciReg,
