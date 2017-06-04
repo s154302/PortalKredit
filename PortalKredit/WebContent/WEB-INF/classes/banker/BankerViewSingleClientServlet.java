@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
+import javax.jms.Session;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -47,8 +48,15 @@ public class BankerViewSingleClientServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+		HttpSession session = request.getSession();
 		
 		String accountNumber = request.getParameter("accountNumber");
+		int regNo = Integer.parseInt(request.getParameter("regNo"));
+		
+		Account account = Controller.getAccountInfo(accountNumber, regNo, ds1);
+		session.setAttribute("account", account);
+		
+		response.sendRedirect(request.getContextPath() + "/banker/ViewClientAccount");
 		
 		
 	}
