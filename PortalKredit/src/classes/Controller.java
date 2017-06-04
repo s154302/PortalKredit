@@ -797,24 +797,24 @@ public final class Controller {
 			add.executeUpdate();
 
 			// Create a statement used to extract the new balances
-			PreparedStatement check = con
+			PreparedStatement check1 = con
 					.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ?");
-			check.setString(1, sendAcc);
-			check.executeQuery();
-			ResultSet rs = check.getResultSet();
+			check1.setString(1, sendAcc);
+			check1.executeQuery();
+			ResultSet rs = check1.getResultSet();
 
 			// Define new balance for sender
 			rs.next();
 			double sendBalance = rs.getDouble("BALANCE");
 
 			// Insert transaction for sender
-			
-			//TODO - should'nt the amount for the sender be negative ? ;)
-			createTransaction(sendAcc, reciAcc, amount, sendReg, reciReg, currency, message, sendBalance, ds1);
+			createTransaction(sendAcc, reciAcc, -(amount), sendReg, reciReg, currency, message, sendBalance, ds1);
 
-			check.setString(1, reciAcc);
-			check.executeQuery();
-			rs = check.getResultSet();
+			PreparedStatement check2 = con
+					.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ?");
+			check2.setString(1, reciAcc);
+			check2.executeQuery();
+			rs = check2.getResultSet();
 
 			// Define new balance for recipient
 			rs.next();
@@ -826,7 +826,6 @@ public final class Controller {
 			// Check that no money has been lost or gained,
 			// if so then roll back all changes
 			
-			//TODO- IT ALWAYS DO ROLLBACK - shouldn't the equation be reversed ? It will also ALWAYS create 2 transaction object and place in the DB even if it should'nt ;)
 			if (Math.abs(sendBalance - reciBalance) == amount) {
 				con.commit();
 				status = true;
@@ -849,7 +848,8 @@ public final class Controller {
 			String message, double balance, DataSource ds1) {
 		try {
 			Connection con = ds1.getConnection(Secret.userID, Secret.password);
-
+			con.setAutoCommit(false);
+			
 			// Inserts a transaction into the TRANSACTION table
 			//TODO - need a transactionID method
 			PreparedStatement ps = con.prepareStatement(
