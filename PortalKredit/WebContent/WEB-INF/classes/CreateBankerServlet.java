@@ -42,7 +42,7 @@ public class CreateBankerServlet extends HttpServlet {
 		String regno = request.getParameter("bankerReg");
 		
 		Controller.createBanker(firstName, lastName, hashed, email, telephone, regno, ds1);
-		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateBanker.jsp");
+		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateBanker");
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		HttpSession session = request.getSession();

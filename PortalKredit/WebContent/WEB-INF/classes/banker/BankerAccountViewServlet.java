@@ -32,11 +32,18 @@ public class BankerAccountViewServlet extends HttpServlet {
 			throws ServletException, IOException{
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
+		if(Controller.checkAuth(Controller.Type.banker, session)){
+			
 		
 		Account account = (Account) session.getAttribute("account");
 	
 		session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), ds1));
 		
 		request.getRequestDispatcher("ViewClientAccount.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+			}
 	}
 }

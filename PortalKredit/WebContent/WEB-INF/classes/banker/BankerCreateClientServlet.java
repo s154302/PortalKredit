@@ -31,10 +31,17 @@ public class BankerCreateClientServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		
+		if(Controller.checkAuth(Controller.Type.banker, session))
+		{
 		Banker banker = (Banker) session.getAttribute("user");
 		session.setAttribute("username", banker.getBankerID());
 
 		request.getRequestDispatcher("CreateClient.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
 	
 	@Resource(name = "jdbc/exampleDS")

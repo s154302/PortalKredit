@@ -41,7 +41,7 @@ public class CreateClientServlet extends HttpServlet {
 		String country = request.getParameter("clientCountry");
 		
 		Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
-		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateClient.jsp");
+		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateClient");
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		HttpSession session = request.getSession();

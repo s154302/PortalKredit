@@ -31,9 +31,15 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		
+		if(Controller.checkAuth(Controller.Type.banker, session)){
 		String clientID = (String) session.getAttribute("clientID");
 
 		request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
 	
 	@Resource(name = "jdbc/exampleDS")

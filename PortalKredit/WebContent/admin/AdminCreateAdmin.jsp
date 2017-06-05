@@ -16,14 +16,14 @@
 			<div class="card card-outline-primary mb-3 text-center blue-outline">
 				<h1>Create Admin</h1>
 				<div class="card-block">
-					<form action="CreateAdminServlet" method="post">
+					<form action="" method="post">
 						<div class="form-group">
 							<input type="text" class="form-control" name="adminID"
 								placeholder="Admin username">
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="adminPassword"
+							<input type="password" class="form-control" name="adminPassword"
 								placeholder="Password">
 						</div>
 						<button class="btn btn-primary btn-block btn-action" type="submit"

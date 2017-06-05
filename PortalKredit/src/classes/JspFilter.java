@@ -18,7 +18,6 @@ public class JspFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		req.getSession().invalidate();
 		((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/index");
-
 	}
 
 	@Override
