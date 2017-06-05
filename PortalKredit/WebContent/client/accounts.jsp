@@ -38,9 +38,9 @@
 									<td colspan="4">
 										<div id="${ob.regNo}${ob.accountNumber}" class="collapse">
 											<ul>
-												<li>${ob.transactions[0].dateOfTransaction} ${note} Amount: ${ob.transactions[0].amount} Balance: ${ob.transactions[0].balance}</li>
-												<li>${ob.transactions[1].dateOfTransaction} ${note} Amount: ${ob.transactions[1].amount} Balance: ${ob.transactions[0].balance}</li>
-												<li>${ob.transactions[2].dateOfTransaction} ${note} Amount: ${ob.transactions[2].amount} Balance: ${ob.transactions[0].balance}</li>
+												<li>${ob.transactions[0].dateOfTransaction} ${ob.transactions[0].note} Amount: ${ob.transactions[0].amount} Balance: ${ob.transactions[0].balance}</li>
+												<li>${ob.transactions[1].dateOfTransaction} ${ob.transactions[1].note} Amount: ${ob.transactions[1].amount} Balance: ${ob.transactions[1].balance}</li>
+												<li>${ob.transactions[2].dateOfTransaction} ${ob.transactions[2].note} Amount: ${ob.transactions[2].amount} Balance: ${ob.transactions[2].balance}</li>
 											</ul>
 											<form action="" method="post">
 												<input type="hidden" name="accountNumber" value="${ob.accountNumber}"/>
