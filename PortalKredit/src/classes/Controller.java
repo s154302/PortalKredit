@@ -787,7 +787,19 @@ public final class Controller {
 			// Make sure transaction is reversible in case of an error
 			con.setAutoCommit(false);
 			
-			// TODO Create two new statements to extract the old balances before they are changed.
+			// Extract the old balances before they are changed
+			PreparedStatement oldBalances = con.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ? OR \"ACCOUNTNUMBER\" = ?");
+			oldBalances.setString(1, sendAcc);
+			oldBalances.setString(2, reciAcc);
+			oldBalances.executeQuery();
+			ResultSet rsOldBalances = oldBalances.getResultSet();
+			
+			// Define variables for old balances
+			rsOldBalances.next();
+			double oldBalanceSend = rsOldBalances.getDouble("BALANCE");
+			
+			rsOldBalances.next();
+			double oldBalanceReci = rsOldBalances.getDouble("BALANCE");
 
 			// Subtract amount from sending account
 			PreparedStatement subtract = con.prepareStatement(
@@ -808,37 +820,37 @@ public final class Controller {
 					.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ?");
 			check1.setString(1, sendAcc);
 			check1.executeQuery();
-			ResultSet rs = check1.getResultSet();
+			ResultSet rsCheck1 = check1.getResultSet();
 
 			// Define new balance for sender
-			rs.next();
-			double sendBalance = rs.getDouble("BALANCE");
+			rsCheck1.next();
+			double sendBalance = rsCheck1.getDouble("BALANCE");
 
 			// Insert transaction for sender
 			String transactionID = generateTransactionID();
-			createTransaction(transactionID, sendAcc, reciAcc, -(amount), sendReg, reciReg, currency, message, sendBalance, ds1);
+			createTransaction(transactionID, sendAcc, reciAcc, -(amount), sendReg, reciReg, currency, message, sendBalance, con);
 
 			PreparedStatement check2 = con
 					.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ?");
 			check2.setString(1, reciAcc);
 			check2.executeQuery();
-			rs = check2.getResultSet();
+			ResultSet rsCheck2 = check2.getResultSet();
 
 			// Define new balance for recipient
-			rs.next();
-			double reciBalance = rs.getDouble("BALANCE");
+			rsCheck2.next();
+			double reciBalance = rsCheck2.getDouble("BALANCE");
 
 			// Insert transaction for recipient
-			createTransaction(transactionID, reciAcc, sendAcc, amount, reciReg, sendReg, currency, reciMessage, reciBalance, ds1);
+			createTransaction(transactionID, reciAcc, sendAcc, amount, reciReg, sendReg, currency, reciMessage, reciBalance, con);
 
 			// Check that no money has been lost or gained,
 			// if so roll back all changes
-			System.out.println("Amount: " + amount);
-			System.out.println("The Math: " + Math.abs(sendBalance - reciBalance));
+			System.out.println("Amount: " + Math.abs(sendBalance - reciBalance));
+			System.out.println("The Math: " +  Math.abs(oldBalanceSend - oldBalanceReci));
 			
 			
 			//TODO This should be changed to (oldSendBalance - oldReciBalance) == (newSendBalance - newReciBalance)
-			if (Math.abs(sendBalance - reciBalance) == amount) {
+			if ((sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci)) {
 				con.commit();
 				status = true;
 			} else {
@@ -857,10 +869,8 @@ public final class Controller {
 	}
 
 	public static void createTransaction(String transactionID, String acc1, String acc2, double amount, int reg1, int reg2, String currency,
-			String message, double balance, DataSource ds1) {
+			String message, double balance, Connection con) {
 		try {
-			Connection con = ds1.getConnection(Secret.userID, Secret.password);
-			con.setAutoCommit(false);
 			
 			// Inserts a transaction into the TRANSACTION table
 			PreparedStatement ps = con.prepareStatement(
