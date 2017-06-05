@@ -1,8 +1,7 @@
 package classes;
 
-import java.sql.Clob;
+import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -776,6 +775,7 @@ public final class Controller {
 		boolean status = false;
 		try {
 			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+			
 			// Make sure transaction is reversible in case of an error
 			con.setAutoCommit(false);
 			
@@ -796,14 +796,14 @@ public final class Controller {
 			// Subtract amount from sending account
 			PreparedStatement subtract = con.prepareStatement(
 					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"BALANCE\" = \"BALANCE\" - ? WHERE \"ACCOUNTNUMBER\" = ?");
-			subtract.setDouble(1, amount);
+			subtract.setBigDecimal(1, new BigDecimal(Double.valueOf(amount)));
 			subtract.setString(2, sendAcc);
 			subtract.executeUpdate();
 
 			// Add amount to receiving account
 			PreparedStatement add = con.prepareStatement(
 					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"BALANCE\" = \"BALANCE\" + ? WHERE \"ACCOUNTNUMBER\" = ?");
-			add.setDouble(1, amount);
+			add.setBigDecimal(1, new BigDecimal(Double.valueOf(amount)));
 			add.setString(2, reciAcc);
 			add.executeUpdate();
 
@@ -837,11 +837,11 @@ public final class Controller {
 
 			// Check that no money has been lost or gained,
 			// if so roll back all changes
-			System.out.println("Amount: " + Math.abs(sendBalance - reciBalance));
-			System.out.println("The Math: " +  Math.abs(oldBalanceSend - oldBalanceReci));
+			System.out.println("Amount: " + (sendBalance + reciBalance));
+			System.out.println("The Math: " +  (oldBalanceSend + oldBalanceReci));
 			
-			
-			//TODO This should be changed to (oldSendBalance - oldReciBalance) == (newSendBalance - newReciBalance)
+			// Check that no money has been lost
+			// Then either commit or roll back
 			if ((sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci)) {
 				con.commit();
 				status = true;
@@ -874,7 +874,7 @@ public final class Controller {
 			ps.setString(4, acc2);
 			ps.setInt(5, reg2);
 			ps.setDate(6, new java.sql.Date(System.currentTimeMillis()));
-			ps.setDouble(7, amount);
+			ps.setBigDecimal(7, new BigDecimal(Double.valueOf(amount)));
 			ps.setString(8, currency);
 			ps.setString(9, message);
 			ps.setDouble(10, balance);
