@@ -37,7 +37,7 @@ public class CreateAdminServlet extends HttpServlet {
 		
 		Controller.createAdmin(adminID, hashed, ds1);
 
-		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateAdmin.jsp");
+		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateAdmin");
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		HttpSession session = request.getSession();

@@ -35,6 +35,8 @@ public class BankerViewSingleClientServlet extends HttpServlet {
 		
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
+		if(Controller.checkAuth(Controller.Type.banker,session)){
+			
 		
 		String clientID = (String) session.getAttribute("clientID");
 		Client client = Controller.getClientInfo(clientID, ds1);
@@ -43,6 +45,11 @@ public class BankerViewSingleClientServlet extends HttpServlet {
 		session.setAttribute("clientName", client.getFirstName());
 		
 		request.getRequestDispatcher("ViewSingleClient.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
 	
 	@Override

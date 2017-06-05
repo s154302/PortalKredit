@@ -81,6 +81,7 @@
 	<servlet-mapping>
 		<servlet-name>AdminFrontpageServlet</servlet-name>
 		<url-pattern>/admin/AdminFrontpage</url-pattern>
+		<url-pattern>/admin/AdminControl</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
