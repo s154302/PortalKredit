@@ -182,10 +182,6 @@ public final class Controller {
 			client = setClientInfo(rs);
 			client.setCity(findCity(rs.getInt("POSTAL"), rs.getString("COUNTRY"), ds1));
 
-			// Consider if we want to fill the Client with its account info
-			// before it's used
-			client.setAccounts(getAccounts(userId, ds1));
-
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -268,18 +264,16 @@ public final class Controller {
 		try {
 			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement(
-					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?) "
+					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?"
 							+ "ORDER BY DATEOFTRANSACTION DESC FETCH FIRST 3 ROWS ONLY");
 
 			ps.setString(1, accountNumber);
 			ps.setInt(2, regNo);
-			ps.setString(3, accountNumber);
-			ps.setInt(4, regNo);
 
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
+				transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
 						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
 						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"), rs.getDouble("BALANCE"), rs.getString("NOTE")));
 			}
@@ -304,17 +298,15 @@ public final class Controller {
 		try {
 			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement(
-					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?)");
+					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
 
 			ps.setString(1, accountNumber);
 			ps.setInt(2, regNo);
-			ps.setString(3, accountNumber);
-			ps.setInt(4, regNo);
 
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
+				transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
 						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
 						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"), rs.getDouble("BALANCE"), rs.getString("NOTE")));
 			}
