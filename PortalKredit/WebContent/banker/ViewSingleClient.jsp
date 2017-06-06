@@ -41,8 +41,10 @@
 												<li>Date: ${ob.transactions[2].dateOfTransaction} Ammount: ${ob.transactions[2].amount}</li>
 											</ul>
 											<form action="" method="post">
+												<input type="hidden" name="accountNumber" value="${ob.accountNumber}"/>
+												<input type="hidden" name="regNo" value="${ob.regNo}"/>	
 												<button class="btn btn-primary btn-block btn-action"
-													type="submit" name="accountNumber" value="${ob.accountNumber}, ${ob.regNo}">View Account</button>
+													type="submit" value="${ob.accountNumber}">View Account</button>
 											</form>
 										</div>
 									</td>

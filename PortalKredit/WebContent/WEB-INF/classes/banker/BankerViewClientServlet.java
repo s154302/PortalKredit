@@ -34,14 +34,13 @@ public class BankerViewClientServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
-			
+			Banker banker = (Banker) session.getAttribute("user");
 		
-		Banker banker = (Banker) session.getAttribute("user");
-		
-		ArrayList<Client> clientList = banker.getClients();
-		session.setAttribute("list", clientList);
+			ArrayList<Client> clientList = banker.getClients();
+			session.setAttribute("list", clientList);
+			session.setAttribute("clientID", null);
 
-		request.getRequestDispatcher("ViewClients.jsp").forward(request, response);
+			request.getRequestDispatcher("ViewClients.jsp").forward(request, response);
 		}
 		else{
 			request.getSession().invalidate();

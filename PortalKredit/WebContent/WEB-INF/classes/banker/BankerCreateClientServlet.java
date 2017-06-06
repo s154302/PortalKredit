@@ -31,12 +31,11 @@ public class BankerCreateClientServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		
-		if(Controller.checkAuth(Controller.Type.banker, session))
-		{
-		Banker banker = (Banker) session.getAttribute("user");
-		session.setAttribute("username", banker.getBankerID());
-
-		request.getRequestDispatcher("CreateClient.jsp").forward(request, response);
+		if(Controller.checkAuth(Controller.Type.banker, session)){
+			Banker banker = (Banker) session.getAttribute("user");
+			session.setAttribute("username", banker.getBankerID());
+			request.getRequestDispatcher("CreateClient.jsp").forward(request, response);
+		
 		}
 		else{
 			request.getSession().invalidate();
@@ -50,6 +49,8 @@ public class BankerCreateClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
+		
+		session.setAttribute("clientID", null);
 		
 		String firstName = request.getParameter("clientFirstName");
 		String lastName = request.getParameter("clientLastName");

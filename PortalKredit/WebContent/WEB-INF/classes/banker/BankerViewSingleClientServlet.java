@@ -31,20 +31,21 @@ public class BankerViewSingleClientServlet extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException{
+			throws ServletException, IOException {
 		
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
+		
 		if(Controller.checkAuth(Controller.Type.banker,session)){
 			
+			String clientID = (String) session.getAttribute("clientID");
+			Client client = Controller.getClientInfo(clientID, ds1);
+			
+			client.setAccounts(Controller.getAccounts(client.getClientID(), ds1));
+			session.setAttribute("accounts", client.getAccounts());
+			session.setAttribute("clientName", client.getFirstName());
 		
-		String clientID = (String) session.getAttribute("clientID");
-		Client client = Controller.getClientInfo(clientID, ds1);
-		
-		session.setAttribute("accounts", client.getAccounts());
-		session.setAttribute("clientName", client.getFirstName());
-		
-		request.getRequestDispatcher("ViewSingleClient.jsp").forward(request, response);
+			request.getRequestDispatcher("ViewSingleClient.jsp").forward(request, response);
 		}
 		else{
 			request.getSession().invalidate();

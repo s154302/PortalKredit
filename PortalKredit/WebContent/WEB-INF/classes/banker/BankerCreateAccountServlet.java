@@ -32,9 +32,8 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
-		String clientID = (String) session.getAttribute("clientID");
-
-		request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
+			String clientID = (String) session.getAttribute("clientID");
+			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
 		}
 		else{
 			request.getSession().invalidate();
@@ -50,6 +49,7 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		
+		String accountName = request.getParameter("clientAccountName");
 		String accountNumber = request.getParameter("clientAccountNumber");
 		int regNo = Integer.parseInt(request.getParameter("clientRegNo"));
 		String accountType = request.getParameter("clientAccountType");
@@ -58,7 +58,7 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		String currency = request.getParameter("clientCurrency");
 		
 		
-		Controller.createAccount(accountNumber, regNo, accountType, clientID, balance, currency, ds1);
+		Controller.createAccount(accountName, accountNumber, regNo, accountType, clientID, balance, currency, ds1);
 		
 //		Banker banker = (Banker) session.getAttribute("user");
 //		banker.getClient(clientID).setAccounts( Controller.getAccounts(clientID, ds1));

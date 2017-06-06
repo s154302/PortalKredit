@@ -384,19 +384,21 @@ public final class Controller {
 		}
 	}
 	
-	public static void createAccount(String accountNumber, int regNo, String accountType, String clientID, double balance, String currency, DataSource ds1) {
+	public static void createAccount(String accountName, String accountNumber, int regNo, String accountType, String clientID, double balance, String currency, DataSource ds1) {
+		Connection con;
 		try {
-			Connection con = ds1.getConnection();
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			
 			PreparedStatement ps = con.prepareStatement(
-					"INSERT INTO \"DTUGRP16\".\"ACCOUNT\" (ACCOUNTNUMBER, REGNO, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY) VALUES (?, ?, ?, ?, ?, ?)");
+					"INSERT INTO \"DTUGRP16\".\"ACCOUNT\" (ACCOUNTNAME, ACCOUNTNUMBER, REGNO, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-			ps.setString(1, accountNumber);
-			ps.setInt(2, regNo);
-			ps.setString(3, accountType);
-			ps.setString(4, clientID);
-			ps.setDouble(5, balance);
-			ps.setString(6, currency);
+			ps.setString(1, accountName);
+			ps.setString(2, accountNumber);
+			ps.setInt(3, regNo);
+			ps.setString(4, accountType);
+			ps.setString(5, clientID);
+			ps.setDouble(6, balance);
+			ps.setString(7, currency);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
