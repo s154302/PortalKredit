@@ -1,4 +1,4 @@
-package Client;
+package banker;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,11 +16,11 @@ import classes.Account;
 import classes.Client;
 import classes.Controller;
 
-@WebServlet("/client/accountView")
-public class AccountViewServlet extends HttpServlet {
+@WebServlet("/banker/ViewClientAccount")
+public class BankerAccountViewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	public AccountViewServlet(){
+	public BankerAccountViewServlet(){
 		super();
 	}
 	
@@ -32,11 +32,18 @@ public class AccountViewServlet extends HttpServlet {
 			throws ServletException, IOException{
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
+		if(Controller.checkAuth(Controller.Type.banker, session)){
+			
 		
-		Account account = (Account)session.getAttribute("account");
+		Account account = (Account) session.getAttribute("account");
 	
 		session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), ds1));
 		
-		request.getRequestDispatcher("accountView.jsp").forward(request, response);
+		request.getRequestDispatcher("ViewClientAccount.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+			}
 	}
 }

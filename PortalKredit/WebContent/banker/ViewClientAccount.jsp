@@ -10,7 +10,7 @@
 </head>
 
 <body>
-	<jsp:include page="ClientNavbar.jsp"></jsp:include>
+	<jsp:include page="BankerNavbar.jsp"></jsp:include>
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary text-center blue-outline">

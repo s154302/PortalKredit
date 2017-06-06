@@ -33,12 +33,20 @@ public class BankerViewClientServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		
+		if(Controller.checkAuth(Controller.Type.banker, session)){
+			
+		
 		Banker banker = (Banker) session.getAttribute("user");
 		
 		ArrayList<Client> clientList = banker.getClients();
 		session.setAttribute("list", clientList);
 
 		request.getRequestDispatcher("ViewClients.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,10 +55,10 @@ public class BankerViewClientServlet extends HttpServlet {
 		
 		String clientID = request.getParameter("username");
 		
-		session.setAttribute("ClientID", clientID);
-		response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient.jsp");
+		session.setAttribute("clientID", clientID);
 		
-		doGet(request, response);
+		response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
+		
 	}
 	
 

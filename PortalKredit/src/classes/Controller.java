@@ -1,12 +1,12 @@
 package classes;
 
-import java.sql.Clob;
+import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
@@ -68,7 +68,11 @@ public final class Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return BCrypt.checkpw(password, hash);
+		if(hash != null){
+			return BCrypt.checkpw(password, hash);
+		}else{
+			return false;
+		}
 	}
 
 	// maybe private
@@ -91,7 +95,11 @@ public final class Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return BCrypt.checkpw(password, hash);
+		if(hash != null){
+			return BCrypt.checkpw(password, hash);
+		}else{
+			return false;
+		}
 	}
 
 	// maybe private ?? - I don't think you can when we say Controller.W/E ;)
@@ -113,7 +121,12 @@ public final class Controller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return BCrypt.checkpw(password, hash);
+		if(hash != null){
+			return BCrypt.checkpw(password, hash);
+		}else{
+			return false;
+		}
+		
 	}
 
 	// Fills a banker client object with data and returns it
@@ -167,10 +180,6 @@ public final class Controller {
 			rs.next();
 			client = setClientInfo(rs);
 			client.setCity(findCity(rs.getInt("POSTAL"), rs.getString("COUNTRY"), ds1));
-
-			// Consider if we want to fill the Client with its account info
-			// before it's used
-			client.setAccounts(getAccounts(userId, ds1));
 
 			rs.close();
 		} catch (SQLException e) {
@@ -254,18 +263,16 @@ public final class Controller {
 		try {
 			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement(
-					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?) "
+					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?"
 							+ "ORDER BY DATEOFTRANSACTION DESC FETCH FIRST 3 ROWS ONLY");
 
 			ps.setString(1, accountNumber);
 			ps.setInt(2, regNo);
-			ps.setString(3, accountNumber);
-			ps.setInt(4, regNo);
 
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
+				transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
 						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
 						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"), rs.getDouble("BALANCE"), rs.getString("NOTE")));
 			}
@@ -290,17 +297,15 @@ public final class Controller {
 		try {
 			con = ds1.getConnection(Secret.userID, Secret.password);
 			PreparedStatement ps = con.prepareStatement(
-					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE (\"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?) OR (\"RECIEVEACCOUNT\" = ? AND \"RECIEVEREGNO\" = ?)");
+					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
 
 			ps.setString(1, accountNumber);
 			ps.setInt(2, regNo);
-			ps.setString(3, accountNumber);
-			ps.setInt(4, regNo);
 
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
-				transactionList.add(new Transaction(rs.getInt("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
+				transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
 						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
 						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"), rs.getDouble("BALANCE"), rs.getString("NOTE")));
 			}
@@ -378,6 +383,26 @@ public final class Controller {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void createAccount(String accountNumber, int regNo, String accountType, String clientID, double balance, String currency, DataSource ds1) {
+		try {
+			Connection con = ds1.getConnection();
+			
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO \"DTUGRP16\".\"ACCOUNT\" (ACCOUNTNUMBER, REGNO, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY) VALUES (?, ?, ?, ?, ?, ?)");
+
+			ps.setString(1, accountNumber);
+			ps.setInt(2, regNo);
+			ps.setString(3, accountType);
+			ps.setString(4, clientID);
+			ps.setDouble(5, balance);
+			ps.setString(6, currency);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
 
 	// Returns all clients associated with a single banker
 	public static ArrayList<Client> getClients(String bankerID, DataSource ds1) {
@@ -452,6 +477,7 @@ public final class Controller {
 		return rate;
 	}
 
+	//IS this used ? 
 	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,
 			DataSource ds1) {
 		ArrayList<String> list = new ArrayList<>();
@@ -740,85 +766,118 @@ public final class Controller {
 		return result;
 	}
 
-	public static void transaction(String sendAcc, String reciAcc, double amount, int sendReg, int reciReg,
-			String currency, Clob message, DataSource ds1) {
+	public static String generateTransactionID(){
+		return UUID.randomUUID().toString();
+	}
+	
+	public static boolean transaction(String sendAcc, String reciAcc, double amount, int sendReg, int reciReg,
+			String currency, String message, String reciMessage, DataSource ds1) {
+		boolean status = false;
 		try {
 			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+			
 			// Make sure transaction is reversible in case of an error
 			con.setAutoCommit(false);
+			
+			// Extract the old balances before they are changed
+			PreparedStatement oldBalances = con.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ? OR \"ACCOUNTNUMBER\" = ?");
+			oldBalances.setString(1, sendAcc);
+			oldBalances.setString(2, reciAcc);
+			oldBalances.executeQuery();
+			ResultSet rsOldBalances = oldBalances.getResultSet();
+			
+			// Define variables for old balances
+			rsOldBalances.next();
+			double oldBalanceSend = rsOldBalances.getDouble("BALANCE");
+			
+			rsOldBalances.next();
+			double oldBalanceReci = rsOldBalances.getDouble("BALANCE");
 
 			// Subtract amount from sending account
 			PreparedStatement subtract = con.prepareStatement(
 					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"BALANCE\" = \"BALANCE\" - ? WHERE \"ACCOUNTNUMBER\" = ?");
-			subtract.setDouble(1, amount);
+			subtract.setBigDecimal(1, new BigDecimal(Double.valueOf(amount)));
 			subtract.setString(2, sendAcc);
 			subtract.executeUpdate();
 
-			// Add amount to receiving amount
+			// Add amount to receiving account
 			PreparedStatement add = con.prepareStatement(
 					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"BALANCE\" = \"BALANCE\" + ? WHERE \"ACCOUNTNUMBER\" = ?");
-			add.setDouble(1, amount);
+			add.setBigDecimal(1, new BigDecimal(Double.valueOf(amount)));
 			add.setString(2, reciAcc);
 			add.executeUpdate();
 
 			// Create a statement used to extract the new balances
-			PreparedStatement check = con
+			PreparedStatement check1 = con
 					.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ?");
-			check.setString(1, sendAcc);
-			check.executeQuery();
-			ResultSet rs = check.getResultSet();
+			check1.setString(1, sendAcc);
+			check1.executeQuery();
+			ResultSet rsCheck1 = check1.getResultSet();
 
 			// Define new balance for sender
-			rs.next();
-			double sendBalance = rs.getDouble("BALANCE");
+			rsCheck1.next();
+			double sendBalance = rsCheck1.getDouble("BALANCE");
 
 			// Insert transaction for sender
-			createTransaction(sendAcc, reciAcc, amount, sendReg, reciReg, currency, message, sendBalance, ds1);
+			String transactionID = generateTransactionID();
+			createTransaction(transactionID, sendAcc, reciAcc, -(amount), sendReg, reciReg, currency, message, sendBalance, con);
 
-			check.setString(1, reciAcc);
-			check.executeQuery();
-			rs = check.getResultSet();
+			PreparedStatement check2 = con
+					.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ?");
+			check2.setString(1, reciAcc);
+			check2.executeQuery();
+			ResultSet rsCheck2 = check2.getResultSet();
 
 			// Define new balance for recipient
-			rs.next();
-			double reciBalance = rs.getDouble("BALANCE");
+			rsCheck2.next();
+			double reciBalance = rsCheck2.getDouble("BALANCE");
 
 			// Insert transaction for recipient
-			createTransaction(reciAcc, sendAcc, amount, reciReg, sendReg, currency, message, reciBalance, ds1);
+			createTransaction(transactionID, reciAcc, sendAcc, amount, reciReg, sendReg, currency, reciMessage, reciBalance, con);
 
 			// Check that no money has been lost or gained,
-			// if so then roll back all changes
-			if (Math.abs(sendBalance - reciBalance) == amount) {
+			// if so roll back all changes
+			System.out.println("Amount: " + (sendBalance + reciBalance));
+			System.out.println("The Math: " +  (oldBalanceSend + oldBalanceReci));
+			
+			// Check that no money has been lost
+			// Then either commit or roll back
+			if ((sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci)) {
 				con.commit();
+				status = true;
 			} else {
 				con.rollback();
+				status = false;
 			}
 			
 			con.close();
-
+			
+			return status;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return status;
 		}
 
 	}
 
-	public static void createTransaction(String acc1, String acc2, double amount, int reg1, int reg2, String currency,
-			Clob message, double balance, DataSource ds1) {
+	public static void createTransaction(String transactionID, String acc1, String acc2, double amount, int reg1, int reg2, String currency,
+			String message, double balance, Connection con) {
 		try {
-			Connection con = ds1.getConnection(Secret.userID, Secret.password);
-
+			
 			// Inserts a transaction into the TRANSACTION table
 			PreparedStatement ps = con.prepareStatement(
-					"INSERT INTO \"DTUGRP16\".\"TRANSACTION\" VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			ps.setString(1, acc1);
-			ps.setInt(2, reg1);
-			ps.setString(3, acc2);
-			ps.setInt(4, reg2);
-			ps.setDate(5, new java.sql.Date(System.currentTimeMillis()));
-			ps.setDouble(6, amount);
-			ps.setString(7, currency);
-			ps.setClob(8, message);
-			ps.setDouble(9, balance);
+					"INSERT INTO \"DTUGRP16\".\"TRANSACTION\" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			
+			ps.setString(1, transactionID);
+			ps.setString(2, acc1);
+			ps.setInt(3, reg1);
+			ps.setString(4, acc2);
+			ps.setInt(5, reg2);
+			ps.setDate(6, new java.sql.Date(System.currentTimeMillis()));
+			ps.setBigDecimal(7, new BigDecimal(Double.valueOf(amount)));
+			ps.setString(8, currency);
+			ps.setString(9, message);
+			ps.setDouble(10, balance);
 			ps.executeUpdate();
 
 		} catch (SQLException e) {
