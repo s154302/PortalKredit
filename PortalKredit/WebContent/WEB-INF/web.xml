@@ -56,6 +56,7 @@
 	<servlet-mapping>
 		<servlet-name>DeleteBankerServlet</servlet-name>
 		<url-pattern>/admin/AdminDeleteBanker</url-pattern>
+		<url-pattern>/admin/DeleteBankerServlet</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>DeleteClientServlet</servlet-name>
