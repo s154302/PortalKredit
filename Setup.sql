@@ -102,21 +102,22 @@ CREATE TABLE DTUGRP16.Currency (
 -----------------
 -- Transaction --
 -----------------
-CREATE TABLE DTUGRP16.Transaction (
-    transactionID INT NOT NULL,
+CREATE TABLE "DTUGRP16"."TRANSACTION" (
+    transactionID VARCHAR(60) NOT NULL,
     accountNumber CHAR(10) NOT NULL,
     regNo INT NOT NULL,
     recieveAccount CHAR(10) NOT NULL,
     recieveRegNo INT NOT NULL,
-    dateOfTransaction DATE,
-    amount DECIMAL(5,2) NOT NULL,		-- Changed from value since value appears to be a reserved keyword
+    dateOfTransaction DATE NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,		-- Changed from value since value appears to be a reserved keyword
     currency VARCHAR(10) NOT NULL,
-    note CLOB,
-    PRIMARY KEY (transactionID, accountNumber) --Using both as PK so multiple accounts can use same transaction ID
+    note VARCHAR(3000),
+    balance DECIMAL(12,2)NOT NULL,
+    PRIMARY KEY (transactionID, accountNumber, regNo, recieveAccount, recieveRegNo, dateOfTransaction) --Using both as PK so multiple accounts can use same transaction ID
  ,
-    CONSTRAINT fk_transaction_currency FOREIGN KEY (currency) REFERENCES DTUGRP16. Currency (currency),
-    CONSTRAINT fk_transaction_account1 FOREIGN KEY (accountNumber, regNo) REFERENCES DTUGRP16. Account (accountNumber, regNo),
-    CONSTRAINT fk_transaction_account2 FOREIGN KEY (recieveAccount, recieveRegNo) REFERENCES DTUGRP16. Account (accountNumber, regNo)
+    FOREIGN KEY (currency) REFERENCES DTUGRP16. Currency (currency),
+    FOREIGN KEY (accountNumber, regNo) REFERENCES DTUGRP16. Account (accountNumber, regNo),
+    FOREIGN KEY (recieveAccount, recieveRegNo) REFERENCES DTUGRP16. Account (accountNumber, regNo)
   );
   
 -----------
