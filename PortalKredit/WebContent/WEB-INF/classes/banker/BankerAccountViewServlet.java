@@ -45,4 +45,7 @@ public class BankerAccountViewServlet extends HttpServlet {
 			response.sendRedirect("../index");
 			}
 	}
+	
+
+	
 }

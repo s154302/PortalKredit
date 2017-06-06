@@ -23,6 +23,10 @@
 						<tr>Currency: ${account.currency} <br></tr>
 						<tr>Interest rate: ${account.interestRate} <br></tr>
 						<tr>Balance: ${account.balance}</tr>
+						<tr>
+						<form action="EditAccount" method="get">
+    					<input type="submit" value="Edit Account" name="Submit" />
+						</form></tr>
 					</tbody>
 				</table>
 			</div>
@@ -44,6 +48,7 @@
 								<th>Balance</th>
 							</tr>
 						</thead>
+							
 
 						<tbody>
 

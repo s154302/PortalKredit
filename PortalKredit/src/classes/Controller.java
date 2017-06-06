@@ -390,15 +390,16 @@ public final class Controller {
 			con = ds1.getConnection(Secret.userID, Secret.password);
 			
 			PreparedStatement ps = con.prepareStatement(
-					"INSERT INTO \"DTUGRP16\".\"ACCOUNT\" (ACCOUNTNAME, ACCOUNTNUMBER, REGNO, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY) VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-			ps.setString(1, accountName);
-			ps.setString(2, accountNumber);
-			ps.setInt(3, regNo);
+					"INSERT INTO \"DTUGRP16\".\"ACCOUNT\" (ACCOUNTNUMBER, REGNO, ACCOUNTNAME, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY, INTEREST) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+			BigDecimal bdBalance = new BigDecimal(Double.valueOf(balance));
+			ps.setString(1, accountNumber);
+			ps.setInt(2, regNo);
+			ps.setString(3, accountName);
 			ps.setString(4, accountType);
 			ps.setString(5, clientID);
-			ps.setDouble(6, balance);
+			ps.setBigDecimal(6, bdBalance);
 			ps.setString(7, currency);
+			ps.setDouble(8, 0);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -882,6 +883,27 @@ public final class Controller {
 			ps.setDouble(10, balance);
 			ps.executeUpdate();
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void editAccount(String accountName, String accountNumber, int regNo, String accountType, String clientID, double balance, String currency, DataSource ds1) {
+		Connection con;
+		try {
+			con = ds1.getConnection(Secret.userID, Secret.password);
+			
+			PreparedStatement ps = con.prepareStatement(
+					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"ACCOUNTNAME\"=?, \"ACCOUNTTYPE\"=?, \"CLIENTID\"=?, \"CURRENCY\"=? WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?" );
+		     
+			ps.setString(1, accountName);
+			ps.setString(2, accountType);
+			ps.setString(3, clientID);
+			ps.setString(4, currency);
+			ps.setString(5, accountNumber);
+			ps.setInt(6, regNo);
+			ps.executeUpdate();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

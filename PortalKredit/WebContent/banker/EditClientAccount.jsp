@@ -1,42 +1,50 @@
-<!DOCTYPE HTML><%@page language="java"
-	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 
 <head>
-<title>Welcome</title>
+<title>Transactions</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-<link href="../assets/css/custom.css" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/custom.css">
 </head>
+
 
 <body>
 	<jsp:include page="BankerNavbar.jsp"></jsp:include>
+	
+		<div class="row pad-row">
+		<div class="col-4 offset-4">
+			<div class="card card-outline-primary text-center blue-outline">
+				<table class="table table-hover">
+					<tbody colspan="4">
+						<tr>Name: ${account.accountName} <br></tr>
+						<tr>Reg: ${account.regNo} <br></tr>
+						<tr>Account: ${account.accountNumber} <br></tr>
+						<tr>Type: ${account.accountType} <br></tr>
+						<tr>Currency: ${account.currency} <br></tr>
+						<tr>Interest rate: ${account.interestRate} <br></tr>
+						<tr>Balance: ${account.balance}</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</div>
+	
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary mb-3 text-center blue-outline">
-				<h1>Create Account for Client</h1>
 				<div class="card-block">
-					<form action="CreateAccount" method="post">
+					<form action="EditAccount" method="post">
 						
 						<div class="form-group">
 							<input type="text" class="form-control" name="clientAccountName"
-								placeholder="Account Name">
-						</div>
-						
-						
-						<div class="form-group">
-							<input type="text" class="form-control" name="clientAccountNumber"
-								placeholder="*Account Number">
-						</div>
-						
-						<div class="form-group">
-							<input type="number" class="form-control" name="clientRegNo"
-								placeholder="*Reg. No.">
+								placeholder="Account Name" value="${account.accountName}">
 						</div>
 
 						<div class="form-group">
 							<input type="text" class="form-control" name="clientAccountType"
-								placeholder="*Account Type">
+								placeholder="*Account Type" value="${account.accountType}">
 						</div>
 
 						<div class="form-group">
@@ -45,17 +53,12 @@
 						</div>
 
 						<div class="form-group">
-							<input type="number" class="form-control" name="clientBalance"
-								placeholder="*Balance">
-						</div>
-
-						<div class="form-group">
 							<input type="text" class="form-control" name="clientCurrency"
-								placeholder="*Client's prefered Currency">
+								placeholder="*Client's prefered Currency" value="${account.currency}">
 						</div>
 
 						<button class="btn btn-primary btn-block btn-action" type="submit"
-							value="createAccount">Create Account</button>
+							value="editAccount">Save Account Chances</button>
 					</form>
 				</div>
 			</div>
@@ -65,4 +68,3 @@
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
 </body>
-</html>

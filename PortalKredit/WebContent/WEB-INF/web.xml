@@ -129,6 +129,15 @@
 		<servlet-name>BankerViewSingleClientServlet</servlet-name>
 		<url-pattern>/banker/BankerViewSingleClientServlet</url-pattern>
 	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>BankerEditAccountServlet</servlet-name>
+		<servlet-class>BankerEditAccountServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BankerEditAccountServlet</servlet-name>
+		<url-pattern>/Client/BankerEditAccountServlet</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
@@ -142,6 +151,7 @@
 		<servlet-name>AccountsServlet</servlet-name>
 		<url-pattern>/Client/AccountsServlet</url-pattern>
 	</servlet-mapping>
+	
 
 	<servlet>
 		<servlet-name>ClientContactServlet</servlet-name>
