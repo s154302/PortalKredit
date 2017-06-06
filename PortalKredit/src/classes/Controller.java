@@ -91,6 +91,7 @@ public final class Controller {
 			ResultSet rs = ps.executeQuery();
 			rs.next();
 			hash = rs.getString("PASSWORD");
+			
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
