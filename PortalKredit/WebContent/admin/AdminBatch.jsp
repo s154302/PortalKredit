@@ -9,13 +9,13 @@
 </head>
 <body>
 	<jsp:include page="AdminNavbar.jsp"></jsp:include>
-	<form class="form-inline my-2 my-lg-0" action="LogOutServlet"
+	<form class="form-inline my-2 my-lg-0" action="AdminBatchServlet"
 		method="post">
-		<button class="btn btn-primary my-2 my-sm-0" type="submit">Update Exchange Rates</button>
+		<button class="btn btn-primary my-2 my-sm-0" type="submit" name="exchangeRates">Update Exchange Rates</button>
 	</form>
-	<form class="form-inline my-2 my-lg-0" action="LogOutServlet"
+	<form class="form-inline my-2 my-lg-0" action="AdminBatchServlet"
 		method="post">
-		<button class="btn btn-primary my-2 my-sm-0" type="submit">Update Account Interest Rates</button>
+		<button class="btn btn-primary my-2 my-sm-0" type="submit" name="interestRates">Update Account Interest Rates</button>
 	</form>
 </body>
 </html>
