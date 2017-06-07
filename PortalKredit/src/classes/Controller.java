@@ -934,9 +934,9 @@ public final class Controller {
 		con = ds1.getConnection(Secret.userID, Secret.password);
 			
 		PreparedStatement ps = con.prepareStatement(
-			"UPDATE \"DTUGRP16\".\"CLIENT\" SET PASSWAORD = ? WHERE CLIENTID = ?");
-		     
-		ps.setString(1, password);
+			"UPDATE \"DTUGRP16\".\"CLIENT\" SET \"DTUGRP16\".\"CLIENT\".\"PASSWORD\" = ? WHERE \"CLIENTID\" = ?");
+		
+		ps.setString(1, BCrypt.hashpw(password, BCrypt.gensalt(14)));
 		ps.setString(2, clientID);
 		ps.executeUpdate();
 		

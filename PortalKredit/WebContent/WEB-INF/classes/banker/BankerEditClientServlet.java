@@ -51,7 +51,7 @@ public class BankerEditClientServlet extends HttpServlet {
 		String clientID = (String) session.getAttribute("clientID");
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
-		String password = null;
+		String password = request.getParameter("password");
 		String email = request.getParameter("email"); 
 		String mobile = request.getParameter("mobile");  
 		String street = request.getParameter("street"); 
@@ -61,7 +61,8 @@ public class BankerEditClientServlet extends HttpServlet {
 		
 		try {
 			if(!request.getParameter("password").isEmpty()){
-				Controller.changeClientPassword(clientID, BCrypt.hashpw(password, BCrypt.gensalt(14)), ds1);
+				System.out.println("not empty: "+clientID+"  pass:"+password);
+				Controller.changeClientPassword(clientID, password, ds1);
 			}
 			
 			Controller.editClient(clientID, firstName, lastName, password, email,
