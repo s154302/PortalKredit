@@ -49,11 +49,9 @@ public class BankerEditClientServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		
 		String clientID = (String) session.getAttribute("clientID");
-		
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
-		String newClientID = request.getParameter("clientID"); 
-		String password = BCrypt.hashpw(request.getParameter("password"), BCrypt.gensalt(14)); 
+		String password = null;
 		String email = request.getParameter("email"); 
 		String mobile = request.getParameter("mobile");  
 		String street = request.getParameter("street"); 
@@ -62,11 +60,16 @@ public class BankerEditClientServlet extends HttpServlet {
 		String country = request.getParameter("country"); 
 		
 		try {
-			Controller.editClient(clientID, newClientID, firstName, lastName, password, email,
+			if(!request.getParameter("password").isEmpty()){
+				Controller.changeClientPassword(clientID, BCrypt.hashpw(password, BCrypt.gensalt(14)), ds1);
+			}
+			
+			Controller.editClient(clientID, firstName, lastName, password, email,
 					mobile, street, bankerID, postal, country, ds1);
 			
 			session.setAttribute("clientID", clientID);
-			response.sendRedirect(request.getContextPath() + "/banker/ViewClient");
+			response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
+			session.setAttribute("user", Controller.getBankerInfo((String) session.getAttribute("userID"), ds1));
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

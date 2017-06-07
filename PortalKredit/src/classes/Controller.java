@@ -904,7 +904,7 @@ public final class Controller {
 		}
 	}
 
-	public static void editClient(String clientID, String newClientID, String firstName, String lastName,
+	public static void editClient(String clientID, String firstName, String lastName,
 			String password, String email, String mobile, String street, String bankerID, int postal, String country,
 			DataSource ds1) throws SQLException {
 
@@ -912,20 +912,33 @@ public final class Controller {
 		con = ds1.getConnection(Secret.userID, Secret.password);
 			
 		PreparedStatement ps = con.prepareStatement(
-			"UPDATE \"DTUGRP16\".\"CLIENT\" SET (CLIENTID, FIRSTNAME, LASTNAME, PASSWAORD, EMAIL, MOBILE, STREET, BANKERID, P0STAL, COUNTRY) = (?,?,?,?,?,?,?,?,?,?) WHERE CLIENTID = ?");
+			"UPDATE \"DTUGRP16\".\"CLIENT\" SET (FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) = (?,?,?,?,?,?,?,?) WHERE CLIENTID = ?");
 		     
-		ps.setString(1, newClientID);
-		ps.setString(2, firstName);
-		ps.setString(3, lastName);
-		ps.setString(4, password);
-		ps.setString(5, email);
-		ps.setString(6, mobile);
-		ps.setString(7, street);
-		ps.setString(8, bankerID);
-		ps.setInt(9, postal);
-		ps.setString(10, country);
-		ps.setString(11, clientID);
+		ps.setString(1, firstName);
+		ps.setString(2, lastName);
+		ps.setString(3, email);
+		ps.setString(4, mobile);
+		ps.setString(5, street);
+		ps.setString(6, bankerID);
+		ps.setInt(7, postal);
+		ps.setString(8, country);
+		ps.setString(9, clientID);
 		ps.executeUpdate();
+		
 
+	}
+
+	public static void changeClientPassword(String clientID, String password, DataSource ds1) throws SQLException {
+		// TODO Auto-generated method stub
+		Connection con;
+		con = ds1.getConnection(Secret.userID, Secret.password);
+			
+		PreparedStatement ps = con.prepareStatement(
+			"UPDATE \"DTUGRP16\".\"CLIENT\" SET PASSWAORD = ? WHERE CLIENTID = ?");
+		     
+		ps.setString(1, password);
+		ps.setString(2, clientID);
+		ps.executeUpdate();
+		
 	}
 }

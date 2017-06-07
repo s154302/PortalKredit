@@ -40,11 +40,6 @@
 					<form action="EditClient" method="post">
 						
 						<div class="form-group">
-							<input type="text" class="form-control" name="clientID"
-								placeholder="Client ID" value="${client.clientID}">
-						</div>
-						
-						<div class="form-group">
 							<input type="text" class="form-control" name="firstName"
 								placeholder="First Name" value="${client.firstName}">
 						</div>
