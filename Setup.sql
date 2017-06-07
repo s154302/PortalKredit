@@ -70,7 +70,7 @@ CREATE TABLE DTUGRP16.Client (
 ------------------
 CREATE TABLE DTUGRP16.AccountType (
 	accountType VARCHAR(45) NOT NULL,
-	interestRate DECIMAL(5,2),
+	interestRate DECIMAL(6,5) NOT NULL,
 	PRIMARY KEY(accountType)
 );
 
@@ -80,10 +80,12 @@ CREATE TABLE DTUGRP16.AccountType (
 CREATE TABLE DTUGRP16.Account (
     accountNumber CHAR(10) NOT NULL,
     regNo INT NOT NULL,
+    accountName VARCHAR(25),
     accountType VARCHAR(45) NOT NULL,
     clientID CHAR(9) NOT NULL,
     balance DECIMAL(10,2),
     currency VARCHAR(10),
+    interest DECIMAL(8,4),
     PRIMARY KEY (accountNumber, regNo),
     FOREIGN KEY (clientID) REFERENCES DTUGRP16. Client (clientID),
     FOREIGN KEY (accountType) REFERENCES DTUGRP16. AccountType (accountType),
@@ -95,7 +97,7 @@ CREATE TABLE DTUGRP16.Account (
 ------------
 CREATE TABLE DTUGRP16.Currency (
     currency VARCHAR(10) NOT NULL,
-    exchangeRate DECIMAL(5,2) NOT NULL,
+    exchangeRate DECIMAL(9,4) NOT NULL,
     PRIMARY KEY (currency)
   );
 
