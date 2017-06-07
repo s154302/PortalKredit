@@ -1,7 +1,6 @@
 package banker;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -12,13 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import classes.Account;
 import classes.Controller;
 
-@WebServlet("/banker/CreateAccount")
-public class BankerCreateAccountServlet extends HttpServlet {
+@WebServlet("/banker/EditAccount")
+public class BankerEditAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	public BankerCreateAccountServlet() {
+	public BankerEditAccountServlet() {
 		super();
 	}
 	
@@ -29,7 +29,7 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
-			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
+			request.getRequestDispatcher("EditClientAccount.jsp").forward(request, response);
 		}
 		else{
 			request.getSession().invalidate();
@@ -45,28 +45,17 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		
+		Account account = (Account) session.getAttribute("account");
 		String accountName = request.getParameter("clientAccountName");
-		String accountNumber = request.getParameter("clientAccountNumber");
-		int regNo = Integer.parseInt(request.getParameter("clientRegNo"));
 		String accountType = request.getParameter("clientAccountType");
 		String clientID = request.getParameter("clientID");
-		double balance = Double.parseDouble(request.getParameter("clientBalance"));
 		String currency = request.getParameter("clientCurrency");
 		
-		session.setAttribute("clientID", clientID);
-		try {
-			Controller.createAccount(accountName, accountNumber, regNo, accountType, clientID, balance, currency, ds1);
-			response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			request.setAttribute("createAccountStatus", "Wrong value inserted");
-			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
-		}
+		Controller.editAccount(accountName, account.getAccountNumber(), account.getRegNo(), accountType, clientID, account.getBalance(), currency, ds1);
+		account = Controller.getAccountInfo(account.getAccountNumber(), account.getRegNo(), ds1);
 		
-//		Banker banker = (Banker) session.getAttribute("user");
-//		banker.getClient(clientID).setAccounts( Controller.getAccounts(clientID, ds1));
-//		session.setAttribute("user", banker);
-
+		session.setAttribute("account", account);
+		
+		response.sendRedirect(request.getContextPath() + "/banker/ViewClientAccount");
 	}
 }

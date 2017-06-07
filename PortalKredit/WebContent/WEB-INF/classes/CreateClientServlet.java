@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -10,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import classes.BCrypt;
+import org.mindrot.jbcrypt.BCrypt;
+
 import classes.Controller;
 
 @WebServlet("/AdminCreateClient")
@@ -25,9 +27,24 @@ public class CreateClientServlet extends HttpServlet {
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		
+		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+			createClient(request,response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+		
+		
+	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		Controller.adminCheckAuth("AdminCreateClient.jsp",request,response);
+		
+
+	}
+	private void createClient(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		String firstName = request.getParameter("clientFirstName");
 		String lastName = request.getParameter("clientLastName");
 		String password = request.getParameter("clientPassword");
@@ -40,18 +57,14 @@ public class CreateClientServlet extends HttpServlet {
 		String postal = request.getParameter("clientCity");
 		String country = request.getParameter("clientCountry");
 		
-		Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
+		try {
+			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateClient");
-	}
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.admin, session)){
-			request.getRequestDispatcher("AdminCreateClient.jsp").forward(request, response);
-			
-		}
-		else{
-			request.getSession().invalidate();
-			response.sendRedirect("../index");
-		}
+		
 	}
 }

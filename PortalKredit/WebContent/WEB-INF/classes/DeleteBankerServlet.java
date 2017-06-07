@@ -28,29 +28,27 @@ public class DeleteBankerServlet extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
-		if(Controller.checkAuth(Controller.Type.admin, session)){
+		
 		ArrayList<Banker> bankerList = Controller.getBankerList(ds1);
 		request.setAttribute("list", bankerList);
-
-		request.getRequestDispatcher("AdminDeleteBanker.jsp").forward(request, response);
+		Controller.adminCheckAuth("AdminDeleteBanker.jsp",request,response);
+	}
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html");
+		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+			deleteBanker(request,response);
 		}
 		else{
 			request.getSession().invalidate();
 			response.sendRedirect("../index");
 		}
 	}
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		
+	private void deleteBanker(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		String bankerID = request.getParameter("username");
 		Controller.deleteBanker(bankerID, ds1);
 		
 		doGet(request, response);
 	}
-	
 
 }

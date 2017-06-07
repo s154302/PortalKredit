@@ -56,6 +56,7 @@
 	<servlet-mapping>
 		<servlet-name>DeleteBankerServlet</servlet-name>
 		<url-pattern>/admin/AdminDeleteBanker</url-pattern>
+		<url-pattern>/admin/DeleteBankerServlet</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>DeleteClientServlet</servlet-name>
@@ -85,6 +86,16 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>AdminBatchServlet</servlet-name>
+		<servlet-class>AdminBatchServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminBatchServlet</servlet-name>
+		<url-pattern>/admin/AdminBatch</url-pattern>
+		<url-pattern>/admin/AdminBatchServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
 		<servlet-class>LoginServlet</servlet-class>
 	</servlet>
@@ -111,7 +122,7 @@
 		<servlet-name>BankerViewClientServlet</servlet-name>
 		<url-pattern>/banker/BankerViewClientServlet</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>BankerCreateAccountServlet</servlet-name>
 		<servlet-class>BankerCreateAccountServlet</servlet-class>
@@ -120,7 +131,7 @@
 		<servlet-name>BankerCreateAccountServlet</servlet-name>
 		<url-pattern>/banker/BankerCreateAccountServlet</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>BankerViewSingleClientServlet</servlet-name>
 		<servlet-class>BankerViewSingleClientServlet</servlet-class>
@@ -128,6 +139,24 @@
 	<servlet-mapping>
 		<servlet-name>BankerViewSingleClientServlet</servlet-name>
 		<url-pattern>/banker/BankerViewSingleClientServlet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>BankerEditAccountServlet</servlet-name>
+		<servlet-class>BankerEditAccountServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BankerEditAccountServlet</servlet-name>
+		<url-pattern>/banker/BankerEditAccountServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>BankerEditClientServlet</servlet-name>
+		<servlet-class>BankerEditClientServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BankerEditClientServlet</servlet-name>
+		<url-pattern>/banker/BankerEditClientServlet</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>
@@ -142,6 +171,7 @@
 		<servlet-name>AccountsServlet</servlet-name>
 		<url-pattern>/Client/AccountsServlet</url-pattern>
 	</servlet-mapping>
+
 
 	<servlet>
 		<servlet-name>ClientContactServlet</servlet-name>
@@ -169,6 +199,9 @@
 		<servlet-name>ClientPaymentsServlet</servlet-name>
 		<url-pattern>/Client/ClientPaymentsServlet</url-pattern>
 	</servlet-mapping>
+
+
+
 
 	<filter>
 		<filter-name>JspFilter</filter-name>

@@ -1,15 +1,25 @@
 package classes;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
 import java.util.UUID;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
+
+import org.json.JSONObject;
+import org.mindrot.jbcrypt.BCrypt;
 
 // REMEMBER st IS STATEMENT
 
@@ -47,6 +57,17 @@ public final class Controller {
 		
 		return type.equals((Type)session.getAttribute("type"));
 	}
+	public static void adminCheckAuth(String redirectUrl, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		response.setContentType("text/html");
+		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+			request.getRequestDispatcher(redirectUrl).forward(request, response);
+			
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+	}
 	
 	// consider making these private??
 	public static boolean clientAuthenticate(String clientID, String password, DataSource ds1) {
@@ -60,10 +81,12 @@ public final class Controller {
 					.prepareStatement("SELECT PASSWORD FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
 
 			ps.setString(1, clientID);
-
+			
 			ResultSet rs = ps.executeQuery();
-			rs.next();
+			
+			if(rs.next()){
 			hash = rs.getString("PASSWORD");
+			}
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,8 +112,9 @@ public final class Controller {
 			ps.setString(1, bankerID);
 
 			ResultSet rs = ps.executeQuery();
-			rs.next();
+			if(rs.next()){
 			hash = rs.getString("PASSWORD");
+			}
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -115,8 +139,9 @@ public final class Controller {
 			ps.setString(1, adminID);
 
 			ResultSet rs = ps.executeQuery();
-			rs.next();
+			if(rs.next()){
 			hash = rs.getString("PASSWORD");
+			}
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -343,10 +368,10 @@ public final class Controller {
 	}
 
 	public static void createClient(String firstName, String lastName, String password, String CPR, String email,
-			String mobile, String street, String bankerID, Integer postal, String country, DataSource ds1) {
+			String mobile, String street, String bankerID, Integer postal, String country, DataSource ds1) throws SQLException {
 		Connection con;
 
-		try {
+		
 			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con.prepareStatement(
@@ -363,9 +388,6 @@ public final class Controller {
 			ps.setInt(10, postal);
 			ps.setString(11, country.toUpperCase());
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public static void createAdmin(String username, String password, DataSource ds1) {
@@ -384,25 +406,22 @@ public final class Controller {
 		}
 	}
 	
-	public static void createAccount(String accountName, String accountNumber, int regNo, String accountType, String clientID, double balance, String currency, DataSource ds1) {
+	public static void createAccount(String accountName, String accountNumber, int regNo, String accountType, String clientID, double balance, String currency, DataSource ds1) throws SQLException {
 		Connection con;
-		try {
 			con = ds1.getConnection(Secret.userID, Secret.password);
 			
 			PreparedStatement ps = con.prepareStatement(
-					"INSERT INTO \"DTUGRP16\".\"ACCOUNT\" (ACCOUNTNAME, ACCOUNTNUMBER, REGNO, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY) VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-			ps.setString(1, accountName);
-			ps.setString(2, accountNumber);
-			ps.setInt(3, regNo);
+					"INSERT INTO \"DTUGRP16\".\"ACCOUNT\" (ACCOUNTNUMBER, REGNO, ACCOUNTNAME, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY, INTEREST) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+			BigDecimal bdBalance = new BigDecimal(Double.valueOf(balance));
+			ps.setString(1, accountNumber);
+			ps.setInt(2, regNo);
+			ps.setString(3, accountName);
 			ps.setString(4, accountType);
 			ps.setString(5, clientID);
-			ps.setDouble(6, balance);
+			ps.setBigDecimal(6, bdBalance);
 			ps.setString(7, currency);
+			ps.setDouble(8, 0);
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
 	}
 
@@ -479,31 +498,6 @@ public final class Controller {
 		return rate;
 	}
 
-	//IS this used ? 
-	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,
-			DataSource ds1) {
-		ArrayList<String> list = new ArrayList<>();
-		Connection con;
-		try {
-			con = ds1.getConnection(Secret.userID, Secret.password);
-
-			// TODO: This works but needs to be sanitized to avoid SQL
-			// injections. Create whitelist
-			// "SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?"
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"" + tableName.toUpperCase()
-					+ "\" WHERE \"" + columnName.toUpperCase() + "\"=?");
-			ps.setString(1, key);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				list.add(rs.getString(resultColumn));
-			}
-			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return list;
-	}
 
 	public static String generateClientID(DataSource ds1) {
 		String ID = null;
@@ -667,6 +661,7 @@ public final class Controller {
 			client.setClientID(rs.getString("CLIENTID"));
 			client.setFirstName(rs.getString("FIRST_NAME"));
 			client.setLastName(rs.getString("LAST_NAME"));
+			client.setBankerID(rs.getString("BANKERID"));
 			client.setEmail(rs.getString("EMAIL"));
 			client.setPhoneNo(rs.getString("MOBILE"));
 			client.setCPR(rs.getString("CPR"));
@@ -887,4 +882,138 @@ public final class Controller {
 		}
 	}
 
+	public static void editAccount(String accountName, String accountNumber, int regNo, String accountType, String clientID, double balance, String currency, DataSource ds1) {
+		Connection con;
+		try {
+			con = ds1.getConnection(Secret.userID, Secret.password);
+			
+			PreparedStatement ps = con.prepareStatement(
+					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"ACCOUNTNAME\"=?, \"ACCOUNTTYPE\"=?, \"CLIENTID\"=?, \"CURRENCY\"=? WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?" );
+		     
+			ps.setString(1, accountName);
+			ps.setString(2, accountType);
+			ps.setString(3, clientID);
+			ps.setString(4, currency);
+			ps.setString(5, accountNumber);
+			ps.setInt(6, regNo);
+			ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void updateExchangeRates(DataSource ds1) throws IOException{
+		String s = "http://api.fixer.io/latest";
+		URL url = new URL(s);
+		Connection con;
+		
+		Scanner scan = new Scanner(url.openStream());
+		String str = new String();
+		while(scan.hasNext()){
+			str+=scan.nextLine();
+		}
+		scan.close();
+		try{
+			con = ds1.getConnection(Secret.userID, Secret.password);
+		
+			PreparedStatement ps = con.prepareStatement(
+					"UPDATE \"DTUGRP16\".\"CURRENCY\" SET \"EXCHANGERATE\"=? WHERE \"CURRENCY\"=?");
+			JSONObject obj = new JSONObject(str).getJSONObject("rates");
+			Iterator x = obj.keys();
+			while(x.hasNext()){
+				String key = (String) x.next();
+				String exchRate = obj.get(key).toString();
+				
+				ps.setString(2, key);
+				ps.setBigDecimal(1, new BigDecimal(exchRate));
+				ps.executeUpdate();
+
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+	
+	public static boolean calculateInterestRates(DataSource ds1){
+		Boolean status = false;
+		int rs;
+		try{
+			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+			
+			PreparedStatement ps = con
+					.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" = "
+							+ "\"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" + "
+							+ "((SELECT INTERESTRATE FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"DTUGRP16\".\"ACCOUNT\".\"ACCOUNTTYPE\" = \"DTUGRP16\".\"ACCOUNTTYPE\".\"ACCOUNTTYPE\")"
+							+ "/365)*\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\"");
+			rs =ps.executeUpdate();
+			status = true;
+		}catch(Exception e){
+			e.printStackTrace();
+			status = false;
+		}
+		
+		return status;
+	}
+	
+	public static boolean giveAnualInterest(DataSource ds1){
+		Boolean status = false;
+		
+		try{
+			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+			
+			PreparedStatement ps = con
+					.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"DTUGRP16\".\"ACCOUNT\".\"BALANCE\" = "
+							+ "\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\" + \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\""
+							+ ", \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" = 0");
+			int rs =ps.executeUpdate();
+			status = true;
+		}catch(Exception e){
+			e.printStackTrace();
+			status = false;
+		}
+		
+		
+		return status;
+	}
+	
+	public static void editClient(String clientID, String firstName, String lastName,
+			String password, String email, String mobile, String street, String bankerID, int postal, String country,
+			DataSource ds1) throws SQLException {
+
+		Connection con;
+		con = ds1.getConnection(Secret.userID, Secret.password);
+			
+		PreparedStatement ps = con.prepareStatement(
+			"UPDATE \"DTUGRP16\".\"CLIENT\" SET (FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) = (?,?,?,?,?,?,?,?) WHERE CLIENTID = ?");
+		     
+		ps.setString(1, firstName);
+		ps.setString(2, lastName);
+		ps.setString(3, email);
+		ps.setString(4, mobile);
+		ps.setString(5, street);
+		ps.setString(6, bankerID);
+		ps.setInt(7, postal);
+		ps.setString(8, country);
+		ps.setString(9, clientID);
+		ps.executeUpdate();
+
+	}
+
+	public static void changeClientPassword(String clientID, String password, DataSource ds1) throws SQLException {
+		
+		Connection con;
+		con = ds1.getConnection(Secret.userID, Secret.password);
+			
+		PreparedStatement ps = con.prepareStatement(
+			"UPDATE \"DTUGRP16\".\"CLIENT\" SET \"DTUGRP16\".\"CLIENT\".\"PASSWORD\" = ? WHERE \"CLIENTID\" = ?");
+		
+		ps.setString(1, BCrypt.hashpw(password, BCrypt.gensalt(14)));
+		ps.setString(2, clientID);
+		ps.executeUpdate();
+		
+	}
 }

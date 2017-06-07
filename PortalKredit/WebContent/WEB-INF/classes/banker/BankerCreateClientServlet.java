@@ -1,7 +1,7 @@
 package banker;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.sql.SQLException;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import classes.BCrypt;
+import org.mindrot.jbcrypt.BCrypt;
+
 import classes.Banker;
-import classes.Client;
 import classes.Controller;
 
 @WebServlet("/banker/CreateClient")
@@ -63,13 +63,21 @@ public class BankerCreateClientServlet extends HttpServlet {
 		String bankerID = request.getParameter("clientBankerID");
 		String postal = request.getParameter("clientCity");
 		String country = request.getParameter("clientCountry");
-		
-		Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
-		
-		Banker banker = (Banker) session.getAttribute("user");
-		banker.setClients(Controller.getClients(banker.getBankerID(), ds1));
-		session.setAttribute("user", banker);
-		
-		response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
+
+		try {
+			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
+
+			Banker banker = (Banker) session.getAttribute("user");
+			banker.setClients(Controller.getClients(banker.getBankerID(), ds1));
+			session.setAttribute("user", banker);
+			
+			response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			request.setAttribute("createClientStatus", "Wrong value inserted");
+			request.getRequestDispatcher("CreateClient.jsp").forward(request, response);
+		}
+
 	}
 }

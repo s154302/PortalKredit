@@ -44,7 +44,9 @@
 											</ul>
 											<form action="" method="post">
 												<button class="btn btn-primary btn-block btn-action"
-													type="submit" name="username" value="${ob.clientID}">View</button>
+													type="submit" name="ViewUsername" value="${ob.clientID}">View Accounts</button>
+												<button class="btn btn-primary btn-block btn-action"
+													type="submit" name="EditUsername" value="${ob.clientID}">Edit Client</button>
 											</form>
 										</div>
 									</td>
