@@ -25,7 +25,11 @@ public class AdminBatchServlet extends HttpServlet {
     @Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		if(!request.getParameter("exchangeRate").equals(null)) {
+			Controller.updateExchangeRates(ds1);
+		} else if(!request.getParameter("interestRate").equals(null)) {
+	//		Controller.
+		}
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		HttpSession session = request.getSession();
@@ -38,5 +42,6 @@ public class AdminBatchServlet extends HttpServlet {
 			response.sendRedirect("../index");
 		}
 	}
+	
 
 }
