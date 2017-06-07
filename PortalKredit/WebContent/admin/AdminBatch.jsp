@@ -14,7 +14,7 @@
 		<div class="btn-group-vertical">
 			<form class="form-inline" action="AdminBatchServlet" method="post">
 				<button class="btn btn-primary btn-block" type="submit"
-					name="exchangeRates">Update Exchange Rates</button>
+					name="exchangeRate">Update Exchange Rates</button>
 
 				<button class="btn btn-primary btn-block" type="submit"
 					name="dInterestRates">Update Daily Interest Rates</button>

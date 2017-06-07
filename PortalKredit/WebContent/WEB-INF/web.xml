@@ -92,6 +92,7 @@
 	<servlet-mapping>
 		<servlet-name>AdminBatchServlet</servlet-name>
 		<url-pattern>/admin/AdminBatch</url-pattern>
+		<url-pattern>/admin/AdminBatchServlet</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

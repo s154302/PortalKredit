@@ -27,10 +27,13 @@ public class AdminBatchServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(!request.getParameter("exchangeRate").equals(null)) {
 			Controller.updateExchangeRates(ds1);
+			System.out.println("Exchange");
 		} else if(!request.getParameter("dInterestRate").equals(null)) {
-			
+			Controller.calculateInterestRates(ds1);
+			System.out.println("dInterest");
 		} else if(!request.getParameter("yInterestRate").equals(null)) {
-			
+			Controller.giveAnualInterest(ds1);
+			System.out.println("yInterest");
 		}
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
