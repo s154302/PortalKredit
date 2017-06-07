@@ -662,6 +662,7 @@ public final class Controller {
 			client.setClientID(rs.getString("CLIENTID"));
 			client.setFirstName(rs.getString("FIRST_NAME"));
 			client.setLastName(rs.getString("LAST_NAME"));
+			client.setBankerID(rs.getString("BANKERID"));
 			client.setEmail(rs.getString("EMAIL"));
 			client.setPhoneNo(rs.getString("MOBILE"));
 			client.setCPR(rs.getString("CPR"));
@@ -903,4 +904,28 @@ public final class Controller {
 		}
 	}
 
+	public static void editClient(String clientID, String newClientID, String firstName, String lastName,
+			String password, String email, String mobile, String street, String bankerID, int postal, String country,
+			DataSource ds1) throws SQLException {
+
+		Connection con;
+		con = ds1.getConnection(Secret.userID, Secret.password);
+			
+		PreparedStatement ps = con.prepareStatement(
+			"UPDATE \"DTUGRP16\".\"CLIENT\" SET (CLIENTID, FIRSTNAME, LASTNAME, PASSWAORD, EMAIL, MOBILE, STREET, BANKERID, P0STAL, COUNTRY) = (?,?,?,?,?,?,?,?,?,?) WHERE CLIENTID = ?");
+		     
+		ps.setString(1, newClientID);
+		ps.setString(2, firstName);
+		ps.setString(3, lastName);
+		ps.setString(4, password);
+		ps.setString(5, email);
+		ps.setString(6, mobile);
+		ps.setString(7, street);
+		ps.setString(8, bankerID);
+		ps.setInt(9, postal);
+		ps.setString(10, country);
+		ps.setString(11, clientID);
+		ps.executeUpdate();
+
+	}
 }

@@ -52,11 +52,19 @@ public class BankerViewClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		String clientID = request.getParameter("username");
+		if(request.getParameter("ViewUsername") != null){
+			String clientID = request.getParameter("ViewUsername");
+			session.setAttribute("clientID", clientID);
+			response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
 		
-		session.setAttribute("clientID", clientID);
+		} else if(request.getParameter("EditUsername") != null){
+			String clientID = request.getParameter("EditUsername");
+			session.setAttribute("clientID", clientID);
+			session.setAttribute("client", (Client) Controller.getClientInfo(clientID, ds1));
+			response.sendRedirect(request.getContextPath() + "/banker/EditClient");
+			
+		} 
 		
-		response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
 		
 	}
 	

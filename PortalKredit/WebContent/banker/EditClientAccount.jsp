@@ -58,7 +58,7 @@
 						</div>
 
 						<button class="btn btn-primary btn-block btn-action" type="submit"
-							value="editAccount">Save Account Chances</button>
+							value="editAccount">Save Account Changes</button>
 					</form>
 				</div>
 			</div>
