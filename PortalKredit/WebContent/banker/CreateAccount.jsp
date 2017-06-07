@@ -58,6 +58,9 @@
 							value="createAccount">Create Account</button>
 					</form>
 				</div>
+				<p style="color:red;">
+				${createAccountStatus}
+				</p>
 			</div>
 		</div>
 	</div>

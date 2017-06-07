@@ -1,6 +1,7 @@
 package banker;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
@@ -32,7 +33,6 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
-			String clientID = (String) session.getAttribute("clientID");
 			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
 		}
 		else{
@@ -57,13 +57,20 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		double balance = Double.parseDouble(request.getParameter("clientBalance"));
 		String currency = request.getParameter("clientCurrency");
 		
-		
-		Controller.createAccount(accountName, accountNumber, regNo, accountType, clientID, balance, currency, ds1);
+		session.setAttribute("clientID", clientID);
+		try {
+			Controller.createAccount(accountName, accountNumber, regNo, accountType, clientID, balance, currency, ds1);
+			response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			request.setAttribute("createAccountStatus", "Wrong value inserted");
+			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
+		}
 		
 //		Banker banker = (Banker) session.getAttribute("user");
 //		banker.getClient(clientID).setAccounts( Controller.getAccounts(clientID, ds1));
 //		session.setAttribute("user", banker);
-		
-		response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
+
 	}
 }

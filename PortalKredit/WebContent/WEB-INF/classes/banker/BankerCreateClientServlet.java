@@ -1,6 +1,7 @@
 package banker;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
@@ -63,13 +64,21 @@ public class BankerCreateClientServlet extends HttpServlet {
 		String bankerID = request.getParameter("clientBankerID");
 		String postal = request.getParameter("clientCity");
 		String country = request.getParameter("clientCountry");
-		
-		Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
-		
-		Banker banker = (Banker) session.getAttribute("user");
-		banker.setClients(Controller.getClients(banker.getBankerID(), ds1));
-		session.setAttribute("user", banker);
-		
-		response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
+
+		try {
+			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
+
+			Banker banker = (Banker) session.getAttribute("user");
+			banker.setClients(Controller.getClients(banker.getBankerID(), ds1));
+			session.setAttribute("user", banker);
+			
+			response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			request.setAttribute("createClientStatus", "Wrong value inserted");
+			request.getRequestDispatcher("CreateClient.jsp").forward(request, response);
+		}
+
 	}
 }

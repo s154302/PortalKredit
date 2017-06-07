@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -40,7 +41,13 @@ public class CreateClientServlet extends HttpServlet {
 		String postal = request.getParameter("clientCity");
 		String country = request.getParameter("clientCountry");
 		
-		Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
+		try {
+			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateClient");
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

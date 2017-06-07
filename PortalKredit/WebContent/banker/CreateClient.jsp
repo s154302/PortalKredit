@@ -71,6 +71,9 @@
 							value="createClient">Create Client</button>
 					</form>
 				</div>
+				<p style="color:red;">
+				${createClientStatus}
+				</p>
 			</div>
 		</div>
 	</div>

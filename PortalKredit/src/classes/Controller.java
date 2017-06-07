@@ -344,10 +344,10 @@ public final class Controller {
 	}
 
 	public static void createClient(String firstName, String lastName, String password, String CPR, String email,
-			String mobile, String street, String bankerID, Integer postal, String country, DataSource ds1) {
+			String mobile, String street, String bankerID, Integer postal, String country, DataSource ds1) throws SQLException {
 		Connection con;
 
-		try {
+		
 			con = ds1.getConnection(Secret.userID, Secret.password);
 
 			PreparedStatement ps = con.prepareStatement(
@@ -364,9 +364,6 @@ public final class Controller {
 			ps.setInt(10, postal);
 			ps.setString(11, country.toUpperCase());
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public static void createAdmin(String username, String password, DataSource ds1) {
@@ -385,9 +382,8 @@ public final class Controller {
 		}
 	}
 	
-	public static void createAccount(String accountName, String accountNumber, int regNo, String accountType, String clientID, double balance, String currency, DataSource ds1) {
+	public static void createAccount(String accountName, String accountNumber, int regNo, String accountType, String clientID, double balance, String currency, DataSource ds1) throws SQLException {
 		Connection con;
-		try {
 			con = ds1.getConnection(Secret.userID, Secret.password);
 			
 			PreparedStatement ps = con.prepareStatement(
@@ -402,9 +398,6 @@ public final class Controller {
 			ps.setString(7, currency);
 			ps.setDouble(8, 0);
 			ps.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
 	}
 
