@@ -2,7 +2,6 @@ package classes;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +12,9 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.UUID;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
@@ -54,6 +56,16 @@ public final class Controller {
 	public static boolean checkAuth(Type type, HttpSession session){
 		
 		return type.equals((Type)session.getAttribute("type"));
+	}
+	public static void adminCheckAuth(String redirectUrl, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+			request.getRequestDispatcher(redirectUrl).forward(request, response);
+			
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
 	
 	// consider making these private??
@@ -485,31 +497,6 @@ public final class Controller {
 		return rate;
 	}
 
-	//IS this used ? 
-	public static ArrayList<String> getList(String tableName, String columnName, String key, String resultColumn,
-			DataSource ds1) {
-		ArrayList<String> list = new ArrayList<>();
-		Connection con;
-		try {
-			con = ds1.getConnection(Secret.userID, Secret.password);
-
-			// TODO: This works but needs to be sanitized to avoid SQL
-			// injections. Create whitelist
-			// "SELECT * FROM \"DTUGRP16\".\"USER\" WHERE \"USERID\"=?"
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"" + tableName.toUpperCase()
-					+ "\" WHERE \"" + columnName.toUpperCase() + "\"=?");
-			ps.setString(1, key);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				list.add(rs.getString(resultColumn));
-			}
-			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		return list;
-	}
 
 	public static String generateClientID(DataSource ds1) {
 		String ID = null;
@@ -948,5 +935,47 @@ public final class Controller {
 		
 		
 		
+	}
+	
+	public static boolean calculateInterestRates(DataSource ds1){
+		Boolean status = false;
+		int rs;
+		try{
+			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+			
+			PreparedStatement ps = con
+					.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" = "
+							+ "\"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" + "
+							+ "((SELECT INTERESTRATE FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"DTUGRP16\".\"ACCOUNT\".\"ACCOUNTTYPE\" = \"DTUGRP16\".\"ACCOUNTTYPE\".\"ACCOUNTTYPE\")"
+							+ "/365)*\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\"");
+			rs =ps.executeUpdate();
+			status = true;
+		}catch(Exception e){
+			e.printStackTrace();
+			status = false;
+		}
+		
+		return status;
+	}
+	
+	public static boolean giveAnualInterest(DataSource ds1){
+		Boolean status = false;
+		
+		try{
+			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+			
+			PreparedStatement ps = con
+					.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"DTUGRP16\".\"ACCOUNT\".\"BALANCE\" = "
+							+ "\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\" + \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\""
+							+ ", \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" = 0");
+			int rs =ps.executeUpdate();
+			status = true;
+		}catch(Exception e){
+			e.printStackTrace();
+			status = false;
+		}
+		
+		
+		return status;
 	}
 }

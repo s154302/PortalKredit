@@ -6,7 +6,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Controller;
@@ -31,16 +30,9 @@ public class AdminFrontpageServlet extends HttpServlet {
 
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		if (Controller.checkAuth(Controller.Type.admin, session)) {
-			request.getRequestDispatcher("AdminControl.jsp").forward(request, response);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		Controller.adminCheckAuth("AdminControl.jsp",request,response);
 
-		} else {
-			request.getSession().invalidate();
-			response.sendRedirect("../index");
-		}
 	}
 
 }

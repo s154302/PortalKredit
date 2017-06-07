@@ -40,15 +40,9 @@ public class CreateAdminServlet extends HttpServlet {
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateAdmin");
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.admin, session)){
-			request.getRequestDispatcher("AdminCreateAdmin.jsp").forward(request, response);
-			
-		}
-		else{
-			request.getSession().invalidate();
-			response.sendRedirect("../index");
-		}
+		
+		Controller.adminCheckAuth("AdminCreateAdmin.jsp",request,response);
+
 	}
 
 }
