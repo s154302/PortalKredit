@@ -31,6 +31,8 @@
 					<a class="dropdown-item" href="AdminDeleteBanker">Delete Banker</a>
 					<a class="dropdown-item" href="AdminDeleteAdmin">Delete Admin</a>
 				</div></li>
+			<li class="nav-item"><a class="nav-link"
+				href="AdminBatch">Batch</a></li>
 		</ul>
 	</div>
 	<p class="col-2" style="color: white">Logged in as: <br>${user.username}</p>
