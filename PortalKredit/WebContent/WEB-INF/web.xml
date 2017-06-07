@@ -147,7 +147,16 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>BankerEditAccountServlet</servlet-name>
-		<url-pattern>/Client/BankerEditAccountServlet</url-pattern>
+		<url-pattern>/banker/BankerEditAccountServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>BankerEditClientServlet</servlet-name>
+		<servlet-class>BankerEditClientServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BankerEditClientServlet</servlet-name>
+		<url-pattern>/banker/BankerEditClientServlet</url-pattern>
 	</servlet-mapping>
 
 	<welcome-file-list>
@@ -190,6 +199,7 @@
 		<servlet-name>ClientPaymentsServlet</servlet-name>
 		<url-pattern>/Client/ClientPaymentsServlet</url-pattern>
 	</servlet-mapping>
+
 
 
 

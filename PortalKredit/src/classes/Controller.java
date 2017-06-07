@@ -661,6 +661,7 @@ public final class Controller {
 			client.setClientID(rs.getString("CLIENTID"));
 			client.setFirstName(rs.getString("FIRST_NAME"));
 			client.setLastName(rs.getString("LAST_NAME"));
+			client.setBankerID(rs.getString("BANKERID"));
 			client.setEmail(rs.getString("EMAIL"));
 			client.setPhoneNo(rs.getString("MOBILE"));
 			client.setCPR(rs.getString("CPR"));
@@ -927,7 +928,6 @@ public final class Controller {
 				ps.setBigDecimal(1, new BigDecimal(exchRate));
 				ps.executeUpdate();
 
-				
 			}
 		}
 		catch(SQLException e){
@@ -978,5 +978,42 @@ public final class Controller {
 		
 		
 		return status;
+	}
+	
+	public static void editClient(String clientID, String firstName, String lastName,
+			String password, String email, String mobile, String street, String bankerID, int postal, String country,
+			DataSource ds1) throws SQLException {
+
+		Connection con;
+		con = ds1.getConnection(Secret.userID, Secret.password);
+			
+		PreparedStatement ps = con.prepareStatement(
+			"UPDATE \"DTUGRP16\".\"CLIENT\" SET (FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) = (?,?,?,?,?,?,?,?) WHERE CLIENTID = ?");
+		     
+		ps.setString(1, firstName);
+		ps.setString(2, lastName);
+		ps.setString(3, email);
+		ps.setString(4, mobile);
+		ps.setString(5, street);
+		ps.setString(6, bankerID);
+		ps.setInt(7, postal);
+		ps.setString(8, country);
+		ps.setString(9, clientID);
+		ps.executeUpdate();
+
+	}
+
+	public static void changeClientPassword(String clientID, String password, DataSource ds1) throws SQLException {
+		
+		Connection con;
+		con = ds1.getConnection(Secret.userID, Secret.password);
+			
+		PreparedStatement ps = con.prepareStatement(
+			"UPDATE \"DTUGRP16\".\"CLIENT\" SET \"DTUGRP16\".\"CLIENT\".\"PASSWORD\" = ? WHERE \"CLIENTID\" = ?");
+		
+		ps.setString(1, BCrypt.hashpw(password, BCrypt.gensalt(14)));
+		ps.setString(2, clientID);
+		ps.executeUpdate();
+		
 	}
 }

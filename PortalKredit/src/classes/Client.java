@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Client {
 
 	private int  postal;
-	private String email, fullAddress, fullName, firstName, lastName, clientID, street, country, city, CPR, phoneNo;
+	private String email, fullAddress, fullName, firstName, lastName, clientID, street, country, city, CPR, phoneNo, bankerID;
 	private ArrayList<Account> accounts;
 
 	public Client(){
@@ -29,22 +29,7 @@ public class Client {
 		setPostal(postal);
 	}
 	
-	public void transaction() {
-
-	}
-
-	public void sendMessage() {
-
-	}
-
-	public void changePassword() {
-
-	}
-
-	public void limitedEditInformation() {
-
-	}
-
+	
 	public Account findAccount(String accountNumber, int regNo) {
 
 		for(Account account : accounts){
@@ -193,5 +178,13 @@ public class Client {
 	public void setPostal(int postal) {
 		this.postal = postal;
 		setFullAddress();
+	}
+
+	public String getBankerID() {
+		return bankerID;
+	}
+
+	public void setBankerID(String bankerID) {
+		this.bankerID = bankerID;
 	}
 }
