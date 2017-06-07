@@ -38,17 +38,18 @@ public class AdminBatchServlet extends HttpServlet {
 		
 		Controller.adminCheckAuth("AdminBatch.jsp",request,response);
 	}
-	private void checkButtons(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		if(!request.getParameter("exchangeRate").equals(null)) {
+	private void checkButtons(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+		if(request.getParameter("exchangeRate") != null) {
 			Controller.updateExchangeRates(ds1);
 			System.out.println("Exchange");
-		} else if(!request.getParameter("dInterestRate").equals(null)) {
+		} else if(request.getParameter("dInterestRate") != null) {
 			Controller.calculateInterestRates(ds1);
 			System.out.println("dInterest");
-		} else if(!request.getParameter("yInterestRate").equals(null)) {
+		} else if(request.getParameter("yInterestRate") != null) {
 			Controller.giveAnualInterest(ds1);
 			System.out.println("yInterest");
 		}
+		doGet(request, response);
 	}
 	
 

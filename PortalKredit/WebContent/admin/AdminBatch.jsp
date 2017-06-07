@@ -17,10 +17,10 @@
 					name="exchangeRate">Update Exchange Rates</button>
 
 				<button class="btn btn-primary btn-block" type="submit"
-					name="dInterestRates">Update Daily Interest Rates</button>
+					name="dInterestRate">Update Daily Interest Rates</button>
 					
 				<button class="btn btn-primary btn-block" type="submit"
-					name="yInterestRates">Update Yearly Interest Rates</button>
+					name="yInterestRate">Update Yearly Interest Rates</button>
 			</form>
 		</div>
 	</div>
