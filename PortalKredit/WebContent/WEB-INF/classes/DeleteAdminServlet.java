@@ -35,11 +35,23 @@ public class DeleteAdminServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		
-		String adminID = request.getParameter("username");
+		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+			deleteAdmin(request,response);
+		
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+	}
+	
+	private void deleteAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+String adminID = request.getParameter("username");
 		
 		Controller.deleteAdmin(adminID, ds1);
 		
 		doGet(request, response);
+		
 	}
 	
 

@@ -58,6 +58,7 @@ public final class Controller {
 		return type.equals((Type)session.getAttribute("type"));
 	}
 	public static void adminCheckAuth(String redirectUrl, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		response.setContentType("text/html");
 		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
 			request.getRequestDispatcher(redirectUrl).forward(request, response);
 			

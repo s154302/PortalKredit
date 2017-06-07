@@ -31,9 +31,22 @@ public class CreateBankerServlet extends HttpServlet {
     private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
+		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+			createBanker(request,response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 		
+
+	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		
+		Controller.adminCheckAuth("AdminCreateBanker.jsp",request,response);
+
+	}
+	private void createBanker(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		String firstName = request.getParameter("bankerFirstName");
 		String lastName = request.getParameter("bankerLastName");
 		String password = request.getParameter("bankerPassword");
@@ -44,11 +57,7 @@ public class CreateBankerServlet extends HttpServlet {
 		
 		Controller.createBanker(firstName, lastName, hashed, email, telephone, regno, ds1);
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateBanker");
-	}
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		
-		Controller.adminCheckAuth("AdminCreateBanker.jsp",request,response);
-
 	}
 
 }

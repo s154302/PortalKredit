@@ -36,12 +36,19 @@ public class DeleteBankerServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		
+		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+			deleteBanker(request,response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+	}
+	private void deleteBanker(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		String bankerID = request.getParameter("username");
 		Controller.deleteBanker(bankerID, ds1);
 		
 		doGet(request, response);
 	}
-	
 
 }
