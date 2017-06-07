@@ -28,15 +28,8 @@ public class AdminBatchServlet extends HttpServlet {
 
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.admin, session)){
-			request.getRequestDispatcher("AdminBatch.jsp").forward(request, response);
-			
-		}
-		else{
-			request.getSession().invalidate();
-			response.sendRedirect("../index");
-		}
+		
+		Controller.adminCheckAuth("AdminBatch.jsp",request,response);
 	}
 
 }

@@ -46,16 +46,9 @@ public class CreateBankerServlet extends HttpServlet {
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateBanker");
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.admin, session)){
-			request.getRequestDispatcher("AdminCreateBanker.jsp").forward(request, response);
-			
-			
-		}
-		else{
-			request.getSession().invalidate();
-			response.sendRedirect("../index");
-		}
+		
+		Controller.adminCheckAuth("AdminCreateBanker.jsp",request,response);
+
 	}
 
 }

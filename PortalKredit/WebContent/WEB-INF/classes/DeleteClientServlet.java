@@ -28,19 +28,13 @@ public class DeleteClientServlet extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
-		if(Controller.checkAuth(Controller.Type.admin, session)){
+		
 		ArrayList<Client> clientList = Controller.getClientList(ds1);
 		request.setAttribute("list", clientList);
 
-		request.getRequestDispatcher("AdminDeleteClient.jsp").forward(request, response);
-		}
-		else{
-			request.getSession().invalidate();
-			response.sendRedirect("../index");
-		}
+		
+		Controller.adminCheckAuth("AdminDeleteClient.jsp", request, response);
+		
 	}
 	
 	@Override
