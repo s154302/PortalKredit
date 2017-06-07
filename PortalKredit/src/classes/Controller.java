@@ -1,15 +1,23 @@
 package classes;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
+
+import org.json.JSONObject;
+import org.mindrot.jbcrypt.BCrypt;
 
 // REMEMBER st IS STATEMENT
 
@@ -60,10 +68,12 @@ public final class Controller {
 					.prepareStatement("SELECT PASSWORD FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
 
 			ps.setString(1, clientID);
-
+			
 			ResultSet rs = ps.executeQuery();
-			rs.next();
+			
+			if(rs.next()){
 			hash = rs.getString("PASSWORD");
+			}
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,9 +99,9 @@ public final class Controller {
 			ps.setString(1, bankerID);
 
 			ResultSet rs = ps.executeQuery();
-			rs.next();
+			if(rs.next()){
 			hash = rs.getString("PASSWORD");
-			
+			}
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,8 +126,9 @@ public final class Controller {
 			ps.setString(1, adminID);
 
 			ResultSet rs = ps.executeQuery();
-			rs.next();
+			if(rs.next()){
 			hash = rs.getString("PASSWORD");
+			}
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -902,5 +913,40 @@ public final class Controller {
 			e.printStackTrace();
 		}
 	}
+	public static void updateExchangeRates(DataSource ds1) throws IOException{
+		String s = "http://api.fixer.io/latest";
+		URL url = new URL(s);
+		Connection con;
+		
+		Scanner scan = new Scanner(url.openStream());
+		String str = new String();
+		while(scan.hasNext()){
+			str+=scan.nextLine();
+		}
+		scan.close();
+		try{
+			con = ds1.getConnection(Secret.userID, Secret.password);
+		
+			PreparedStatement ps = con.prepareStatement(
+					"UPDATE \"DTUGRP16\".\"CURRENCY\" SET \"EXCHANGERATE\"=? WHERE \"CURRENCY\"=?");
+			JSONObject obj = new JSONObject(str).getJSONObject("rates");
+			Iterator x = obj.keys();
+			while(x.hasNext()){
+				String key = (String) x.next();
+				String exchRate = obj.get(key).toString();
+				
+				ps.setString(2, key);
+				ps.setBigDecimal(1, new BigDecimal(exchRate));
+				ps.executeUpdate();
 
+				
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
 }

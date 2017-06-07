@@ -34,7 +34,6 @@ public class LoginServlet extends HttpServlet {
 		String userID = request.getParameter("userID");
 		String password = request.getParameter("password");
 		boolean st = false;
-
 		//TODO: Move the method to a utility class and call it authenticate
 		st = Controller.authenticate(userID, password, ds1, session);
 		

@@ -1,7 +1,6 @@
 package banker;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -13,9 +12,6 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Account;
-import classes.BCrypt;
-import classes.Banker;
-import classes.Client;
 import classes.Controller;
 
 @WebServlet("/banker/EditAccount")

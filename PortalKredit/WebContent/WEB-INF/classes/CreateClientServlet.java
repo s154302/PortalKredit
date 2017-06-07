@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import classes.BCrypt;
+import org.mindrot.jbcrypt.BCrypt;
+
 import classes.Controller;
 
 @WebServlet("/AdminCreateClient")
