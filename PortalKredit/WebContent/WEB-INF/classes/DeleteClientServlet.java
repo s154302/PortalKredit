@@ -40,6 +40,18 @@ public class DeleteClientServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+		
+			deleteClient(request,response);
+		
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+	}
+	private void deleteClient(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		String search = request.getParameter("search-client");
 		String delete = request.getParameter("username");
 		if(search != null) {
@@ -47,13 +59,10 @@ public class DeleteClientServlet extends HttpServlet {
 			request.setAttribute("list", clientList);
 			request.getRequestDispatcher("AdminDeleteClient.jsp").forward(request, response);
 		}
-		
 		if(delete != null) {
 			Controller.deleteClient(delete, ds1);
 			doGet(request, response);
 		}
-				
-		
 	}
 	
 

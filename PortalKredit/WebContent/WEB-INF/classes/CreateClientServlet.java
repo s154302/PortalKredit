@@ -27,9 +27,24 @@ public class CreateClientServlet extends HttpServlet {
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		
+		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+			createClient(request,response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+		
+		
+	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		Controller.adminCheckAuth("AdminCreateClient.jsp",request,response);
+		
+
+	}
+	private void createClient(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		String firstName = request.getParameter("clientFirstName");
 		String lastName = request.getParameter("clientLastName");
 		String password = request.getParameter("clientPassword");
@@ -50,10 +65,6 @@ public class CreateClientServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateClient");
-	}
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		Controller.adminCheckAuth("AdminCreateClient.jsp",request,response);
 		
-
 	}
 }

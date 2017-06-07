@@ -30,7 +30,23 @@ public class CreateAdminServlet extends HttpServlet {
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+			createAdmin(request,response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 		
+		
+	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		
+		Controller.adminCheckAuth("AdminCreateAdmin.jsp",request,response);
+
+	}
+	
+	private void createAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		String adminID = request.getParameter("adminID");
 		String adminPassword = request.getParameter("adminPassword");
 		String hashed = BCrypt.hashpw(adminPassword, BCrypt.gensalt(14));
@@ -38,11 +54,7 @@ public class CreateAdminServlet extends HttpServlet {
 		Controller.createAdmin(adminID, hashed, ds1);
 
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateAdmin");
-	}
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		
-		Controller.adminCheckAuth("AdminCreateAdmin.jsp",request,response);
-
 	}
 
 }

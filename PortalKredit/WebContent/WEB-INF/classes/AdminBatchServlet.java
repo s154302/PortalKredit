@@ -6,7 +6,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Controller;
@@ -25,15 +24,27 @@ public class AdminBatchServlet extends HttpServlet {
     @Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(!request.getParameter("exchangeRate").equals(null)) {
-			Controller.updateExchangeRates(ds1);
-		} else if(!request.getParameter("interestRate").equals(null)) {
-	//		Controller.
+		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+			checkButtons(request,response);
 		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+	
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		
 		Controller.adminCheckAuth("AdminBatch.jsp",request,response);
+	}
+	private void checkButtons(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		if(!request.getParameter("exchangeRate").equals(null)) {
+			Controller.updateExchangeRates(ds1);
+		}
+		
+		else if(!request.getParameter("interestRate").equals(null)) {
+//		Controller.
+		}
 	}
 	
 
