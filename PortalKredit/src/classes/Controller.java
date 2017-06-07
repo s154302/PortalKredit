@@ -340,6 +340,32 @@ public final class Controller {
 		}
 		return transactionList;
 	}
+	
+	public static ArrayList<Transaction> getOldTransactions(String accountNumber, int regNo, DataSource ds1) {
+
+		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
+		Connection con;
+		try {
+			con = ds1.getConnection(Secret.userID, Secret.password);
+			PreparedStatement ps = con.prepareStatement(
+					"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+
+			ps.setString(1, accountNumber);
+			ps.setInt(2, regNo);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
+						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
+						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"), rs.getDouble("BALANCE"), rs.getString("NOTE")));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return transactionList;
+	}
 
 	// Fills a single Admin object with data and returns it
 	public static Admin getAdminInfo(String userID, DataSource ds1) {
@@ -1014,6 +1040,28 @@ public final class Controller {
 		ps.setString(1, BCrypt.hashpw(password, BCrypt.gensalt(14)));
 		ps.setString(2, clientID);
 		ps.executeUpdate();
+	}
+	
+	public static boolean backupTransactions(DataSource ds1){
+		Boolean status = false;
 		
+		try{
+			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+			
+			PreparedStatement movePs = con
+					.prepareStatement("INSERT INTO \"DTUGRP16\".\"TRANSACTIONOLD\" SELECT * FROM \"DTUGRP16\".\"TRANSACTION\"");
+			int rs =movePs.executeUpdate();
+			
+			//TODO - der burde nok lige blive checket om de er blevet flyttet først
+			PreparedStatement deletePs = con
+					.prepareStatement("DELETE FROM \"DTUGRP16\".\"TRANSACTION\"");
+			status = true;
+		}catch(Exception e){
+			e.printStackTrace();
+			status = false;
+		}
+		
+		
+		return status;
 	}
 }

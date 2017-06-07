@@ -33,7 +33,7 @@ CREATE TABLE DTUGRP16. Branch (
 ------------
 CREATE TABLE DTUGRP16.Banker (
     bankerID CHAR(7) NOT NULL,
-    password VARCHAR(20) NOT NULL,
+    password VARCHAR(60) NOT NULL,
     firstName VARCHAR(45) NOT NULL,
     lastName VARCHAR(45) NOT NULL,
     regNo INT NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE DTUGRP16.Banker (
 ------------
 CREATE TABLE DTUGRP16.Client (
     clientID CHAR(9) NOT NULL,
-    password VARCHAR(20) NOT NULL,
+    password VARCHAR(60) NOT NULL,
     cpr CHAR(10) NOT NULL,
     first_name VARCHAR(45) NOT NULL,
     last_name VARCHAR(45) NOT NULL,
@@ -73,6 +73,14 @@ CREATE TABLE DTUGRP16.AccountType (
 	interestRate DECIMAL(6,5) NOT NULL,
 	PRIMARY KEY(accountType)
 );
+------------
+-- Currency --
+------------
+CREATE TABLE DTUGRP16.Currency (
+    currency CHAR(3) NOT NULL,
+    exchangeRate DECIMAL(9,4) NOT NULL,
+    PRIMARY KEY (currency)
+  );
 
 -------------
 -- Account --
@@ -83,22 +91,13 @@ CREATE TABLE DTUGRP16.Account (
     accountName VARCHAR(25),
     accountType VARCHAR(45) NOT NULL,
     clientID CHAR(9) NOT NULL,
-    balance DECIMAL(10,2),
-    currency VARCHAR(10),
-    interest DECIMAL(8,4),
+    balance DECIMAL(12,2),
+    currency CHAR(3),
+    interest DECIMAL(14,4),
     PRIMARY KEY (accountNumber, regNo),
     FOREIGN KEY (clientID) REFERENCES DTUGRP16. Client (clientID),
     FOREIGN KEY (accountType) REFERENCES DTUGRP16. AccountType (accountType),
     FOREIGN KEY (currency) REFERENCES DTUGRP16. Currency (currency)
-  );
-
-------------
--- Currency --
-------------
-CREATE TABLE DTUGRP16.Currency (
-    currency VARCHAR(10) NOT NULL,
-    exchangeRate DECIMAL(9,4) NOT NULL,
-    PRIMARY KEY (currency)
   );
 
 -----------------
@@ -112,7 +111,7 @@ CREATE TABLE "DTUGRP16"."TRANSACTION" (
     recieveRegNo INT NOT NULL,
     dateOfTransaction DATE NOT NULL,
     amount DECIMAL(10,2) NOT NULL,		-- Changed from value since value appears to be a reserved keyword
-    currency VARCHAR(10) NOT NULL,
+    currency CHAR(3) NOT NULL,
     note VARCHAR(3000),
     balance DECIMAL(12,2)NOT NULL,
     PRIMARY KEY (transactionID, accountNumber, regNo, recieveAccount, recieveRegNo, dateOfTransaction) --Using both as PK so multiple accounts can use same transaction ID
@@ -121,12 +120,31 @@ CREATE TABLE "DTUGRP16"."TRANSACTION" (
     FOREIGN KEY (accountNumber, regNo) REFERENCES DTUGRP16. Account (accountNumber, regNo),
     FOREIGN KEY (recieveAccount, recieveRegNo) REFERENCES DTUGRP16. Account (accountNumber, regNo)
   );
-  
+-----------
+-- TRANSACTIONSOLD --
+-----------
+CREATE TABLE "DTUGRP16"."TRANSACTION" (
+    transactionID VARCHAR(60) NOT NULL,
+    accountNumber CHAR(10) NOT NULL,
+    regNo INT NOT NULL,
+    recieveAccount CHAR(10) NOT NULL,
+    recieveRegNo INT NOT NULL,
+    dateOfTransaction DATE NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,		-- Changed from value since value appears to be a reserved keyword
+    currency CHAR(3) NOT NULL,
+    note VARCHAR(3000),
+    balance DECIMAL(12,2)NOT NULL,
+    PRIMARY KEY (transactionID, accountNumber, regNo, recieveAccount, recieveRegNo, dateOfTransaction) --Using both as PK so multiple accounts can use same transaction ID
+ ,
+    FOREIGN KEY (currency) REFERENCES DTUGRP16. Currency (currency),
+    FOREIGN KEY (accountNumber, regNo) REFERENCES DTUGRP16. Account (accountNumber, regNo),
+    FOREIGN KEY (recieveAccount, recieveRegNo) REFERENCES DTUGRP16. Account (accountNumber, regNo)
+  );  
 -----------
 -- Admin --
 -----------
 CREATE TABLE DTUGRP16.Admin (
 	adminID VARCHAR(25) NOT NULL,
-	password VARCHAR(25) NOT NULL,
+	password VARCHAR(60) NOT NULL,
 	PRIMARY KEY(adminID)
 	);
