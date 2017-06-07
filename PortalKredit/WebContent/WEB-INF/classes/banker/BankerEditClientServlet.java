@@ -60,7 +60,6 @@ public class BankerEditClientServlet extends HttpServlet {
 		
 		try {
 			if(!request.getParameter("password").isEmpty()){
-				System.out.println("not empty: "+clientID+"  pass:"+password);
 				Controller.changeClientPassword(clientID, password, ds1);
 			}
 			
