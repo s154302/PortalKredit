@@ -17,23 +17,27 @@ import classes.Controller;
 @WebServlet("/AdminFrontpage")
 public class AdminFrontpageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public AdminFrontpageServlet() {
-        super();
 
-    }
-    @Resource(name = "jdbc/exampleDS")
-	private DataSource ds1;
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public AdminFrontpageServlet() {
+		super();
 
 	}
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+
+	@Resource(name = "jdbc/exampleDS")
+	private DataSource ds1;
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.admin, session)){
+		if (Controller.checkAuth(Controller.Type.admin, session)) {
 			request.getRequestDispatcher("AdminControl.jsp").forward(request, response);
-			
-		}
-		else{
+
+		} else {
 			request.getSession().invalidate();
 			response.sendRedirect("../index");
 		}
