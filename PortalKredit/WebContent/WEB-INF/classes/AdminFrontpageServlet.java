@@ -16,18 +16,23 @@ import classes.Controller;
 @WebServlet("/AdminFrontpage")
 public class AdminFrontpageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public AdminFrontpageServlet() {
-        super();
 
-    }
-    @Resource(name = "jdbc/exampleDS")
-	private DataSource ds1;
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public AdminFrontpageServlet() {
+		super();
 
 	}
+
+	@Resource(name = "jdbc/exampleDS")
+	private DataSource ds1;
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+	}
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		Controller.adminCheckAuth("AdminControl.jsp",request,response);
+
 	}
 
 }

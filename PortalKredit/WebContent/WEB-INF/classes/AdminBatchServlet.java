@@ -24,6 +24,7 @@ public class AdminBatchServlet extends HttpServlet {
     @Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
 			checkButtons(request,response);
 		}
@@ -40,10 +41,10 @@ public class AdminBatchServlet extends HttpServlet {
 	private void checkButtons(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		if(!request.getParameter("exchangeRate").equals(null)) {
 			Controller.updateExchangeRates(ds1);
-		}
-		
-		else if(!request.getParameter("interestRate").equals(null)) {
-//		Controller.
+		} else if(!request.getParameter("dInterestRate").equals(null)) {
+			
+		} else if(!request.getParameter("yInterestRate").equals(null)) {
+			
 		}
 	}
 	
