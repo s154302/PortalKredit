@@ -936,4 +936,46 @@ public final class Controller {
 		
 		
 	}
+	
+	public static boolean calculateInterestRates(DataSource ds1){
+		Boolean status = false;
+		int rs;
+		try{
+			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+			
+			PreparedStatement ps = con
+					.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" = "
+							+ "\"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" + "
+							+ "((SELECT INTERESTRATE FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"DTUGRP16\".\"ACCOUNT\".\"ACCOUNTTYPE\" = \"DTUGRP16\".\"ACCOUNTTYPE\".\"ACCOUNTTYPE\")"
+							+ "/365)*\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\"");
+			rs =ps.executeUpdate();
+			status = true;
+		}catch(Exception e){
+			e.printStackTrace();
+			status = false;
+		}
+		
+		return status;
+	}
+	
+	public static boolean giveAnualInterest(DataSource ds1){
+		Boolean status = false;
+		
+		try{
+			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+			
+			PreparedStatement ps = con
+					.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"DTUGRP16\".\"ACCOUNT\".\"BALANCE\" = "
+							+ "\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\" + \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\""
+							+ ", \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" = 0");
+			int rs =ps.executeUpdate();
+			status = true;
+		}catch(Exception e){
+			e.printStackTrace();
+			status = false;
+		}
+		
+		
+		return status;
+	}
 }
