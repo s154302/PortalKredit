@@ -78,7 +78,7 @@ public class BankerEditClientServlet extends HttpServlet {
 				Controller.changeClientPassword(clientID, password, ds1);
 			}
 			
-			Controller.editClient(clientID, firstName, lastName, password, email,
+			Controller.editClient(clientID, firstName, lastName, email,
 					mobile, street, bankerID, postal, country, ds1);
 			
 			session.setAttribute("clientID", clientID);

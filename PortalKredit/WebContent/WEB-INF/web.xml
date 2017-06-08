@@ -199,6 +199,15 @@
 		<servlet-name>ClientPaymentsServlet</servlet-name>
 		<url-pattern>/Client/ClientPaymentsServlet</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ClientEditInfoServlet</servlet-name>
+		<servlet-class>ClientEditInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ClientEditInfoServlet</servlet-name>
+		<url-pattern>/Client/ClientEditInfoServlet</url-pattern>
+	</servlet-mapping>
 
 
 

@@ -14,6 +14,7 @@
 			<li class="nav-item active"><a class="nav-link" href="frontpage">Home</a></li>
 			<li class="nav-item active"><a class="nav-link" href="accounts">Accounts</a></li>
 			<li class="nav-item active"><a class="nav-link" href="payments">Payments</a></li>
+			<li class="nav-item active"><a class="nav-link" href="editInfo">Edit Info</a></li>
 			<li class="nav-item active"><a class="nav-link" href="contact">Contact</a></li>
 
 		</ul>

@@ -871,8 +871,7 @@ public final class Controller {
 
 			// Check that no money has been lost or gained,
 			// if so roll back all changes
-			System.out.println("Amount: " + (sendBalance + reciBalance));
-			System.out.println("The Math: " +  (oldBalanceSend + oldBalanceReci));
+
 			
 			// Check that no money has been lost
 			// Then either commit or roll back
@@ -1050,8 +1049,7 @@ public final class Controller {
 		return status;
 	}
 	
-	public static void editClient(String clientID, String firstName, String lastName,
-			String password, String email, String mobile, String street, String bankerID, int postal, String country,
+	public static void editClient(String clientID, String firstName, String lastName, String email, String mobile, String street, String bankerID, int postal, String country,
 			DataSource ds1) throws SQLException {
 
 		Connection con;
@@ -1069,6 +1067,24 @@ public final class Controller {
 		ps.setInt(7, postal);
 		ps.setString(8, country);
 		ps.setString(9, clientID);
+		ps.executeUpdate();
+
+	}
+	
+	public static void clientEditClient(String clientID, String email, String mobile, String street, int postal,
+			DataSource ds1) throws SQLException {
+
+		Connection con;
+		con = ds1.getConnection(Secret.userID, Secret.password);
+			
+		PreparedStatement ps = con.prepareStatement(
+			"UPDATE \"DTUGRP16\".\"CLIENT\" SET (EMAIL, MOBILE, STREET, POSTAL) = (?,?,?,?) WHERE CLIENTID = ?");
+		     
+		ps.setString(1, email);
+		ps.setString(2, mobile);
+		ps.setString(3, street);
+		ps.setInt(4, postal);
+		ps.setString(5, clientID);
 		ps.executeUpdate();
 
 	}
