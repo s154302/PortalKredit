@@ -3,7 +3,7 @@
 
 
 <head>
-<title>Transactions</title>
+<title>Edit Account</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/custom.css">

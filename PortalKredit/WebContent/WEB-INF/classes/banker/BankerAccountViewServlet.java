@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Account;
+import classes.Client;
 import classes.Controller;
 
 @WebServlet("/banker/ViewClientAccount")
@@ -44,6 +45,21 @@ public class BankerAccountViewServlet extends HttpServlet {
 			}
 	}
 	
+	
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html");
+		
+		if(request.getParameter("EditAccount") != null){
+			response.sendRedirect(request.getContextPath() + "/banker/EditAccount");
+		
+		} else if(request.getParameter("DeleteAccount") != null){
+			response.sendRedirect(request.getContextPath() + "/banker/DeleteAccount");
+			
+		}
+		
+		
+	}
 
 	
 }

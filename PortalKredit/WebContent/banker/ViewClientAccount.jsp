@@ -3,7 +3,7 @@
 
 
 <head>
-<title>Transactions</title>
+<title>View Accounts</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/custom.css">
@@ -23,10 +23,16 @@
 						<tr>Currency: ${account.currency} <br></tr>
 						<tr>Interest rate: ${account.interestRate} <br></tr>
 						<tr>Balance: ${account.balance}</tr>
-						<tr>
-						<form action="EditAccount" method="get">
-    					<input type="submit" value="Edit Account" name="Submit" />
-						</form></tr>
+					
+					<tr>	
+					<form action="ViewClientAccount" method="post">
+						<button class="btn btn-primary btn-block btn-action" type="submit"
+							name="EditAccount" value="EditAccount">Edit Account</button>
+						<button class="btn btn-primary btn-block btn-action" type="submit"
+							name="DeleteAccount" value="DeleteAccount">Delete Account</button>
+					</form>
+					</tr>
+				
 					</tbody>
 				</table>
 			</div>

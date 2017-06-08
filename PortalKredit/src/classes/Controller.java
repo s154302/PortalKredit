@@ -1110,4 +1110,36 @@ public final class Controller {
 		
 		return status;
 	}
+	
+	//Used by bankers to delete a clients account given the balance is 0
+	public static boolean deleteAccount(int regNo, String accountNumber, DataSource ds1) {
+		Boolean deleteStatus = false;
+		Connection con;
+		
+		try {
+			con = ds1.getConnection(Secret.userID, Secret.password);
+			
+			// Checking there isn't a balance or debt in account
+			PreparedStatement ps1 = con.prepareStatement("SELECT BALANCE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
+			ps1.setInt(1, regNo);
+			ps1.setString(2, accountNumber);
+			ResultSet rs1 = ps1.executeQuery();
+			rs1.next();
+			double balance = rs1.getDouble("BALANCE");
+			if(balance == 0){
+				
+				// Trying to delete account
+				PreparedStatement ps2 = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
+				ps2.setInt(1, regNo);
+				ps2.setString(2, accountNumber);
+				ps2.executeUpdate();
+				deleteStatus = true;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return deleteStatus;
+	}
 }
