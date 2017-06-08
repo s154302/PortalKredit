@@ -61,6 +61,7 @@ public class BankerEditClientServlet extends HttpServlet {
 		
 
 	}
+	
 	private void editClient(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
 		String clientID = (String) session.getAttribute("clientID");
 		String firstName = request.getParameter("firstName");

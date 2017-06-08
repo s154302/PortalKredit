@@ -1081,7 +1081,7 @@ public final class Controller {
 		return status;
 	}
 
-	public static void editClient(String clientID, String firstName, String lastName, String password, String email,
+	public static void editClient(String clientID, String firstName, String lastName, String email,
 			String mobile, String street, String bankerID, int postal, String country, DataSource ds1)
 			throws SQLException {
 		Connection con;
