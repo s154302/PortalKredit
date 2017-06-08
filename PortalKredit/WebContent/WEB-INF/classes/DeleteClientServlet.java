@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
@@ -8,10 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import classes.Admin;
 import classes.Client;
 import classes.Controller;
 
@@ -29,10 +27,11 @@ public class DeleteClientServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		ArrayList<Client> clientList = Controller.getClientList(ds1);
+		Connection con= Controller.getConnection(ds1);
+		ArrayList<Client> clientList = Controller.getClientList(con);
 		request.setAttribute("list", clientList);
 
-		
+		Controller.cleanUpConnection(con);
 		Controller.adminCheckAuth("AdminDeleteClient.jsp", request, response);
 		
 	}
@@ -54,15 +53,18 @@ public class DeleteClientServlet extends HttpServlet {
 	private void deleteClient(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		String search = request.getParameter("search-client");
 		String delete = request.getParameter("username");
+		Connection con= Controller.getConnection(ds1);
+		
 		if(search != null) {
-			ArrayList<Client> clientList = Controller.searchClient(request.getParameter("search-term"), ds1);
+			ArrayList<Client> clientList = Controller.searchClient(request.getParameter("search-term"), con);
 			request.setAttribute("list", clientList);
 			request.getRequestDispatcher("AdminDeleteClient.jsp").forward(request, response);
 		}
 		if(delete != null) {
-			Controller.deleteClient(delete, ds1);
+			Controller.deleteClient(delete, con);
 			doGet(request, response);
 		}
+		Controller.cleanUpConnection(con);
 	}
 	
 

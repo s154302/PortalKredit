@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
@@ -8,7 +8,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Admin;
@@ -27,9 +26,14 @@ public class DeleteAdminServlet extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<Admin> adminList = Controller.getAdminList(ds1);
+		
+		//TODO - bliver der tjekekr Auth rigtigt her ? 
+		Connection con = Controller.getConnection(ds1);
+		ArrayList<Admin> adminList = Controller.getAdminList(con);
+		Controller.cleanUpConnection(con);
 		request.setAttribute("list", adminList);
 		Controller.adminCheckAuth("AdminDeleteAdmin.jsp",request,response);
+		
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -46,10 +50,11 @@ public class DeleteAdminServlet extends HttpServlet {
 	}
 	
 	private void deleteAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-String adminID = request.getParameter("username");
+		String adminID = request.getParameter("username");
 		
-		Controller.deleteAdmin(adminID, ds1);
-		
+		Connection con = Controller.getConnection(ds1);
+		Controller.deleteAdmin(adminID, con);
+		Controller.cleanUpConnection(con);
 		doGet(request, response);
 		
 	}

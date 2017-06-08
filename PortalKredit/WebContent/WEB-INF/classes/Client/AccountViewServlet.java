@@ -1,6 +1,7 @@
 package Client;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Account;
-import classes.Client;
 import classes.Controller;
 import classes.Transaction;
 
@@ -35,9 +35,9 @@ public class AccountViewServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		Account account = (Account)session.getAttribute("account");
-	
-		session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), ds1));
-		
+		Connection con = Controller.getConnection(ds1);
+		session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con));
+		Controller.cleanUpConnection(con);
 		request.getRequestDispatcher("accountView.jsp").forward(request, response);
 	}
 	
@@ -48,8 +48,10 @@ public class AccountViewServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Account account = (Account)session.getAttribute("account");
 		ArrayList<Transaction> transactions = (ArrayList<Transaction>) session.getAttribute("transactions");
-		transactions.addAll(Controller.getOldTransactions(account.getAccountNumber(), account.getRegNo(), ds1, session));
+		Connection con = Controller.getConnection(ds1);
+		transactions.addAll(Controller.getOldTransactions(account.getAccountNumber(), account.getRegNo(), con, session));
 		session.setAttribute("transactions", transactions);
+		Controller.cleanUpConnection(con);
 		request.getRequestDispatcher("accountView.jsp").forward(request, response);
 	}
 }

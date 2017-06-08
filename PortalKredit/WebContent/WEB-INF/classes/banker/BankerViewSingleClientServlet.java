@@ -1,10 +1,9 @@
 package banker;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.sql.Connection;
 
 import javax.annotation.Resource;
-import javax.jms.Session;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Account;
-import classes.Banker;
 import classes.Client;
 import classes.Controller;
 
@@ -37,14 +35,15 @@ public class BankerViewSingleClientServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		if(Controller.checkAuth(Controller.Type.banker,session)){
-			
+			Connection con = Controller.getConnection(ds1);
 			String clientID = (String) session.getAttribute("clientID");
-			Client client = Controller.getClientInfo(clientID, ds1);
-			
-			client.setAccounts(Controller.getAccounts(client.getClientID(), ds1));
+			Client client = Controller.getClientInfo(clientID, con);
+				
+			client.setAccounts(Controller.getAccounts(client.getClientID(), con));
 			session.setAttribute("accounts", client.getAccounts());
 			session.setAttribute("clientName", client.getFirstName());
-		
+			
+			Controller.cleanUpConnection(con);
 			request.getRequestDispatcher("ViewSingleClient.jsp").forward(request, response);
 		}
 		else{
@@ -60,9 +59,10 @@ public class BankerViewSingleClientServlet extends HttpServlet {
 		
 		String accountNumber = request.getParameter("accountNumber");
 		int regNo = Integer.parseInt(request.getParameter("regNo"));
-		
-		Account account = Controller.getAccountInfo(accountNumber, regNo, ds1);
+		Connection con = Controller.getConnection(ds1);
+		Account account = Controller.getAccountInfo(accountNumber, regNo, con);
 		session.setAttribute("account", account);
+		Controller.cleanUpConnection(con);
 		
 		response.sendRedirect(request.getContextPath() + "/banker/ViewClientAccount");
 		

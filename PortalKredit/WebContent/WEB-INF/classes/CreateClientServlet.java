@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.annotation.Resource;
@@ -8,7 +8,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -57,12 +56,16 @@ public class CreateClientServlet extends HttpServlet {
 		String postal = request.getParameter("clientCity");
 		String country = request.getParameter("clientCountry");
 		
+		Connection con = Controller.getConnection(ds1);
 		try {
-			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
+			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
+					Integer.parseInt(postal), country, con);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			Controller.cleanUpConnection(con);
 		}
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateClient");
 		

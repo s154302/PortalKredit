@@ -1,6 +1,6 @@
 package banker;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.annotation.Resource;
@@ -26,7 +26,6 @@ public class BankerCreateAccountServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
 			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
@@ -43,7 +42,6 @@ public class BankerCreateAccountServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		
 		String accountName = request.getParameter("clientAccountName");
 		String accountNumber = request.getParameter("clientAccountNumber");
@@ -54,19 +52,17 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		String currency = request.getParameter("clientCurrency");
 		
 		session.setAttribute("clientID", clientID);
+		Connection con = Controller.getConnection(ds1);
 		try {
-			Controller.createAccount(accountName, accountNumber, regNo, accountType, clientID, balance, currency, ds1);
+			Controller.createAccount(accountName, accountNumber, regNo, accountType, clientID, balance, currency, con);
 			response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			request.setAttribute("createAccountStatus", "Wrong value inserted");
 			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
+		}finally{
+			Controller.cleanUpConnection(con);
 		}
-		
-//		Banker banker = (Banker) session.getAttribute("user");
-//		banker.getClient(clientID).setAccounts( Controller.getAccounts(clientID, ds1));
-//		session.setAttribute("user", banker);
-
 	}
 }
