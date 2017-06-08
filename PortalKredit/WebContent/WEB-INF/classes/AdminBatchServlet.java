@@ -48,6 +48,9 @@ public class AdminBatchServlet extends HttpServlet {
 		} else if(request.getParameter("yInterestRate") != null) {
 			Controller.giveAnualInterest(ds1);
 			System.out.println("yInterest");
+		} else if(request.getParameter("backupTrsansactions") != null){
+			Controller.backupTransactions(ds1);
+			System.out.println("backupTrsansactions");
 		}
 		doGet(request, response);
 	}

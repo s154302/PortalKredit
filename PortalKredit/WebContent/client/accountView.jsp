@@ -15,7 +15,7 @@
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary text-center blue-outline">
 				<table class="table table-hover">
-					<tbody colspan="4">
+					<tbody colspan="6">
 						<tr>Name: ${account.accountName} <br></tr>
 						<tr>Reg: ${account.regNo} <br></tr>
 						<tr>Account: ${account.accountNumber} <br></tr>
@@ -34,7 +34,7 @@
 			<div class="card card-outline-primary text-center blue-outline">
 				<h1>Transactions</h1>
 
-				<div class="card-block">
+				<div  class="card-block">
 					<table class="table table-hover">
 						<thead>
 							<tr>
@@ -56,7 +56,7 @@
 									<td><c:out value="${ob.balance}" /></td>
 								</tr>
 								<tr>
-									<td colspan="4">
+									<td colspan="6">
 										<div id="${ob.transactionID}${ob.regNo}${ob.accountNumber}" class="collapse">
 											<ul>
 												<li>ID: ${ob.transactionID}</li>
@@ -68,6 +68,14 @@
 									</td>
 								</tr>
 							</c:forEach>
+								<tr>
+									<td>
+										<form action="" method="post">
+											<button class="btn btn-primary btn-block btn-action"
+													type="submit" value="">Load old transactions</button>
+										</form>
+									</td>
+								</tr>
 						</tbody>
 					</table>
 				</div>

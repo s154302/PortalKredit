@@ -57,6 +57,7 @@ public final class Controller {
 		
 		return type.equals((Type)session.getAttribute("type"));
 	}
+	
 	public static void adminCheckAuth(String redirectUrl, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		response.setContentType("text/html");
 		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
@@ -341,6 +342,7 @@ public final class Controller {
 		return transactionList;
 	}
 	
+	// Returns all 'old' transactions associated with an account
 	public static ArrayList<Transaction> getOldTransactions(String accountNumber, int regNo, DataSource ds1) {
 
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();

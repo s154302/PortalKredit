@@ -21,6 +21,8 @@
 					
 				<button class="btn btn-primary btn-block" type="submit"
 					name="yInterestRate">Update Yearly Interest Rates</button>
+				<button class="btn btn-primary btn-block" type="submit"
+					name="backupTrsansactions">Backup transactions</button>
 			</form>
 		</div>
 	</div>
