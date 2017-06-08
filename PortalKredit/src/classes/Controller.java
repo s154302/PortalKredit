@@ -796,6 +796,9 @@ public final class Controller {
 	public static boolean transaction(String sendAcc, String reciAcc, double amount, int sendReg, int reciReg,
 			String currency, String message, String reciMessage, DataSource ds1) {
 		boolean status = false;
+		if(amount < 0){
+			return false;
+		}
 		try {
 			Connection con = ds1.getConnection(Secret.userID, Secret.password);
 			
@@ -865,7 +868,7 @@ public final class Controller {
 			
 			// Check that no money has been lost
 			// Then either commit or roll back
-			if ((sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci)) {
+			if ((sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci) && checkTransaction(transactionID, con)) {
 				con.commit();
 				status = true;
 			} else {
@@ -908,6 +911,36 @@ public final class Controller {
 		}
 	}
 
+	//Used to chekc if two transactions are placed in the db
+	public static boolean checkTransaction(String transactionId, Connection con){
+		Boolean status = false;
+		int i = 0;
+		try{
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"TRANSACTIONID\" = ?");
+			ps.setString(1, transactionId);
+			ResultSet rs = ps.executeQuery();
+			
+		while(rs.next()){
+			if(transactionId.equals(rs.getString("TRANSACTIONID"))){
+				i++;
+			}
+		}
+		
+		if(i==2){
+			status = true;
+		}else{
+			status = false;
+		}
+			
+		}catch (SQLException e){
+			e.printStackTrace();
+			status = false;
+		}
+		
+		
+		return status;
+	}
+	
 	public static void editAccount(String accountName, String accountNumber, int regNo, String accountType, String clientID, double balance, String currency, DataSource ds1) {
 		Connection con;
 		try {
@@ -928,6 +961,7 @@ public final class Controller {
 			e.printStackTrace();
 		}
 	}
+	
 	public static void updateExchangeRates(DataSource ds1) throws IOException{
 		String s = "http://api.fixer.io/latest";
 		URL url = new URL(s);
