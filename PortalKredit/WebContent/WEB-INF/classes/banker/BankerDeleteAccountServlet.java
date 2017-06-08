@@ -65,7 +65,7 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 				String accountNumber = account.getAccountNumber();
 				
 				// Deleting the account
-				Boolean isDeleted = Controller.deleteAccount(regNo, accountNumber, ds1);
+				Boolean isDeleted = Controller.deleteAccount(regNo, accountNumber, con);
 				
 				if(isDeleted){
 					response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");

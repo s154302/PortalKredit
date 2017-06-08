@@ -908,11 +908,9 @@ public final class Controller {
 		}
 	}
 
-	public static void insertExchangeRates(DataSource ds1) throws IOException {
+	public static void insertExchangeRates(Connection ds1) throws IOException {
 		String s = "http://api.fixer.io/latest";
 		URL url = new URL(s);
-		Connection con;
-
 		Scanner scan = new Scanner(url.openStream());
 		String str = new String();
 		while (scan.hasNext()) {
@@ -921,9 +919,7 @@ public final class Controller {
 
 		scan.close();
 		try {
-			con = ds1.getConnection(Secret.userID, Secret.password);
-
-			PreparedStatement ps = con.prepareStatement("INSERT INTO \"DTUGRP16\".\"CURRENCY\" VALUES(?, ?)");
+			PreparedStatement ps = ds1.prepareStatement("INSERT INTO \"DTUGRP16\".\"CURRENCY\" VALUES(?, ?)");
 			JSONObject obj = new JSONObject(str).getJSONObject("rates");
 			Iterator x = obj.keys();
 			while (x.hasNext()) {
@@ -941,10 +937,9 @@ public final class Controller {
 		}
 	}
 
-	public static void updateExchangeRates(DataSource ds1) throws IOException {
+	public static void updateExchangeRates(Connection ds1) throws IOException {
 		String s = "http://api.fixer.io/latest";
 		URL url = new URL(s);
-		Connection con;
 
 		Scanner scan = new Scanner(url.openStream());
 		String str = new String();
@@ -953,9 +948,7 @@ public final class Controller {
 		}
 		scan.close();
 		try {
-			con = ds1.getConnection(Secret.userID, Secret.password);
-
-			PreparedStatement ps = con
+			PreparedStatement ps = ds1
 					.prepareStatement("UPDATE \"DTUGRP16\".\"CURRENCY\" SET \"EXCHANGERATE\"=? WHERE \"CURRENCY\"=?");
 			JSONObject obj = new JSONObject(str).getJSONObject("rates");
 			Iterator x = obj.keys();
@@ -1084,15 +1077,12 @@ public final class Controller {
 	}
 	
 	//Used by bankers to delete a clients account given the balance is 0
-	public static boolean deleteAccount(int regNo, String accountNumber, DataSource ds1) {
+	public static boolean deleteAccount(int regNo, String accountNumber, Connection ds1) {
 		Boolean deleteStatus = false;
-		Connection con;
 		
-		try {
-			con = ds1.getConnection(Secret.userID, Secret.password);
-			
+		try {			
 			// Checking there isn't a balance or debt in account
-			PreparedStatement ps1 = con.prepareStatement("SELECT BALANCE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
+			PreparedStatement ps1 = ds1.prepareStatement("SELECT BALANCE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
 			ps1.setInt(1, regNo);
 			ps1.setString(2, accountNumber);
 			ResultSet rs1 = ps1.executeQuery();
@@ -1101,7 +1091,7 @@ public final class Controller {
 			if(balance == 0){
 				
 				// Trying to delete account
-				PreparedStatement ps2 = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
+				PreparedStatement ps2 = ds1.prepareStatement("DELETE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
 				ps2.setInt(1, regNo);
 				ps2.setString(2, accountNumber);
 				ps2.executeUpdate();

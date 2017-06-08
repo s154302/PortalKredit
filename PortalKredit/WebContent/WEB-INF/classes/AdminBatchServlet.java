@@ -42,7 +42,7 @@ public class AdminBatchServlet extends HttpServlet {
 	private void checkButtons(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		Connection con = Controller.getConnection(ds1);
 		if(request.getParameter("exchangeRate") != null) {
-			Controller.updateExchangeRates(ds1);
+			Controller.updateExchangeRates(con);
 		} else if(request.getParameter("dInterestRate") != null) {
 			Controller.calculateInterestRates(con);
 		} else if(request.getParameter("yInterestRate") != null) {
@@ -50,7 +50,7 @@ public class AdminBatchServlet extends HttpServlet {
 		} else if(request.getParameter("backupTransactions") != null){
 			Controller.backupTransactions(con);
 		} else if(request.getParameter("insertExchangeRate") != null) {
-			Controller.insertExchangeRates(ds1);
+			Controller.insertExchangeRates(con);
 
 		}
 		Controller.cleanUpConnection(con);
