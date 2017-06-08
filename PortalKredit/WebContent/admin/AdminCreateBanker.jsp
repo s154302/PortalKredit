@@ -9,7 +9,7 @@
 </head>
 
 <body>
-	<jsp:include page="AdminNavbar.jsp"/>
+	<jsp:include page="AdminNavbar.jsp" />
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary mb-3 text-center blue-outline">
@@ -18,12 +18,12 @@
 					<form action="" method="post">
 						<div class="form-group">
 							<input type="text" class="form-control" name="bankerFirstName"
-								placeholder="*First Name">
+								placeholder="*First Name" maxlength="45">
 						</div>
 
 						<div class="form-group">
 							<input type="text" class="form-control" name="bankerLastName"
-								placeholder="*Last Name">
+								placeholder="*Last Name" maxlength="45">
 						</div>
 
 						<div class="form-group">
@@ -33,12 +33,17 @@
 
 						<div class="form-group">
 							<input type="email" class="form-control" name="bankerEmail"
-								placeholder="E-mail">
+								placeholder="E-mail" maxlength="45">
 						</div>
 
 						<div class="form-group">
 							<input type="text" class="form-control" name="bankerTelephone"
 								placeholder="Phone Number">
+						</div>
+
+						<div class="form-group">
+							<input type="text" class="form-control bfh-phone"
+								name="bankerTelephone" placeholder="Phone Number">
 						</div>
 
 						<div class="form-group">
