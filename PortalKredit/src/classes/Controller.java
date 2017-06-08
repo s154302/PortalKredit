@@ -998,6 +998,7 @@ public final class Controller {
 		
 	}
 	
+	//Used as a 'batch' to calculate the daily interest and add it to the db.account 'Interest' attribute
 	public static boolean calculateInterestRates(DataSource ds1){
 		Boolean status = false;
 		int rs;
@@ -1019,6 +1020,7 @@ public final class Controller {
 		return status;
 	}
 	
+	//Used as a 'batch' to add the 'Interest' db.account attribute to the balance
 	public static boolean giveAnualInterest(DataSource ds1){
 		Boolean status = false;
 		
@@ -1076,25 +1078,26 @@ public final class Controller {
 		ps.executeUpdate();
 	}
 	
+	//Used as a "batch" to place transaction into the db for old transactions
 	public static boolean backupTransactions(DataSource ds1){
 		Boolean status = false;
-		
+		Connection con;
 		try{
-			Connection con = ds1.getConnection(Secret.userID, Secret.password);
+			con = ds1.getConnection(Secret.userID, Secret.password);
 			
 			PreparedStatement movePs = con
 					.prepareStatement("INSERT INTO \"DTUGRP16\".\"TRANSACTIONOLD\" SELECT * FROM \"DTUGRP16\".\"TRANSACTION\"");
 			int rs =movePs.executeUpdate();
 			
-			//TODO - der burde nok lige blive checket om de er blevet flyttet først
+			//TODO - Check if the transaction are moved first
 			PreparedStatement deletePs = con
 					.prepareStatement("DELETE FROM \"DTUGRP16\".\"TRANSACTION\"");
 			status = true;
+			con.close();
 		}catch(Exception e){
 			e.printStackTrace();
 			status = false;
 		}
-		
 		
 		return status;
 	}
