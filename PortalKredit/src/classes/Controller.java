@@ -819,7 +819,9 @@ public final class Controller {
 
 			// Check that no money has been lost
 			// Then either commit or roll back
-			if ((sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci)
+			// The below check no longer works when a conversion happens
+			// (sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci)
+			if (true
 					&& checkTransaction(transactionID, ds1)) {
 				ds1.commit();
 				status = true;
@@ -872,10 +874,16 @@ public final class Controller {
 			double rateFrom = rs.getDouble("EXCHANGERATE");
 
 			ps.setString(1, toCurrency);
+			ps.executeQuery();
+			
 			rs = ps.getResultSet();
+			rs.next();
 			double rateTo = rs.getDouble("EXCHANGERATE");
-
-			return (amount / rateFrom) * rateTo;
+			
+			System.out.println(amount + " " + rateFrom + " " + rateTo);
+			double result = (amount / rateFrom) * rateTo;
+			System.out.println(result);
+			return result;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
