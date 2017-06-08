@@ -1094,6 +1094,7 @@ public final class Controller {
 			//TODO - Check if the transaction are moved first
 			PreparedStatement deletePs = con
 					.prepareStatement("DELETE FROM \"DTUGRP16\".\"TRANSACTION\"");
+			deletePs.executeUpdate();
 			status = true;
 			con.close();
 		}catch(Exception e){
