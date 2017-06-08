@@ -14,6 +14,7 @@
 		<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary text-center blue-outline">
+				<p style="color:green;"> ${deleteStatus}</p>
 				<h1>${clientName}'s Accounts</h1>
 				<div class="card-block">
 					<table class="table table-hover">
