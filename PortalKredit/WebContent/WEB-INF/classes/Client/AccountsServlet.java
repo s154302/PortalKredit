@@ -53,6 +53,8 @@ public class AccountsServlet extends HttpServlet {
 			accountInfo(request, response, session);
 		}
 		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
 			
 		}
 	
