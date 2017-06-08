@@ -41,16 +41,16 @@ public class AdminBatchServlet extends HttpServlet {
 	private void checkButtons(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		if(request.getParameter("exchangeRate") != null) {
 			Controller.updateExchangeRates(ds1);
-			System.out.println("Exchange");
 		} else if(request.getParameter("dInterestRate") != null) {
 			Controller.calculateInterestRates(ds1);
-			System.out.println("dInterest");
 		} else if(request.getParameter("yInterestRate") != null) {
 			Controller.giveAnualInterest(ds1);
 			System.out.println("yInterest");
-		} else if(request.getParameter("backupTrsansactions") != null){
+		} else if(request.getParameter("backupTransactions") != null){
 			Controller.backupTransactions(ds1);
 			System.out.println("backupTrsansactions");
+		} else if(request.getParameter("insertExchangeRate") != null) {
+			Controller.insertExchangeRates(ds1);
 		}
 		doGet(request, response);
 	}

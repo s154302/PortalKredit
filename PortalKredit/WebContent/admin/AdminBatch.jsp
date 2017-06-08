@@ -17,8 +17,11 @@
 					name="exchangeRate">Update Exchange Rates</button>
 
 				<button class="btn btn-primary btn-block" type="submit"
+					name="insertExchangeRate">Insert Exchange Rates</button>
+
+				<button class="btn btn-primary btn-block" type="submit"
 					name="dInterestRate">Update Daily Interest Rates</button>
-					
+
 				<button class="btn btn-primary btn-block" type="submit"
 					name="yInterestRate">Update Yearly Interest Rates</button>
 				<button class="btn btn-primary btn-block" type="submit"
