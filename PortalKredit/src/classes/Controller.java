@@ -44,7 +44,7 @@ public final class Controller {
 		}
 	}
 	
-	public static void cleanUpConnection(ResultSet rs, PreparedStatement ps, Connection con){
+	public static void cleanUpResult(ResultSet rs, PreparedStatement ps){
 		try{
 			rs.close();
 		}catch(SQLException e){
@@ -54,11 +54,6 @@ public final class Controller {
 			ps.close();
 		}catch(SQLException e){
 			
-		}
-		try{
-			con.close();
-		}catch(SQLException e){
-	
 		}
 	}
 	
