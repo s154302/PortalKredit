@@ -47,8 +47,30 @@ public class ClientPaymentsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
+		if(Controller.checkAuth(Controller.Type.client, session)){
+			payment(request, response, session);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 		
 
+		
+		
+	}
+	
+	//Used to keep the written input in the input fields
+	private HttpServletRequest keepInputs(HttpServletRequest request){	
+		request.setAttribute("amount", stramount);
+		request.setAttribute("currency", currency);
+		request.setAttribute("message", strmessage);
+		request.setAttribute("reciMessage", strreciMessage);
+		request.setAttribute("reciReg", strreciReg);
+		request.setAttribute("reciAcc", reciAcc);
+		return request;
+	}
+	private void payment(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
 		fullAcc = request.getParameter("senderAcc");
 		String[] fullAccSplit = fullAcc.split("[.]");
 		strsendReg = fullAccSplit[0];
@@ -85,16 +107,5 @@ public class ClientPaymentsServlet extends HttpServlet {
 			
 		request.getRequestDispatcher("payments.jsp").forward(request, response);
 		
-	}
-	
-	//Used to keep the written input in the input fields
-	private HttpServletRequest keepInputs(HttpServletRequest request){	
-		request.setAttribute("amount", stramount);
-		request.setAttribute("currency", currency);
-		request.setAttribute("message", strmessage);
-		request.setAttribute("reciMessage", strreciMessage);
-		request.setAttribute("reciReg", strreciReg);
-		request.setAttribute("reciAcc", reciAcc);
-		return request;
 	}
 }

@@ -45,6 +45,22 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		
+		if(Controller.checkAuth(Controller.Type.banker, session)){
+			
+			createAccount(request, response);
+		
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+//		Banker banker = (Banker) session.getAttribute("user");
+//		banker.getClient(clientID).setAccounts( Controller.getAccounts(clientID, ds1));
+//		session.setAttribute("user", banker);
+
+	}
+	private void createAccount(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		String accountName = request.getParameter("clientAccountName");
 		String accountNumber = request.getParameter("clientAccountNumber");
 		int regNo = Integer.parseInt(request.getParameter("clientRegNo"));
@@ -53,7 +69,7 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		double balance = Double.parseDouble(request.getParameter("clientBalance"));
 		String currency = request.getParameter("clientCurrency");
 		
-		session.setAttribute("clientID", clientID);
+		request.getSession().setAttribute("clientID", clientID);
 		try {
 			Controller.createAccount(accountName, accountNumber, regNo, accountType, clientID, balance, currency, ds1);
 			response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
@@ -63,10 +79,5 @@ public class BankerCreateAccountServlet extends HttpServlet {
 			request.setAttribute("createAccountStatus", "Wrong value inserted");
 			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
 		}
-		
-//		Banker banker = (Banker) session.getAttribute("user");
-//		banker.getClient(clientID).setAccounts( Controller.getAccounts(clientID, ds1));
-//		session.setAttribute("user", banker);
-
 	}
 }

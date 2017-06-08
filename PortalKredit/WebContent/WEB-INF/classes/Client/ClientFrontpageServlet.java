@@ -33,7 +33,7 @@ public class ClientFrontpageServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		if(Controller.checkAuth(Controller.Type.client, session)){
-		request.getRequestDispatcher("frontpage.jsp").forward(request, response);
+			request.getRequestDispatcher("frontpage.jsp").forward(request, response);
 		}
 		else{
 			request.getSession().invalidate();
@@ -44,7 +44,14 @@ public class ClientFrontpageServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		String accountNumber = request.getParameter("accountNumber");
+			if(Controller.checkAuth(Controller.Type.client, request.getSession())){
+			
+				String accountNumber = request.getParameter("accountNumber");
+			}
+			else{
+				request.getSession().invalidate();
+				response.sendRedirect("../index");
+			}
 		
 		
 	}

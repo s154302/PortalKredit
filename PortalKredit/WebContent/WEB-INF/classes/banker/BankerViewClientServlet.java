@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import classes.Banker;
 import classes.Client;
 import classes.Controller;
-import classes.Banker;
 
 @WebServlet("/banker/ViewClients")
 public class BankerViewClientServlet extends HttpServlet {
@@ -52,6 +52,20 @@ public class BankerViewClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
+		if(Controller.checkAuth(Controller.Type.banker, session)){
+			viewClient(request, response, session);
+			
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+		
+		
+		
+	}
+	private void viewClient(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
 		if(request.getParameter("ViewUsername") != null){
 			String clientID = request.getParameter("ViewUsername");
 			session.setAttribute("clientID", clientID);
@@ -64,7 +78,6 @@ public class BankerViewClientServlet extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/banker/EditClient");
 			
 		} 
-		
 		
 	}
 	

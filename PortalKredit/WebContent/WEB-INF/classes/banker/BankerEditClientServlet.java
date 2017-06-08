@@ -47,6 +47,21 @@ public class BankerEditClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
+		if(Controller.checkAuth(Controller.Type.banker, session)){
+			editClient(request, response, session);
+			
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+		
+		
+		
+
+	}
+	private void editClient(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
 		String clientID = (String) session.getAttribute("clientID");
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
@@ -74,8 +89,5 @@ public class BankerEditClientServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-
 	}
 }

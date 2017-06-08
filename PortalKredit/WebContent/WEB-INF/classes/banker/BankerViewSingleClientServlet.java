@@ -58,6 +58,20 @@ public class BankerViewSingleClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
+		if(Controller.checkAuth(Controller.Type.banker, session)){
+			viewSingleClient(request, response, session);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+		
+		
+		
+	}
+	private void viewSingleClient(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
+		
 		String accountNumber = request.getParameter("accountNumber");
 		int regNo = Integer.parseInt(request.getParameter("regNo"));
 		
@@ -65,7 +79,6 @@ public class BankerViewSingleClientServlet extends HttpServlet {
 		session.setAttribute("account", account);
 		
 		response.sendRedirect(request.getContextPath() + "/banker/ViewClientAccount");
-		
 		
 	}
 }

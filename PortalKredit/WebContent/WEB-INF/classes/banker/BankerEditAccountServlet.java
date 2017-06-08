@@ -45,6 +45,18 @@ public class BankerEditAccountServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		
+		if(Controller.checkAuth(Controller.Type.banker, session)){
+			editAccount(request, response, session);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+		
+		}
+	
+	private void editAccount(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
 		Account account = (Account) session.getAttribute("account");
 		String accountName = request.getParameter("clientAccountName");
 		String accountType = request.getParameter("clientAccountType");

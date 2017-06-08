@@ -34,11 +34,18 @@ public class AccountViewServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
-		Account account = (Account)session.getAttribute("account");
+		if(Controller.checkAuth(Controller.Type.client, session)){
+			Account account = (Account)session.getAttribute("account");
+			
+			session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), ds1));
+			
+			request.getRequestDispatcher("accountView.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	
-		session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), ds1));
-		
-		request.getRequestDispatcher("accountView.jsp").forward(request, response);
 	}
 	
 	@Override
@@ -46,6 +53,16 @@ public class AccountViewServlet extends HttpServlet {
 			throws ServletException, IOException{
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
+		if(Controller.checkAuth(Controller.Type.client, session)){
+			accountTransactions(request, response, session);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+	}
+	private void accountTransactions(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
 		Account account = (Account)session.getAttribute("account");
 		ArrayList<Transaction> transactions = (ArrayList<Transaction>) session.getAttribute("transactions");
 		transactions.addAll(Controller.getOldTransactions(account.getAccountNumber(), account.getRegNo(), ds1, session));

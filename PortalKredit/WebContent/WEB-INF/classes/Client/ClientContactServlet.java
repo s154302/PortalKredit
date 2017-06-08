@@ -45,7 +45,15 @@ public class ClientContactServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		String accountNumber = request.getParameter("accountNumber");
+		
+		if(Controller.checkAuth(Controller.Type.client, request.getSession())){
+			
+			String accountNumber = request.getParameter("accountNumber");
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 		
 		
 	}

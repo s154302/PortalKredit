@@ -50,7 +50,21 @@ public class BankerCreateClientServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		PrintWriter out = response.getWriter();
 		
-		session.setAttribute("clientID", null);
+		if(Controller.checkAuth(Controller.Type.banker, session)){
+			createClient(request,response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+		
+
+	}
+	
+	private void createClient(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+		
+		request.getSession().setAttribute("clientID", null);
 		
 		String firstName = request.getParameter("clientFirstName");
 		String lastName = request.getParameter("clientLastName");
@@ -67,9 +81,9 @@ public class BankerCreateClientServlet extends HttpServlet {
 		try {
 			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
 
-			Banker banker = (Banker) session.getAttribute("user");
+			Banker banker = (Banker) request.getSession().getAttribute("user");
 			banker.setClients(Controller.getClients(banker.getBankerID(), ds1));
-			session.setAttribute("user", banker);
+			request.getSession().setAttribute("user", banker);
 			
 			response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
 		} catch (NumberFormatException e) {
@@ -78,6 +92,5 @@ public class BankerCreateClientServlet extends HttpServlet {
 			request.setAttribute("createClientStatus", "Wrong value inserted");
 			request.getRequestDispatcher("CreateClient.jsp").forward(request, response);
 		}
-
 	}
 }

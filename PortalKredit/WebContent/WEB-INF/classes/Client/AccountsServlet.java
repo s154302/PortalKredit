@@ -49,7 +49,17 @@ public class AccountsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
+		if(Controller.checkAuth(Controller.Type.client, session)){
+			accountInfo(request, response, session);
+		}
+		else{
+			
+		}
 	
+		
+	}
+	
+	private void accountInfo(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
 		String accountNumber = request.getParameter("accountNumber");
 		int regNo = Integer.parseInt(request.getParameter("regNo"));
 		
