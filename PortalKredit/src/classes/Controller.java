@@ -343,29 +343,35 @@ public final class Controller {
 	}
 	
 	// Returns all 'old' transactions associated with an account
-	public static ArrayList<Transaction> getOldTransactions(String accountNumber, int regNo, DataSource ds1) {
+	public static ArrayList<Transaction> getOldTransactions(String accountNumber, int regNo, DataSource ds1, HttpSession session) {
 
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 		Connection con;
-		try {
-			con = ds1.getConnection(Secret.userID, Secret.password);
-			PreparedStatement ps = con.prepareStatement(
-					"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+			try {
+				if(session.getAttribute("loadedOldTransactions") == null){
+					con = ds1.getConnection(Secret.userID, Secret.password);
+					PreparedStatement ps = con.prepareStatement(
+							"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
 
-			ps.setString(1, accountNumber);
-			ps.setInt(2, regNo);
+					ps.setString(1, accountNumber);
+					ps.setInt(2, regNo);
 
-			ResultSet rs = ps.executeQuery();
+					ResultSet rs = ps.executeQuery();
 
-			while (rs.next()) {
-				transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
-						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
-						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"), rs.getDouble("BALANCE"), rs.getString("NOTE")));
+					while (rs.next()) {
+						transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
+								rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
+								rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"), rs.getDouble("BALANCE"), rs.getString("NOTE")));
+					}
+					rs.close();
+					con.close();
+					session.setAttribute("loadedOldTransactions", true);
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
 		return transactionList;
 	}
 

@@ -48,7 +48,7 @@ public class AccountViewServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Account account = (Account)session.getAttribute("account");
 		ArrayList<Transaction> transactions = (ArrayList<Transaction>) session.getAttribute("transactions");
-		transactions.addAll(Controller.getOldTransactions(account.getAccountNumber(), account.getRegNo(), ds1));
+		transactions.addAll(Controller.getOldTransactions(account.getAccountNumber(), account.getRegNo(), ds1, session));
 		session.setAttribute("transactions", transactions);
 		request.getRequestDispatcher("accountView.jsp").forward(request, response);
 	}
