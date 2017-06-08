@@ -1,6 +1,6 @@
 package banker;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.annotation.Resource;
@@ -29,7 +29,6 @@ public class BankerCreateClientServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
 			Banker banker = (Banker) session.getAttribute("user");
@@ -48,7 +47,6 @@ public class BankerCreateClientServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
 			createClient(request,response);
@@ -78,12 +76,16 @@ public class BankerCreateClientServlet extends HttpServlet {
 		String postal = request.getParameter("clientCity");
 		String country = request.getParameter("clientCountry");
 
+		Connection con = Controller.getConnection(ds1);
 		try {
-			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID, Integer.parseInt(postal), country, ds1);
+			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
+					Integer.parseInt(postal), country, con);
+
 
 			Banker banker = (Banker) request.getSession().getAttribute("user");
-			banker.setClients(Controller.getClients(banker.getBankerID(), ds1));
+			banker.setClients(Controller.getClients(banker.getBankerID(), con));
 			request.getSession().setAttribute("user", banker);
+
 			
 			response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
 		} catch (NumberFormatException e) {
@@ -91,6 +93,8 @@ public class BankerCreateClientServlet extends HttpServlet {
 		} catch (SQLException e) {
 			request.setAttribute("createClientStatus", "Wrong value inserted");
 			request.getRequestDispatcher("CreateClient.jsp").forward(request, response);
+		}finally{
+			Controller.cleanUpConnection(con);
 		}
 	}
 }

@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.sql.Connection;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -39,19 +40,20 @@ public class AdminBatchServlet extends HttpServlet {
 		Controller.adminCheckAuth("AdminBatch.jsp",request,response);
 	}
 	private void checkButtons(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+		Connection con = Controller.getConnection(ds1);
 		if(request.getParameter("exchangeRate") != null) {
 			Controller.updateExchangeRates(ds1);
 		} else if(request.getParameter("dInterestRate") != null) {
-			Controller.calculateInterestRates(ds1);
+			Controller.calculateInterestRates(con);
 		} else if(request.getParameter("yInterestRate") != null) {
-			Controller.giveAnualInterest(ds1);
-			System.out.println("yInterest");
+			Controller.giveAnualInterest(con);
 		} else if(request.getParameter("backupTransactions") != null){
-			Controller.backupTransactions(ds1);
-			System.out.println("backupTrsansactions");
+			Controller.backupTransactions(con);
 		} else if(request.getParameter("insertExchangeRate") != null) {
 			Controller.insertExchangeRates(ds1);
+
 		}
+		Controller.cleanUpConnection(con);
 		doGet(request, response);
 	}
 	

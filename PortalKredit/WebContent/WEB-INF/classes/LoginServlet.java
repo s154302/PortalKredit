@@ -1,7 +1,7 @@
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import classes.Client;
 import classes.Controller;
 
 /**
@@ -34,28 +33,30 @@ public class LoginServlet extends HttpServlet {
 		String userID = request.getParameter("userID");
 		String password = request.getParameter("password");
 		boolean st = false;
-		//TODO: Move the method to a utility class and call it authenticate
-		st = Controller.authenticate(userID, password, ds1, session);
+		
+		Connection con= Controller.getConnection(ds1);
+		
+		st = Controller.authenticate(userID, password, con, session);
 		
 		if(st) {
 			session.setAttribute("userID", userID);
 			switch((Controller.Type)session.getAttribute("type")){
 			case client:
-				session.setAttribute("user", Controller.getClientInfo(userID, ds1));
+				session.setAttribute("user", Controller.getClientInfo(userID, con));
 				response.sendRedirect(request.getContextPath() + "/client/accounts");
 				break;
 			case banker:
-				session.setAttribute("user", Controller.getBankerInfo(userID, ds1));
+				session.setAttribute("user", Controller.getBankerInfo(userID, con));
 				response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
 				break;
 			case admin:
-				session.setAttribute("user", Controller.getAdminInfo(userID, ds1));
+				session.setAttribute("user", Controller.getAdminInfo(userID, con));
 				response.sendRedirect(request.getContextPath() + "/admin/AdminFrontpage");
 				break;
 			default:
 				break;
 			}
-			
+			Controller.cleanUpConnection(con);
 		} else {
 			request.setAttribute("logingStatus", "Wrong userID or Password");
 			request.setAttribute("userID", userID);

@@ -1,6 +1,7 @@
 
 
 import java.io.IOException;
+import java.sql.Connection;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -8,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -51,8 +51,9 @@ public class CreateAdminServlet extends HttpServlet {
 		String adminPassword = request.getParameter("adminPassword");
 		String hashed = BCrypt.hashpw(adminPassword, BCrypt.gensalt(14));
 		
-		Controller.createAdmin(adminID, hashed, ds1);
-
+		Connection con = Controller.getConnection(ds1);
+		Controller.createAdmin(adminID, hashed, con);
+		Controller.cleanUpConnection(con);
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateAdmin");
 		
 	}

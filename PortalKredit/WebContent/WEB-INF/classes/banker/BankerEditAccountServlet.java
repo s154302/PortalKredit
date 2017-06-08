@@ -1,6 +1,6 @@
 package banker;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -26,7 +26,6 @@ public class BankerEditAccountServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
 			request.getRequestDispatcher("EditClientAccount.jsp").forward(request, response);
@@ -43,7 +42,6 @@ public class BankerEditAccountServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
 			editAccount(request, response, session);
@@ -62,12 +60,13 @@ public class BankerEditAccountServlet extends HttpServlet {
 		String accountType = request.getParameter("clientAccountType");
 		String clientID = request.getParameter("clientID");
 		String currency = request.getParameter("clientCurrency");
-		
-		Controller.editAccount(accountName, account.getAccountNumber(), account.getRegNo(), accountType, clientID, account.getBalance(), currency, ds1);
-		account = Controller.getAccountInfo(account.getAccountNumber(), account.getRegNo(), ds1);
-		
+		Connection con = Controller.getConnection(ds1);
+		Controller.editAccount(accountName, account.getAccountNumber(), account.getRegNo(), 
+				accountType, clientID, account.getBalance(), currency, con);
+		account = Controller.getAccountInfo(account.getAccountNumber(), account.getRegNo(), con);
+
 		session.setAttribute("account", account);
-		
+		Controller.cleanUpConnection(con);
 		response.sendRedirect(request.getContextPath() + "/banker/ViewClientAccount");
 	}
 }

@@ -1,6 +1,7 @@
 package Client;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.annotation.Resource;
@@ -54,11 +55,6 @@ public class ClientEditInfoServlet extends HttpServlet {
 			request.getSession().invalidate();
 			response.sendRedirect("../index");
 		}
-		
-		
-		
-		
-
 	}
 	
 	//Needs to handle null values somehow.
@@ -69,13 +65,13 @@ public class ClientEditInfoServlet extends HttpServlet {
 		String mobile = request.getParameter("mobile");  
 		String street = request.getParameter("street"); 
 		int postal = Integer.parseInt(request.getParameter("postal"));
-		
+		Connection con = Controller.getConnection(ds1);
 		try {
 			if(!request.getParameter("password").isEmpty()){
-				Controller.changeClientPassword(clientID, password, ds1);
+				Controller.changeClientPassword(clientID, password, con);
 			}
 			
-			Controller.clientEditClient(clientID, email, mobile, street, postal, ds1);
+			Controller.clientEditClient(clientID, email, mobile, street, postal, con);
 			Client client = (Client)session.getAttribute("user");
 			client.setEmail(email);
 			client.setPhoneNo(mobile);
@@ -88,6 +84,8 @@ public class ClientEditInfoServlet extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			Controller.cleanUpConnection(con);
 		}
 	}
 }

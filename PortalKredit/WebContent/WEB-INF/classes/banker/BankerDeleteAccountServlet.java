@@ -1,7 +1,6 @@
 package banker;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.sql.Connection;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -12,10 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import classes.Client;
-import classes.Controller;
 import classes.Account;
 import classes.Banker;
+import classes.Controller;
 
 @WebServlet("/banker/DeleteAccount")
 public class BankerDeleteAccountServlet extends HttpServlet {
@@ -47,6 +45,7 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
+		Connection con = Controller.getConnection(ds1);
 		// Clicked button canceled
 		if(request.getParameter("cancel") != null){
 			response.sendRedirect(request.getContextPath() + "/banker/ViewClientAccount");
@@ -56,7 +55,7 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 			
 			String password = request.getParameter("password");
 			String bankerID = ((Banker)session.getAttribute("user")).getBankerID();
-			Boolean control = Controller.authenticate(bankerID, password, ds1, session);
+			Boolean control = Controller.authenticate(bankerID, password, con, session);
 			
 			// authenticating the banker ID
 			if(control){
@@ -81,7 +80,8 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 				request.setAttribute("deleteStatus", "Wrong Password");
 				request.getRequestDispatcher("DeleteAccount.jsp").forward(request, response);
 			}
-		}	
+		}
+		Controller.cleanUpConnection(con);
 	}
 
 

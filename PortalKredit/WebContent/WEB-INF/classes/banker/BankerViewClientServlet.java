@@ -1,6 +1,6 @@
 package banker;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
@@ -31,7 +31,6 @@ public class BankerViewClientServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		PrintWriter out = response.getWriter();
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
 			Banker banker = (Banker) session.getAttribute("user");
@@ -72,9 +71,13 @@ public class BankerViewClientServlet extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
 		
 		} else if(request.getParameter("EditUsername") != null){
+			
+			Connection con = Controller.getConnection(ds1);
 			String clientID = request.getParameter("EditUsername");
 			session.setAttribute("clientID", clientID);
-			session.setAttribute("client", (Client) Controller.getClientInfo(clientID, ds1));
+			session.setAttribute("client", (Client) Controller.getClientInfo(clientID, con));
+			
+			Controller.cleanUpConnection(con);
 			response.sendRedirect(request.getContextPath() + "/banker/EditClient");
 			
 		} 

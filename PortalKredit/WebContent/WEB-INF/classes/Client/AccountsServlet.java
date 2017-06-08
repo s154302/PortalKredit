@@ -1,7 +1,7 @@
 package Client;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.sql.Connection;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -34,9 +34,11 @@ public class AccountsServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		if(Controller.checkAuth(Controller.Type.client, session)){
 		Client client = (Client) session.getAttribute("user");
-		client.setAccounts(Controller.getAccounts(client.getClientID(), ds1));
+		Connection con = Controller.getConnection(ds1);
+		client.setAccounts(Controller.getAccounts(client.getClientID(), con));
 		session.setAttribute("accounts", client.getAccounts());
-		
+
+		Controller.cleanUpConnection(con);
 		request.getRequestDispatcher("accounts.jsp").forward(request, response);
 		}
 		else{
@@ -64,10 +66,11 @@ public class AccountsServlet extends HttpServlet {
 	private void accountInfo(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
 		String accountNumber = request.getParameter("accountNumber");
 		int regNo = Integer.parseInt(request.getParameter("regNo"));
-		
-		Account account = Controller.getAccountInfo(accountNumber, regNo, ds1);
+		Connection con = Controller.getConnection(ds1);
+		Account account = Controller.getAccountInfo(accountNumber, regNo, con);
 		session.setAttribute("account", account);
-		
+		Controller.cleanUpConnection(con);
 		response.sendRedirect("accountView");
 	}
+	
 }

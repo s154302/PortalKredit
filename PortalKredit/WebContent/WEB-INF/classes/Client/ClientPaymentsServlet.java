@@ -1,6 +1,8 @@
 package Client;
 
 import java.io.IOException;
+import java.sql.Connection;
+
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-
-import classes.Client;
 import classes.Controller;
 
 @WebServlet("/client/payments")
@@ -86,12 +86,13 @@ public class ClientPaymentsServlet extends HttpServlet {
 		int reciReg = Integer.parseInt(strreciReg);
 		double amount = Double.parseDouble(stramount);
 		
+		Connection con = Controller.getConnection(ds1);
 		String userID = (String) session.getAttribute("userID");
-		Boolean correctPw = Controller.authenticate(userID, password, ds1, session);
+		Boolean correctPw = Controller.authenticate(userID, password, con, session);
 
 		if(correctPw){
 			Boolean status = Controller.transaction(sendAcc, reciAcc, amount, sendReg, reciReg,
-					currency, strmessage, strreciMessage, ds1);
+					currency, strmessage, strreciMessage, con);
 			
 			if(status){
 				request.setAttribute("status", "Payment complete");
@@ -104,7 +105,8 @@ public class ClientPaymentsServlet extends HttpServlet {
 			request.setAttribute("status", "Payment incomplete - Wrong password");
 			request = keepInputs(request); 
 		}
-			
+		
+		Controller.cleanUpConnection(con);
 		request.getRequestDispatcher("payments.jsp").forward(request, response);
 		
 	}

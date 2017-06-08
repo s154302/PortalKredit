@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
@@ -8,10 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import classes.Admin;
 import classes.Banker;
 import classes.Controller;
 
@@ -29,8 +27,11 @@ public class DeleteBankerServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		ArrayList<Banker> bankerList = Controller.getBankerList(ds1);
+		Connection con = Controller.getConnection(ds1);
+		ArrayList<Banker> bankerList = Controller.getBankerList(con);
+		Controller.cleanUpConnection(con);
 		request.setAttribute("list", bankerList);
+		
 		Controller.adminCheckAuth("AdminDeleteBanker.jsp",request,response);
 	}
 	@Override
@@ -46,8 +47,9 @@ public class DeleteBankerServlet extends HttpServlet {
 	}
 	private void deleteBanker(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		String bankerID = request.getParameter("username");
-		Controller.deleteBanker(bankerID, ds1);
-		
+		Connection con = Controller.getConnection(ds1);
+		Controller.deleteBanker(bankerID, con);
+		Controller.cleanUpConnection(con);
 		doGet(request, response);
 	}
 

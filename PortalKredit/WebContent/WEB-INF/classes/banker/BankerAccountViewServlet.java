@@ -1,6 +1,7 @@
 package banker;
 
 import java.io.IOException;
+import java.sql.Connection;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -29,14 +30,16 @@ public class BankerAccountViewServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException{
+		
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		if(Controller.checkAuth(Controller.Type.banker, session)){
-			
-		
-		Account account = (Account) session.getAttribute("account");
-		session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), ds1));
-		request.getRequestDispatcher("ViewClientAccount.jsp").forward(request, response);
+			Connection con = Controller.getConnection(ds1);
+			Account account = (Account) session.getAttribute("account");
+			session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con));
+			Controller.cleanUpConnection(con);
+			request.getRequestDispatcher("ViewClientAccount.jsp").forward(request, response);
+
 		
 		}
 		else{
