@@ -28,35 +28,35 @@ public final class Controller {
 		client, banker, admin
 	}
 
-	public static Connection getConnection (DataSource ds1){
+	public static Connection getConnection(DataSource ds1) {
 		try {
 			return ds1.getConnection(Secret.userID, Secret.password);
 		} catch (SQLException e) {
 			return null;
 		}
 	}
-	
-	public static void cleanUpConnection(Connection con){
-		try{
+
+	public static void cleanUpConnection(Connection con) {
+		try {
 			con.close();
-		}catch(SQLException e){
-			
+		} catch (SQLException e) {
+
 		}
 	}
-	
-	public static void cleanUpResult(ResultSet rs, PreparedStatement ps){
-		try{
+
+	public static void cleanUpResult(ResultSet rs, PreparedStatement ps) {
+		try {
 			rs.close();
-		}catch(SQLException e){
-			
+		} catch (SQLException e) {
+
 		}
-		try{
+		try {
 			ps.close();
-		}catch(SQLException e){
-			
+		} catch (SQLException e) {
+
 		}
 	}
-	
+
 	public static boolean authenticate(String userID, String password, Connection ds1, HttpSession session) {
 		boolean st = false;
 
@@ -334,33 +334,35 @@ public final class Controller {
 		}
 		return transactionList;
 	}
-	
+
 	// Returns all 'old' transactions associated with an account
-	public static ArrayList<Transaction> getOldTransactions(String accountNumber, int regNo, Connection ds1, HttpSession session) {
+	public static ArrayList<Transaction> getOldTransactions(String accountNumber, int regNo, Connection ds1,
+			HttpSession session) {
 
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
-			try {
-				if(session.getAttribute("loadedOldTransactions") == null){
-					PreparedStatement ps = ds1.prepareStatement(
-							"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+		try {
+			if (session.getAttribute("loadedOldTransactions") == null) {
+				PreparedStatement ps = ds1.prepareStatement(
+						"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
 
-					ps.setString(1, accountNumber);
-					ps.setInt(2, regNo);
+				ps.setString(1, accountNumber);
+				ps.setInt(2, regNo);
 
-					ResultSet rs = ps.executeQuery();
+				ResultSet rs = ps.executeQuery();
 
-					while (rs.next()) {
-						transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
-								rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
-								rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"), rs.getDouble("BALANCE"), rs.getString("NOTE")));
-					}
-					session.setAttribute("loadedOldTransactions", true);
+				while (rs.next()) {
+					transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
+							rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
+							rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"),
+							rs.getDouble("BALANCE"), rs.getString("NOTE")));
 				}
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
+				session.setAttribute("loadedOldTransactions", true);
 			}
-		
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return transactionList;
 	}
 
@@ -400,6 +402,7 @@ public final class Controller {
 		ps.setString(8, street);
 		ps.setString(9, bankerID);
 		ps.setInt(10, postal);
+		System.out.println(postal);
 		ps.setString(11, country.toUpperCase());
 		ps.executeUpdate();
 
@@ -417,10 +420,10 @@ public final class Controller {
 			e.printStackTrace();
 		}
 	}
+
 	public static void createAccount(String accountName, String accountNumber, int regNo, String accountType,
 			String clientID, double balance, String currency, Connection ds1) throws SQLException {
-		PreparedStatement ps = ds1.prepareStatement(
-				"INSERT INTO \"DTUGRP16\".\"ACCOUNT\" "
+		PreparedStatement ps = ds1.prepareStatement("INSERT INTO \"DTUGRP16\".\"ACCOUNT\" "
 				+ "(ACCOUNTNUMBER, REGNO, ACCOUNTNAME, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY, INTEREST) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 		BigDecimal bdBalance = new BigDecimal(Double.valueOf(balance));
@@ -735,21 +738,21 @@ public final class Controller {
 
 	public static boolean transaction(String sendAcc, String reciAcc, double amount, int sendReg, int reciReg,
 			String currency, String message, String reciMessage, Connection ds1) {
+
+		// Ensure that negative value transaction can't be executed
 		boolean status = false;
-		if(amount < 0){
+		if (amount < 0) {
 			return false;
 		}
 
-		try {			
+		try {
 			// Make sure transaction is reversible in case of an error
-
 			ds1.setAutoCommit(false);
-			
 
-			// Extract the old balances before they are changed
-
+			// Extract the used currencies, and the old balances before they are
+			// changed
 			PreparedStatement oldBalances = ds1.prepareStatement(
-					"SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ? OR \"ACCOUNTNUMBER\" = ?");
+					"SELECT \"BALANCE\", \"CURRENCY\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ? OR \"ACCOUNTNUMBER\" = ?");
 
 			oldBalances.setString(1, sendAcc);
 			oldBalances.setString(2, reciAcc);
@@ -759,9 +762,15 @@ public final class Controller {
 			// Define variables for old balances
 			rsOldBalances.next();
 			double oldBalanceSend = rsOldBalances.getDouble("BALANCE");
+			String currencySend = rsOldBalances.getString("CURRENCY");
 
 			rsOldBalances.next();
 			double oldBalanceReci = rsOldBalances.getDouble("BALANCE");
+			String currencyReci = rsOldBalances.getString("CURRENCY");
+
+			// Define transaction amount converted to receiving account's
+			// currency
+			double reciAmount = convert(currencySend, currencyReci, amount, ds1);
 
 			// Subtract amount from sending account
 			PreparedStatement subtract = ds1.prepareStatement(
@@ -773,7 +782,7 @@ public final class Controller {
 			// Add amount to receiving account
 			PreparedStatement add = ds1.prepareStatement(
 					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"BALANCE\" = \"BALANCE\" + ? WHERE \"ACCOUNTNUMBER\" = ?");
-			add.setBigDecimal(1, new BigDecimal(Double.valueOf(amount)));
+			add.setBigDecimal(1, new BigDecimal(Double.valueOf(reciAmount)));
 			add.setString(2, reciAcc);
 			add.executeUpdate();
 
@@ -794,7 +803,6 @@ public final class Controller {
 			createTransaction(transactionID, sendAcc, reciAcc, -(amount), sendReg, reciReg, currency, message,
 					sendBalance, ds1);
 
-
 			PreparedStatement check2 = ds1
 					.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ?");
 			check2.setString(1, reciAcc);
@@ -809,11 +817,10 @@ public final class Controller {
 			createTransaction(transactionID, reciAcc, sendAcc, amount, reciReg, sendReg, currency, reciMessage,
 					reciBalance, ds1);
 
-			// Check that no money has been lost or gained,
-			// if so roll back all changes
 			// Check that no money has been lost
 			// Then either commit or roll back
-			if ((sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci) && checkTransaction(transactionID, ds1)) {
+			if ((sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci)
+					&& checkTransaction(transactionID, ds1)) {
 				ds1.commit();
 				status = true;
 			} else {
@@ -853,42 +860,65 @@ public final class Controller {
 		}
 	}
 
-	//Used to check if two transactions are placed in the db
-	public static boolean checkTransaction(String transactionId, Connection con){
+	public static double convert(String fromCurrency, String toCurrency, double amount, Connection con) {
+		try {
+			PreparedStatement ps = con
+					.prepareStatement("SELECT \"EXCHANGERATE\" FROM \"DTUGRP16\".\"CURRENCY\" WHERE \"CURRENCY\" = ?");
+			ps.setString(1, fromCurrency);
+			ps.executeQuery();
+
+			ResultSet rs = ps.getResultSet();
+			rs.next();
+			double rateFrom = rs.getDouble("EXCHANGERATE");
+
+			ps.setString(1, toCurrency);
+			rs = ps.getResultSet();
+			double rateTo = rs.getDouble("EXCHANGERATE");
+
+			return (amount / rateFrom) * rateTo;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0.0;
+	}
+
+	// Used to check if two transactions are placed in the db
+	public static boolean checkTransaction(String transactionId, Connection con) {
 		Boolean status = false;
 		int i = 0;
-		try{
-			PreparedStatement ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"TRANSACTIONID\" = ?");
+		try {
+			PreparedStatement ps = con
+					.prepareStatement("SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"TRANSACTIONID\" = ?");
 			ps.setString(1, transactionId);
 			ResultSet rs = ps.executeQuery();
-			
-		while(rs.next()){
-			if(transactionId.equals(rs.getString("TRANSACTIONID"))){
-				i++;
+
+			while (rs.next()) {
+				if (transactionId.equals(rs.getString("TRANSACTIONID"))) {
+					i++;
+				}
 			}
-		}
-		
-		if(i==2){
-			status = true;
-		}else{
-			status = false;
-		}
-			
-		}catch (SQLException e){
+
+			if (i == 2) {
+				status = true;
+			} else {
+				status = false;
+			}
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 			status = false;
 		}
-		
-		
+
 		return status;
 	}
-	
-	public static void editAccount(String accountName, String accountNumber, int regNo, String accountType, String clientID,
-			double balance, String currency, Connection ds1) {
+
+	public static void editAccount(String accountName, String accountNumber, int regNo, String accountType,
+			String clientID, double balance, String currency, Connection ds1) {
 		try {
 			PreparedStatement ps = ds1.prepareStatement(
 					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"ACCOUNTNAME\"=?, \"ACCOUNTTYPE\"=?, \"CLIENTID\"=?, \"CURRENCY\"=?"
-					+ " WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+							+ " WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
 
 			ps.setString(1, accountName);
 			ps.setString(2, accountType);
@@ -961,13 +991,14 @@ public final class Controller {
 		}
 
 	}
-	
-	//Used as a 'batch' to calculate the daily interest and add it to the db.account 'Interest' attribute
-	public static boolean calculateInterestRates(Connection ds1){
+
+	// Used as a 'batch' to calculate the daily interest and add it to the
+	// db.account 'Interest' attribute
+	public static boolean calculateInterestRates(Connection ds1) {
 		Boolean status = false;
 		int rs;
 
-		try{			
+		try {
 			PreparedStatement ps = ds1
 					.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" = "
 							+ "\"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" + "
@@ -983,11 +1014,12 @@ public final class Controller {
 		return status;
 	}
 
-	//Used as a 'batch' to add the 'Interest' db.account attribute to the balance
-	public static boolean giveAnualInterest(Connection ds1){
+	// Used as a 'batch' to add the 'Interest' db.account attribute to the
+	// balance
+	public static boolean giveAnualInterest(Connection ds1) {
 		Boolean status = false;
-		
-		try{			
+
+		try {
 			PreparedStatement ps = ds1
 					.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"DTUGRP16\".\"ACCOUNT\".\"BALANCE\" = "
 							+ "\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\" + \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\""
@@ -1001,15 +1033,14 @@ public final class Controller {
 
 		return status;
 	}
-	
-	public static void editClient(String clientID, String firstName, String lastName, String email,
-			String mobile, String street, String bankerID, int postal, String country, Connection ds1)
-			throws SQLException {
+
+	public static void editClient(String clientID, String firstName, String lastName, String email, String mobile,
+			String street, String bankerID, int postal, String country, Connection ds1) throws SQLException {
 
 		PreparedStatement ps = ds1.prepareStatement(
-			"UPDATE \"DTUGRP16\".\"CLIENT\" SET (FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) "
-			+ "= (?,?,?,?,?,?,?,?) WHERE CLIENTID = ?");
-		     
+				"UPDATE \"DTUGRP16\".\"CLIENT\" SET (FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) "
+						+ "= (?,?,?,?,?,?,?,?) WHERE CLIENTID = ?");
+
 		ps.setString(1, firstName);
 		ps.setString(2, lastName);
 		ps.setString(3, email);
@@ -1022,13 +1053,13 @@ public final class Controller {
 		ps.executeUpdate();
 
 	}
-	
+
 	public static void clientEditClient(String clientID, String email, String mobile, String street, int postal,
 			Connection ds1) throws SQLException {
-		
+
 		PreparedStatement ps = ds1.prepareStatement(
-			"UPDATE \"DTUGRP16\".\"CLIENT\" SET (EMAIL, MOBILE, STREET, POSTAL) = (?,?,?,?) WHERE CLIENTID = ?");
-		     
+				"UPDATE \"DTUGRP16\".\"CLIENT\" SET (EMAIL, MOBILE, STREET, POSTAL) = (?,?,?,?) WHERE CLIENTID = ?");
+
 		ps.setString(1, email);
 		ps.setString(2, mobile);
 		ps.setString(3, street);
@@ -1039,60 +1070,61 @@ public final class Controller {
 	}
 
 	public static void changeClientPassword(String clientID, String password, Connection ds1) throws SQLException {
-		
+
 		PreparedStatement ps = ds1.prepareStatement(
-			"UPDATE \"DTUGRP16\".\"CLIENT\" SET \"DTUGRP16\".\"CLIENT\".\"PASSWORD\" = ? WHERE \"CLIENTID\" = ?");
+				"UPDATE \"DTUGRP16\".\"CLIENT\" SET \"DTUGRP16\".\"CLIENT\".\"PASSWORD\" = ? WHERE \"CLIENTID\" = ?");
 
 		ps.setString(1, BCrypt.hashpw(password, BCrypt.gensalt(14)));
 		ps.setString(2, clientID);
 		ps.executeUpdate();
 
 	}
-	
-	//Used as a "batch" to place transaction into the db for old transactions
-	public static boolean backupTransactions(Connection ds1){
+
+	// Used as a "batch" to place transaction into the db for old transactions
+	public static boolean backupTransactions(Connection ds1) {
 		Boolean status = false;
-		try{			
-			PreparedStatement movePs = ds1
-					.prepareStatement("INSERT INTO \"DTUGRP16\".\"TRANSACTIONOLD\" SELECT * FROM \"DTUGRP16\".\"TRANSACTION\"");
-			int rs =movePs.executeUpdate();
-			
-			//TODO - Check if the transaction are moved first
-			PreparedStatement deletePs = ds1
-					.prepareStatement("DELETE FROM \"DTUGRP16\".\"TRANSACTION\"");
+		try {
+			PreparedStatement movePs = ds1.prepareStatement(
+					"INSERT INTO \"DTUGRP16\".\"TRANSACTIONOLD\" SELECT * FROM \"DTUGRP16\".\"TRANSACTION\"");
+			int rs = movePs.executeUpdate();
+
+			// TODO - Check if the transaction are moved first
+			PreparedStatement deletePs = ds1.prepareStatement("DELETE FROM \"DTUGRP16\".\"TRANSACTION\"");
 			deletePs.executeUpdate();
 			status = true;
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			status = false;
 		}
-		
+
 		return status;
 
 	}
-	
-	//Used by bankers to delete a clients account given the balance is 0
+
+	// Used by bankers to delete a clients account given the balance is 0
 	public static boolean deleteAccount(int regNo, String accountNumber, Connection ds1) {
 		Boolean deleteStatus = false;
-		
-		try {			
+
+		try {
 			// Checking there isn't a balance or debt in account
-			PreparedStatement ps1 = ds1.prepareStatement("SELECT BALANCE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
+			PreparedStatement ps1 = ds1.prepareStatement(
+					"SELECT BALANCE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
 			ps1.setInt(1, regNo);
 			ps1.setString(2, accountNumber);
 			ResultSet rs1 = ps1.executeQuery();
 			rs1.next();
 			double balance = rs1.getDouble("BALANCE");
-			if(balance == 0){
-				
+			if (balance == 0) {
+
 				// Trying to delete account
-				PreparedStatement ps2 = ds1.prepareStatement("DELETE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
+				PreparedStatement ps2 = ds1.prepareStatement(
+						"DELETE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
 				ps2.setInt(1, regNo);
 				ps2.setString(2, accountNumber);
 				ps2.executeUpdate();
 				deleteStatus = true;
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -91,6 +91,7 @@ public class BankerCreateClientServlet extends HttpServlet {
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			request.setAttribute("createClientStatus", "Wrong value inserted");
 			request.getRequestDispatcher("CreateClient.jsp").forward(request, response);
 		}finally{
