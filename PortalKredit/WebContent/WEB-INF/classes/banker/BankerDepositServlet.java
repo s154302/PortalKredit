@@ -38,7 +38,7 @@ public class BankerDepositServlet extends HttpServlet {
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
 		
-		request.getRequestDispatcher("Transaction.jsp").forward(request, response);
+		request.getRequestDispatcher("Deposit.jsp").forward(request, response);
 		}
 		else{
 			request.getSession().invalidate();
