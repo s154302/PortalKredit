@@ -495,10 +495,13 @@ public final class Controller {
 			ps.setString(1, postal);
 			ps.setString(2, getCountry(country).toUpperCase());
 			ResultSet rs = ps.executeQuery();
+			
+			//maybe handle if the city doesnt exist
+			if(rs.next()){
+				city = rs.getString("CITY");
+			}
 
-			rs.next();
-
-			city = rs.getString("CITY");
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
