@@ -1329,4 +1329,27 @@ public final class Controller {
 
 		return country;
 	}
+
+	public static boolean createAccountType(String accountType, Double interestRate, Connection con) {
+		boolean createAccountTypeStatus = false;
+		
+		// parsing to big decimal for precision 
+		BigDecimal interestRateBD = new BigDecimal(Double.valueOf(interestRate));
+		
+		try {
+			// Inserting the account type and interest rate in the database
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO \"DTUGRP16\".\"ACCOUNTTYPE\" VALUES(?, ?)");
+			ps.setString(1, accountType);
+			ps.setBigDecimal(2, interestRateBD);
+			ps.executeUpdate();
+			createAccountTypeStatus = true;
+
+		} catch (SQLException e) {
+			//SQL Error printing
+			e.printStackTrace();
+		}
+
+		return createAccountTypeStatus;
+	}
 }
