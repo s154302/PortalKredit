@@ -11,7 +11,6 @@
 	<div class="collapse navbar-collapse" id="navbarNavDropdown">
 		<ul class="navbar-nav">
 
-			<li class="nav-item active"><a class="nav-link" href="frontpage">Home</a></li>
 			<li class="nav-item active"><a class="nav-link" href="accounts">Accounts</a></li>
 			<li class="nav-item active"><a class="nav-link" href="payments">Payments</a></li>
 			<li class="nav-item active"><a class="nav-link" href="editInfo">Edit Info</a></li>

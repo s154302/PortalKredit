@@ -15,9 +15,11 @@
 			<li class="nav-item active"><a class="nav-link"
 				href="CreateClient">Create Client</a></li>
 			<li class="nav-item active"><a class="nav-link"
-				href="CreateAccount">Create Account</a></li>
-			<li class="nav-item active"><a class="nav-link"
 				href="CreateAccountType">Create Account Type</a></li>
+			<li class="nav-item active"><a class="nav-link"
+				href="Deposit">Deposit</a></li>
+			<li class="nav-item active"><a class="nav-link"
+				href="Transaction">Transaction</a></li>
 		</ul>
 	</div>
 	<p class="col-2" style="color: white">Logged in as: <br>${user.fullName}</p>

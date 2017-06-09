@@ -168,7 +168,6 @@
 		<url-pattern>/banker/BankerDeleteAccountServlet</url-pattern>
 	</servlet-mapping>
 	
-	
 	<servlet>
 		<servlet-name>BankerCreateAccountTypeServlet</servlet-name>
 		<servlet-class>BankerCreateAccountTypeServlet</servlet-class>
@@ -177,6 +176,27 @@
 		<servlet-name>BankerCreateAccountTypeServlet</servlet-name>
 		<url-pattern>/banker/BankerCreateAccountTypeServlet</url-pattern>
 	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>BankerDepositServlet</servlet-name>
+		<servlet-class>BankerDepositServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BankerDepositServlet</servlet-name>
+		<url-pattern>/banker/BankerDepositServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>BankerTransactionServlet</servlet-name>
+		<servlet-class>BankerTransactionServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BankerTransactionServlet</servlet-name>
+		<url-pattern>/banker/BankerTransactionServlet</url-pattern>
+	</servlet-mapping>
+	
+	
+	
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
