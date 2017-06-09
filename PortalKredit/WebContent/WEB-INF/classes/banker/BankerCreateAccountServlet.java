@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import classes.Banker;
 import classes.Controller;
 
 @WebServlet("/banker/CreateAccount")
@@ -59,11 +60,12 @@ public class BankerCreateAccountServlet extends HttpServlet {
 
 	}
 	private void createAccount(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+		Banker banker = (Banker) request.getAttribute("user");
 		String accountName = request.getParameter("clientAccountName");
 		String accountNumber = request.getParameter("clientAccountNumber");
-		int regNo = Integer.parseInt(request.getParameter("clientRegNo"));
+		int regNo = (banker.getRegNo());
 		String accountType = request.getParameter("clientAccountType");
-		String clientID = request.getParameter("clientID");
+		String clientID = (String) request.getAttribute("clientID");
 		double balance = Double.parseDouble(request.getParameter("clientBalance"));
 		String currency = request.getParameter("clientCurrency");
 		

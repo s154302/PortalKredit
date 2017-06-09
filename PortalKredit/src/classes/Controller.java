@@ -402,7 +402,6 @@ public final class Controller {
 		ps.setString(8, street);
 		ps.setString(9, bankerID);
 		ps.setInt(10, postal);
-		System.out.println(postal);
 		ps.setString(11, country.toUpperCase());
 		ps.executeUpdate();
 
@@ -427,7 +426,7 @@ public final class Controller {
 				+ "(ACCOUNTNUMBER, REGNO, ACCOUNTNAME, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY, INTEREST) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 		BigDecimal bdBalance = new BigDecimal(Double.valueOf(balance));
-		ps.setString(1, accountNumber);
+		ps.setString(1, generateAccountNumber(ds1));
 		ps.setInt(2, regNo);
 		ps.setString(3, accountName);
 		ps.setString(4, accountType);
@@ -437,7 +436,37 @@ public final class Controller {
 		ps.setDouble(8, 0);
 		ps.executeUpdate();
 	}
+	public static String generateAccountNumber(Connection ds1){
+		String accountNumber = new String();
+		
+		int intID = 0;
+		try {
+			// Select the latest ID, and extract only the ID number as an
+			// integer
+			PreparedStatement ps = ds1.prepareStatement(
+					"(SELECT INTEGER(ACCOUNTNUMBER) FROM \"DTUGRP16\". \"ACCOUNT\" ORDER BY ACCOUNTNUMBER DESC FETCH FIRST 1 ROWS ONLY)");
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				intID = rs.getInt(1);
+			}
 
+			if (intID > 0) {
+				accountNumber = String.format("%010d", intID + 1);
+			} else {
+				accountNumber = "0000000001";
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println(accountNumber);
+		
+		
+		
+		return accountNumber;
+	}
+	
+	
 	// Returns all clients associated with a single banker
 	public static ArrayList<Client> getClients(String bankerID, Connection ds1) {
 		ArrayList<Client> clientList = new ArrayList<>();
@@ -958,12 +987,11 @@ public final class Controller {
 			while (x.hasNext()) {
 				String key = (String) x.next();
 				String exchRate = obj.get(key).toString();
-				if (!key.equals("DKK")) {
-					System.out.println(key + " " + exchRate);
-					ps.setString(1, key);
-					ps.setBigDecimal(2, new BigDecimal(exchRate));
-					ps.executeUpdate();
-				}
+				
+				ps.setString(1, key);
+				ps.setBigDecimal(2, new BigDecimal(exchRate));
+				ps.executeUpdate();
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
