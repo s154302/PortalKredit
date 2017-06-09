@@ -210,7 +210,7 @@ public final class Controller {
 			banker.setBankerID(rs.getString("BANKERID"));
 			banker.setFirstName(rs.getString("FIRSTNAME"));
 			banker.setLastName(rs.getString("LASTNAME"));
-			banker.setRegNo(rs.getInt("REGNO"));
+			banker.setRegNo(rs.getString("REGNO"));
 			banker.setEmail(rs.getString("EMAIL"));
 			banker.setPhoneNo(rs.getString("MOBILE"));
 
@@ -241,7 +241,9 @@ public final class Controller {
 
 			rs.next();
 			client = setClientInfo(rs);
-			client.setCity(findCity(rs.getInt("POSTAL"), rs.getString("COUNTRY"), con));
+
+			client.setCity(findCity(rs.getString("POSTAL"), rs.getString("COUNTRY"), con));
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally{
@@ -265,7 +267,7 @@ public final class Controller {
 
 			Account account;
 			while (rs.next()) {
-				account = new Account(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"), rs.getString("ACCOUNTTYPE"),
+				account = new Account(rs.getString("ACCOUNTNUMBER"), rs.getString("REGNO"), rs.getString("ACCOUNTTYPE"),
 						rs.getString("CLIENTID"), rs.getDouble("BALANCE"), rs.getString("CURRENCY"),
 						findInterestRate(rs.getString("ACCOUNTTYPE"), con), rs.getString("accountName"));
 				account.setTransactions(get3NewestTransactions(account.getAccountNumber(), account.getRegNo(), con));
@@ -280,7 +282,9 @@ public final class Controller {
 	}
 
 	// Fills a single account object with data and returns it
-	public static Account getAccountInfo(String accountNumber, int regNo, Connection con) {
+
+	public static Account getAccountInfo(String accountNumber, String regNo, Connection con) {
+
 		Account account = new Account();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -289,18 +293,22 @@ public final class Controller {
 					"SELECT * FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\"=? AND \"REGNO\"=?");
 
 			ps.setString(1, accountNumber);
-			ps.setInt(2, regNo);
+
+			ps.setString(2, regNo);
 			rs = ps.executeQuery();
+
 
 			rs.next();
 			account.setAccountNumber(rs.getString("ACCOUNTNUMBER"));
-			account.setRegNo(rs.getInt("REGNO"));
+			account.setRegNo(rs.getString("REGNO"));
 			account.setAccountType(rs.getString("ACCOUNTTYPE"));
 			account.setClientID(rs.getString("CLIENTID"));
 			account.setBalance(rs.getDouble("BALANCE"));
 			account.setCurrency(rs.getString("CURRENCY"));
 			account.setAccountName(rs.getString("ACCOUNTNAME"));
-			account.setTransactions(getNewTransactions(rs.getString("ACCOUNTNUMBER"), rs.getInt("REGNO"), con));
+
+			account.setTransactions(getNewTransactions(rs.getString("ACCOUNTNUMBER"), rs.getString("REGNO"), con));
+
 
 		} catch (SQLException e) {
 
@@ -314,7 +322,9 @@ public final class Controller {
 
 	// Returns the 3 newest transactions associated with an account number and
 	// regno
-	public static ArrayList<Transaction> get3NewestTransactions(String accountNumber, int regNo, Connection con) {
+
+	public static ArrayList<Transaction> get3NewestTransactions(String accountNumber, String regNo, Connection con) {
+
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -324,13 +334,13 @@ public final class Controller {
 							+ "ORDER BY DATEOFTRANSACTION DESC FETCH FIRST 3 ROWS ONLY");
 
 			ps.setString(1, accountNumber);
-			ps.setInt(2, regNo);
+			ps.setString(2, regNo);
 
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
-						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
+						rs.getString("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getString("RECIEVEREGNO"),
 						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"),
 						rs.getDouble("BALANCE"), rs.getString("NOTE")));
 			}
@@ -349,7 +359,9 @@ public final class Controller {
 	}
 
 	// Returns all 'new' transactions associated with an account
-	public static ArrayList<Transaction> getNewTransactions(String accountNumber, int regNo, Connection con) {
+
+	public static ArrayList<Transaction> getNewTransactions(String accountNumber, String string, Connection con) {
+
 
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 		PreparedStatement ps = null;
@@ -359,13 +371,13 @@ public final class Controller {
 					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
 
 			ps.setString(1, accountNumber);
-			ps.setInt(2, regNo);
+			ps.setString(2, string);
 
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
-						rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
+						rs.getString("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getString("RECIEVEREGNO"),
 						rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"),
 						rs.getDouble("BALANCE"), rs.getString("NOTE")));
 			}
@@ -378,7 +390,10 @@ public final class Controller {
 	}
 	
 	// Returns all 'old' transactions associated with an account
-	public static ArrayList<Transaction> getOldTransactions(String accountNumber, int regNo, Connection con, HttpSession session) {
+
+	public static ArrayList<Transaction> getOldTransactions(String accountNumber, String regNo, Connection con,
+			HttpSession session) {
+
 
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 		PreparedStatement ps = null;
@@ -388,17 +403,20 @@ public final class Controller {
 					ps = con.prepareStatement(
 							"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
 
-					ps.setString(1, accountNumber);
-					ps.setInt(2, regNo);
+				ps.setString(1, accountNumber);
+				ps.setString(2, regNo);
+
 
 					rs = ps.executeQuery();
 
-					while (rs.next()) {
-						transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
-								rs.getInt("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getInt("RECIEVEREGNO"),
-								rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"), rs.getDouble("BALANCE"), rs.getString("NOTE")));
-					}
+
+				while (rs.next()) {
+					transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
+							rs.getString("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getString("RECIEVEREGNO"),
+							rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"),
+							rs.getDouble("BALANCE"), rs.getString("NOTE")));
 					session.setAttribute("loadedOldTransactions", true);
+				}
 				}
 				
 			} catch (SQLException e) {
@@ -434,8 +452,10 @@ public final class Controller {
 		return admin;
 	}
 
+
 	public static void createClient(String firstName, String lastName, String password, String CPR, String email,
-			String mobile, String street, String bankerID, Integer postal, String country, Connection con)
+			String mobile, String street, String bankerID, String postal, String country, Connection con)
+
 			throws SQLException {
 		PreparedStatement ps = con.prepareStatement(
 				"INSERT INTO \"DTUGRP16\".\"CLIENT\" (CLIENTID, PASSWORD, CPR, FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -448,8 +468,11 @@ public final class Controller {
 		ps.setString(7, mobile);
 		ps.setString(8, street);
 		ps.setString(9, bankerID);
-		ps.setInt(10, postal);
+
+		ps.setString(10, postal);
+
 		ps.setString(11, country.toUpperCase());
+		System.out.println(country);
 		ps.executeUpdate();
 		cleanUpResult(null, ps);
 	}
@@ -468,16 +491,17 @@ public final class Controller {
 			cleanUpResult(null, ps);
 		}
 	}
-	
-	public static void createAccount(String accountName, String accountNumber, int regNo, String accountType,
-				String clientID, double balance, String currency, Connection con) throws SQLException {
-		PreparedStatement ps = con.prepareStatement(
-				"INSERT INTO \"DTUGRP16\".\"ACCOUNT\" "
+
+
+	public static void createAccount(String accountName, String accountNumber, String regNo, String accountType,
+			String clientID, double balance, String currency, Connection con) throws SQLException {
+		PreparedStatement ps = con.prepareStatement("INSERT INTO \"DTUGRP16\".\"ACCOUNT\" "
+
 				+ "(ACCOUNTNUMBER, REGNO, ACCOUNTNAME, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY, INTEREST) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 		BigDecimal bdBalance = new BigDecimal(Double.valueOf(balance));
-		ps.setString(1, accountNumber);
-		ps.setInt(2, regNo);
+		ps.setString(2, regNo);
+		ps.setString(1, generateAccountNumber(con));
 		ps.setString(3, accountName);
 		ps.setString(4, accountType);
 		ps.setString(5, clientID);
@@ -485,7 +509,38 @@ public final class Controller {
 		ps.setString(7, currency);
 		ps.setDouble(8, 0);
 		ps.executeUpdate();
+
 		cleanUpResult(null,ps);
+
+	}
+
+	public static String generateAccountNumber(Connection ds1) {
+		String accountNumber = new String();
+
+		int intID = 0;
+		try {
+			// Select the latest ID, and extract only the ID number as an
+			// integer
+			PreparedStatement ps = ds1.prepareStatement(
+					"(SELECT INTEGER(ACCOUNTNUMBER) FROM \"DTUGRP16\". \"ACCOUNT\" ORDER BY ACCOUNTNUMBER DESC FETCH FIRST 1 ROWS ONLY)");
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				intID = rs.getInt(1);
+			}
+
+			if (intID > 0) {
+				accountNumber = String.format("%010d", intID + 1);
+			} else {
+				accountNumber = "0000000001";
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println(accountNumber);
+
+		return accountNumber;
+
 	}
 
 	// Returns all clients associated with a single banker
@@ -513,7 +568,9 @@ public final class Controller {
 	}
 
 	// Returns the city associated with the postal and country
-	public static String findCity(int postal, String country, Connection con) {
+
+	public static String findCity(String postal, String country, Connection con) {
+
 		String city = "Orgrimmar";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -521,13 +578,18 @@ public final class Controller {
 			ps = con.prepareStatement(
 					"SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = ? AND \"COUNTRY\" = ?");
 
-			ps.setInt(1, postal);
-			ps.setString(2, country);
+
+			ps.setString(1, postal);
+			ps.setString(2, country.toUpperCase());
 			rs = ps.executeQuery();
+			
+			//maybe handle if the city doesnt exist
+			if(rs.next()){
+				city = rs.getString("CITY");
+			}
 
-			rs.next();
 
-			city = rs.getString("CITY");
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -729,7 +791,7 @@ public final class Controller {
 			client.setPhoneNo(rs.getString("MOBILE"));
 			client.setCPR(rs.getString("CPR"));
 			client.setCountry(rs.getString("COUNTRY"));
-			client.setPostal(rs.getInt("POSTAL"));
+			client.setPostal(rs.getString("POSTAL"));
 			client.setStreet(rs.getString("STREET"));
 			return client;
 		} catch (Exception e) {
@@ -752,7 +814,7 @@ public final class Controller {
 				banker.setBankerID(rs.getString("BANKERID"));
 				banker.setFirstName(rs.getString("FIRSTNAME"));
 				banker.setLastName(rs.getString("LASTNAME"));
-				banker.setRegNo(rs.getInt("REGNO"));
+				banker.setRegNo(rs.getString("REGNO"));
 				banker.setEmail(rs.getString("EMAIL"));
 				banker.setPhoneNo(rs.getString("MOBILE"));
 				bankerList.add(banker);
@@ -833,8 +895,12 @@ public final class Controller {
 		return UUID.randomUUID().toString();
 	}
 
-	public static boolean transaction(String sendAcc, String reciAcc, double amount, int sendReg, int reciReg,
+
+	public static boolean transaction(String sendAcc, String reciAcc, double amount, String sendReg, String reciReg,
 			String currency, String message, String reciMessage, Connection con) {
+
+		// Ensure that negative value transaction can't be executed
+
 		boolean status = false;
 		if(amount < 0){
 			return false;
@@ -921,8 +987,12 @@ public final class Controller {
 			// if so roll back all changes
 			// Check that no money has been lost
 			// Then either commit or roll back
-			if ((sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci) && checkTransaction(transactionID, con)) {
+
+			// The below check no longer works when a conversion happens
+			// (sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci)
+			if (checkTransaction(transactionID, con)) {
 				con.commit();
+
 				status = true;
 			} else {
 				con.rollback();
@@ -942,9 +1012,12 @@ public final class Controller {
 
 	}
 
-	public static void createTransaction(String transactionID, String acc1, String acc2, double amount, int reg1,
-			int reg2, String currency, String message, double balance, Connection con) {
-		PreparedStatement ps = null;
+
+	public static void createTransaction(String transactionID, String acc1, String acc2, double amount, String reg1,
+			String reg2, String currency, String message, double balance, Connection con) {
+	PreparedStatement ps = null;
+
+
 		try {
 
 			// Inserts a transaction into the TRANSACTION table
@@ -953,9 +1026,9 @@ public final class Controller {
 
 			ps.setString(1, transactionID);
 			ps.setString(2, acc1);
-			ps.setInt(3, reg1);
+			ps.setString(3, reg1);
 			ps.setString(4, acc2);
-			ps.setInt(5, reg2);
+			ps.setString(5, reg2);
 			ps.setDate(6, new java.sql.Date(System.currentTimeMillis()));
 			ps.setBigDecimal(7, new BigDecimal(Double.valueOf(amount)));
 			ps.setString(8, currency);
@@ -970,8 +1043,39 @@ public final class Controller {
 		}
 	}
 
-	//Used to check if two transactions are placed in the db
-	public static boolean checkTransaction(String transactionId, Connection con){
+
+	public static double convert(String fromCurrency, String toCurrency, double amount, Connection con) {
+		try {
+			// Create PreparedStatement to retrieve exchange rates
+			PreparedStatement ps = con
+					.prepareStatement("SELECT \"EXCHANGERATE\" FROM \"DTUGRP16\".\"CURRENCY\" WHERE \"CURRENCY\" = ?");
+			ps.setString(1, fromCurrency);
+			ps.executeQuery();
+
+			// Get exchange rate for first account
+			ResultSet rs = ps.getResultSet();
+			rs.next();
+			double rateFrom = rs.getDouble("EXCHANGERATE");
+
+			ps.setString(1, toCurrency);
+			ps.executeQuery();
+
+			// Get
+			rs = ps.getResultSet();
+			rs.next();
+			double rateTo = rs.getDouble("EXCHANGERATE");
+
+			return (amount / rateFrom) * rateTo;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0.0;
+	}
+
+	// Used to check if two transactions are placed in the db
+	public static boolean checkTransaction(String transactionId, Connection con) {
+
 		Boolean status = false;
 		int i = 0;
 		PreparedStatement ps = null;
@@ -1003,10 +1107,12 @@ public final class Controller {
 		
 		return status;
 	}
-	
-	public static void editAccount(String accountName, String accountNumber, int regNo, String accountType, String clientID,
-			double balance, String currency, Connection con) {
-		PreparedStatement ps = null;
+
+
+	public static void editAccount(String accountName, String accountNumber, String regNo, String accountType,
+			String clientID, double balance, String currency, Connection con) {
+	PreparedStatement ps = null;
+
 		try {
 			ps = con.prepareStatement(
 					"UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"ACCOUNTNAME\"=?, \"ACCOUNTTYPE\"=?, \"CLIENTID\"=?, \"CURRENCY\"=?"
@@ -1017,7 +1123,7 @@ public final class Controller {
 			ps.setString(3, clientID);
 			ps.setString(4, currency);
 			ps.setString(5, accountNumber);
-			ps.setInt(6, regNo);
+			ps.setString(6, regNo);
 			ps.executeUpdate();
 
 		} catch (SQLException e) {
@@ -1045,12 +1151,11 @@ public final class Controller {
 			while (x.hasNext()) {
 				String key = (String) x.next();
 				String exchRate = obj.get(key).toString();
-				if (!key.equals("DKK")) {
-					System.out.println(key + " " + exchRate);
-					ps.setString(1, key);
-					ps.setBigDecimal(2, new BigDecimal(exchRate));
-					ps.executeUpdate();
-				}
+
+				ps.setString(1, key);
+				ps.setBigDecimal(2, new BigDecimal(exchRate));
+				ps.executeUpdate();
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1133,40 +1238,44 @@ public final class Controller {
 		}
 
 		return status;
+
+
 	}
-	
-	public static void editClient(String clientID, String firstName, String lastName, String email,
-			String mobile, String street, String bankerID, int postal, String country, Connection con)
-			throws SQLException {
+
+	public static void editClient(String clientID, String firstName, String lastName, String email, String mobile,
+			String street, String bankerID, String postal, String country, Connection con) throws SQLException {
 
 		PreparedStatement ps = con.prepareStatement(
-			"UPDATE \"DTUGRP16\".\"CLIENT\" SET (FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) "
-			+ "= (?,?,?,?,?,?,?,?) WHERE CLIENTID = ?");
-		     
+				"UPDATE \"DTUGRP16\".\"CLIENT\" SET (FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) "
+						+ "= (?,?,?,?,?,?,?,?) WHERE CLIENTID = ?");
+
+
 		ps.setString(1, firstName);
 		ps.setString(2, lastName);
 		ps.setString(3, email);
 		ps.setString(4, mobile);
 		ps.setString(5, street);
 		ps.setString(6, bankerID);
-		ps.setInt(7, postal);
-		ps.setString(8, country);
+		ps.setString(7, postal);
+		ps.setString(8, country.toUpperCase());
 		ps.setString(9, clientID);
 		ps.executeUpdate();
 
 		cleanUpResult(null, ps);
 	}
-	
-	public static void clientEditClient(String clientID, String email, String mobile, String street, int postal,
+
+
+	public static void clientEditClient(String clientID, String email, String mobile, String street, String postal,
 			Connection con) throws SQLException {
-		
+
 		PreparedStatement ps = con.prepareStatement(
-			"UPDATE \"DTUGRP16\".\"CLIENT\" SET (EMAIL, MOBILE, STREET, POSTAL) = (?,?,?,?) WHERE CLIENTID = ?");
-		     
+				"UPDATE \"DTUGRP16\".\"CLIENT\" SET (EMAIL, MOBILE, STREET, POSTAL) = (?,?,?,?) WHERE CLIENTID = ?");
+
+
 		ps.setString(1, email);
 		ps.setString(2, mobile);
 		ps.setString(3, street);
-		ps.setInt(4, postal);
+		ps.setString(4, postal);
 		ps.setString(5, clientID);
 		ps.executeUpdate();
 
@@ -1211,17 +1320,21 @@ public final class Controller {
 		return status;
 
 	}
-	
-	//Used by bankers to delete a clients account given the balance is 0
-	public static boolean deleteAccount(int regNo, String accountNumber, Connection con) {
+
+
+	// Used by bankers to delete a clients account given the balance is 0
+	public static boolean deleteAccount(String regNo, String accountNumber, Connection con) {
+
 		Boolean deleteStatus = false;
 		PreparedStatement ps1 = null;
 		PreparedStatement ps2 = null;
 		ResultSet rs1 = null;
 		try {			
 			// Checking there isn't a balance or debt in account
+
 			ps1 = con.prepareStatement("SELECT BALANCE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
-			ps1.setInt(1, regNo);
+			ps1.setString(1, regNo);
+
 			ps1.setString(2, accountNumber);
 			rs1 = ps1.executeQuery();
 			rs1.next();
@@ -1229,8 +1342,10 @@ public final class Controller {
 			if(balance == 0){
 				
 				// Trying to delete account
+
 				ps2 = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? and \"ACCOUNTNUMBER\" = ?");
-				ps2.setInt(1, regNo);
+				ps2.setString(1, regNo);
+
 				ps2.setString(2, accountNumber);
 				ps2.executeUpdate();
 				deleteStatus = true;
@@ -1245,4 +1360,28 @@ public final class Controller {
 
 		return deleteStatus;
 	}
+
+	public static boolean createAccountType(String accountType, Double interestRate, Connection con) {
+		boolean createAccountTypeStatus = false;
+		
+		// parsing to big decimal for precision 
+		BigDecimal interestRateBD = new BigDecimal(Double.valueOf(interestRate));
+		
+		try {
+			// Inserting the account type and interest rate in the database
+			PreparedStatement ps = con.prepareStatement(
+					"INSERT INTO \"DTUGRP16\".\"ACCOUNTTYPE\" VALUES(?, ?)");
+			ps.setString(1, accountType);
+			ps.setBigDecimal(2, interestRateBD);
+			ps.executeUpdate();
+			createAccountTypeStatus = true;
+
+		} catch (SQLException e) {
+			//SQL Error printing
+			e.printStackTrace();
+		}
+
+		return createAccountTypeStatus;
+	}
+
 }

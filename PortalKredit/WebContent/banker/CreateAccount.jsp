@@ -25,15 +25,11 @@
 						</div>
 
 
-						<div class="form-group">
-							<input type="text" class="form-control"
-								name="clientAccountNumber" placeholder="*Account Number">
-						</div>
 
 						<div class="form-group">
 							<input type="text" pattern="[0-9]*" class="form-control"
 								name="clientRegNo" placeholder="*Reg. No."
-								title="Please only input numbers.">
+								title="Please only input numbers." value="${user.regNo}" readonly>
 						</div>
 
 						<div class="form-group">
@@ -43,7 +39,7 @@
 
 						<div class="form-group">
 							<input type="text" class="form-control" name="clientID"
-								placeholder="*Client's ID" value="${clientID}">
+								placeholder="*Client's ID" value="${clientID}" readonly>
 						</div>
 
 						<div class="form-group">
@@ -54,12 +50,7 @@
 
 						<div class="form-group">
 							<select class="form-control bfh-currencies"
-								id="createClientCountry" name="clientCurrency"></select>
-						</div>
-
-						<div class="form-group">
-							<input type="text" class="form-control" name="clientCurrency"
-								placeholder="*Client's prefered Currency">
+								id="createClientCountry" name="clientCurrency" data-currency="DKK"></select>
 						</div>
 
 						<button class="btn btn-primary btn-block btn-action" type="submit"

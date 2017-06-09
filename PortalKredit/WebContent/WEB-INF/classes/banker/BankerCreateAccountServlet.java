@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import classes.Banker;
 import classes.Controller;
 
 @WebServlet("/banker/CreateAccount")
@@ -59,13 +60,15 @@ public class BankerCreateAccountServlet extends HttpServlet {
 
 	}
 	private void createAccount(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+		Banker banker = (Banker) request.getSession().getAttribute("user");
 		String accountName = request.getParameter("clientAccountName");
 		String accountNumber = request.getParameter("clientAccountNumber");
-		int regNo = Integer.parseInt(request.getParameter("clientRegNo"));
+		String regNo = banker.getRegNo();
 		String accountType = request.getParameter("clientAccountType");
-		String clientID = request.getParameter("clientID");
+		String clientID = (String) request.getSession().getAttribute("clientID");
 		double balance = Double.parseDouble(request.getParameter("clientBalance"));
 		String currency = request.getParameter("clientCurrency");
+		System.out.println(currency);
 		
 		request.getSession().setAttribute("clientID", clientID);
 
@@ -77,6 +80,7 @@ public class BankerCreateAccountServlet extends HttpServlet {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
 			request.setAttribute("createAccountStatus", "Wrong value inserted");
 			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
 		}finally{

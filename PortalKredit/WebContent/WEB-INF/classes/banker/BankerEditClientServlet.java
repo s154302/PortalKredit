@@ -67,7 +67,7 @@ public class BankerEditClientServlet extends HttpServlet {
 		String mobile = request.getParameter("mobile");  
 		String street = request.getParameter("street"); 
 		String bankerID = request.getParameter("bankerID"); 
-		int postal = Integer.parseInt(request.getParameter("postal"));
+		String postal = request.getParameter("postal");
 		String country = request.getParameter("country"); 
 		
 		Connection con = Controller.getConnection(ds1);

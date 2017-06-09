@@ -82,8 +82,8 @@ public class ClientPaymentsServlet extends HttpServlet {
 		strmessage = request.getParameter("message");
 		strreciMessage = request.getParameter("reciMessage");
 		password = request.getParameter("password");
-		int sendReg = Integer.parseInt(strsendReg);
-		int reciReg = Integer.parseInt(strreciReg);
+		String sendReg = strsendReg;
+		String reciReg = strreciReg;
 		double amount = Double.parseDouble(stramount);
 		
 		Connection con = Controller.getConnection(ds1);

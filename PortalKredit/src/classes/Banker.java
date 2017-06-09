@@ -6,49 +6,20 @@ import java.util.ArrayList;
  */
 public class Banker {
 
-	private int  regNo;
-	private String firstName, lastName, fullName, email, bankerID, phoneNo;
+	private String firstName, lastName, fullName, email, bankerID, phoneNo, regNo;
 	private ArrayList<Client> clients;
 
 	public Banker(){
 		
 	}
 	
-	public Banker(String firstName, String lastName, String email, String bankerID, String phoneNo, int regNo){
+	public Banker(String firstName, String lastName, String email, String bankerID, String phoneNo, String regNo){
 		setFirstName(firstName);
 		setLastName(lastName);
 		this.email = email;
 		this.bankerID = bankerID;
 		this.phoneNo = phoneNo;
 		this.regNo = regNo;
-	}
-	
-	public void createClient() {
-
-	}
-
-	public void openAccount() {
-
-	}
-
-	public void closeAccount() {
-
-	}
-
-	public void editAccount() {
-
-	}
-
-	public void editClient() {
-
-	}
-
-	public void deposit(double amount) {
-
-	}
-
-	public void withdraw(double amount) {
-
 	}
 	
 	public String toString(){
@@ -90,11 +61,11 @@ public class Banker {
 		return fullName;
 	}
 
-	public void setRegNo(int regNo) {
+	public void setRegNo(String regNo) {
 		this.regNo = regNo;
 	}
 	
-	public int getRegNo(){
+	public String getRegNo(){
 		return regNo;
 	}
 

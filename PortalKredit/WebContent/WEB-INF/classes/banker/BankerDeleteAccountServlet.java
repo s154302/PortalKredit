@@ -61,7 +61,7 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 			if(control){
 				
 				Account account = (Account) session.getAttribute("account");
-				int regNo = account.getRegNo();
+				String regNo = account.getRegNo();
 				String accountNumber = account.getAccountNumber();
 				
 				// Deleting the account

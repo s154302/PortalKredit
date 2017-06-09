@@ -65,7 +65,7 @@ public class AccountsServlet extends HttpServlet {
 	
 	private void accountInfo(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
 		String accountNumber = request.getParameter("accountNumber");
-		int regNo = Integer.parseInt(request.getParameter("regNo"));
+		String regNo = request.getParameter("regNo");
 		Connection con = Controller.getConnection(ds1);
 		Account account = Controller.getAccountInfo(accountNumber, regNo, con);
 		session.setAttribute("account", account);

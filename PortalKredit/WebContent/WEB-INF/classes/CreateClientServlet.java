@@ -59,7 +59,7 @@ public class CreateClientServlet extends HttpServlet {
 		Connection con = Controller.getConnection(ds1);
 		try {
 			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
-					Integer.parseInt(postal), country, con);
+					postal, country, con);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
