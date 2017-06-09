@@ -19,14 +19,10 @@
 				<div class="card-block">
 					<form action="" method="post">
 						<div class="form-group">
-							<select class="form-control" name="senderAcc" required>
-								<c:forEach var="acc" items="${accounts}">
-									<option value="${acc.regNo}.${acc.accountNumber}">
-										${acc.accountName} ${acc.regNo} ${acc.accountNumber}</option>
-								</c:forEach>
-							</select>
+							<input type="text" class="form-control" name="reciAcc"
+								placeholder="*Account Number" required value="${reciAcc}">
 						</div>
-
+						
 						<div class="form-group">
 							<input type="text" class="form-control" name="amount"
 								placeholder="*Amount" required value="${amount}">
@@ -38,33 +34,12 @@
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="message"
-								placeholder="*Message to self" required value="${message}">
-						</div>
-
-						<div class="form-group">
-							<input type="text" class="form-control" name="reciReg"
-								placeholder="*Reg no" required value="${reciReg}">
-						</div>
-
-						<div class="form-group">
-							<input type="text" class="form-control" name="reciAcc"
-								placeholder="*Account Number" required value="${reciAcc}">
-						</div>
-
-						<div class="form-group">
-							<input type="text" class="form-control" name="reciMessage"
-								placeholder="*Message to reciever" required
-								value="${reciMessage}">
-						</div>
-
-						<div class="form-group">
 							<input type="password" class="form-control" name="password"
 								placeholder="*Enter password" required>
 						</div>
 
 						<button class="btn btn-primary btn-block btn-action" type="submit"
-							value="createClient">Submit payment</button>
+							value="makeDeposit">Make Deposit</button>
 					</form>
 				</div>
 			</div>

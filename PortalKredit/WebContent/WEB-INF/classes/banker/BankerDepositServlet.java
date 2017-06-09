@@ -46,8 +46,8 @@ public class BankerDepositServlet extends HttpServlet {
 		}
 	}
 	
-//	@Override
-//	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		response.setContentType("text/html");
 //		HttpSession session = request.getSession();
 //		if(Controller.checkAuth(Controller.Type.client, session)){
@@ -58,10 +58,7 @@ public class BankerDepositServlet extends HttpServlet {
 //			response.sendRedirect("../index");
 //		}
 //		
-//
-//		
-//		
-//	}
+	}
 //	
 //	//Used to keep the written input in the input fields
 //	private HttpServletRequest keepInputs(HttpServletRequest request){	
