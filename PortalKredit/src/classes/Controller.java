@@ -65,23 +65,23 @@ public final class Controller {
 		}
 	}
 	
-	public static boolean authenticate(String userID, String password, Connection ds1, HttpSession session) {
-	
+
+	public static boolean authenticate(String userID, String password, Connection con, HttpSession session) {
 
 		if (userID.substring(userID.length() - 1).equals("C")) {
-			boolean bool = clientAuthenticate(userID, password, ds1);
+			boolean bool = clientAuthenticate(userID, password, con);
 			if (bool) {
 				session.setAttribute("type", Type.client);
 			}
 			return bool;
 		} else if (userID.substring(userID.length() - 1).equals("B")) {
-			boolean bool = bankerAuthenticate(userID, password, ds1);
+			boolean bool = bankerAuthenticate(userID, password, con);
 			if (bool) {
 				session.setAttribute("type", Type.banker);
 			}
 			return bool;
 		} else {
-			boolean bool = adminAuthenticate(userID, password, ds1);
+			boolean bool = adminAuthenticate(userID, password, con);
 			if (bool) {
 				session.setAttribute("type", Type.admin);
 			}
@@ -916,26 +916,32 @@ public final class Controller {
 		
 		try {			
 			// Make sure transaction is reversible in case of an error
-
 			con.setAutoCommit(false);
+
+			// Extract the used currencies, and the old balances before they are
+			// changed
+			PreparedStatement oldBalance = con.prepareStatement(
+					"SELECT \"BALANCE\", \"CURRENCY\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ?");
 			
-
-			// Extract the old balances before they are changed
-
-			oldBalances = con.prepareStatement(
-					"SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ? OR \"ACCOUNTNUMBER\" = ?");
-
-			oldBalances.setString(1, sendAcc);
-			oldBalances.setString(2, reciAcc);
-			oldBalances.executeQuery();
-			rsOldBalances = oldBalances.getResultSet();
+			oldBalance.setString(1, sendAcc);
+			oldBalance.executeQuery();
+			ResultSet rsOldSend = oldBalance.getResultSet();
 
 			// Define variables for old balances
-			rsOldBalances.next();
-			double oldBalanceSend = rsOldBalances.getDouble("BALANCE");
+			rsOldSend.next();
+			double oldBalanceSend = rsOldSend.getDouble("BALANCE");
+			String currencySend = rsOldSend.getString("CURRENCY");
 
-			rsOldBalances.next();
-			double oldBalanceReci = rsOldBalances.getDouble("BALANCE");
+			oldBalance.setString(1, reciAcc);
+			oldBalance.executeQuery();
+			ResultSet rsOldReci = oldBalance.getResultSet();
+			rsOldReci.next();
+			double oldBalanceReci = rsOldReci.getDouble("BALANCE");
+			String currencyReci = rsOldReci.getString("CURRENCY");
+
+			// Define transaction amount converted to receiving account's
+			// currency
+			double reciAmount = convert(currencySend, currencyReci, amount, con);
 
 			// Subtract amount from sending account
 			subtract = con.prepareStatement(
@@ -980,7 +986,7 @@ public final class Controller {
 			double reciBalance = rsCheck2.getDouble("BALANCE");
 
 			// Insert transaction for recipient
-			createTransaction(transactionID, reciAcc, sendAcc, amount, reciReg, sendReg, currency, reciMessage,
+			createTransaction(transactionID, reciAcc, sendAcc, reciAmount, reciReg, sendReg, currency, reciMessage,
 					reciBalance, con);
 
 			// Check that no money has been lost or gained,
