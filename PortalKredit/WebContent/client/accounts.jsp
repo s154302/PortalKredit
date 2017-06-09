@@ -40,15 +40,18 @@
 												<li>${ob.transactions[0].dateOfTransaction}
 													${ob.transactions[0].note} Amount:
 													${ob.transactions[0].amount} Balance:
-													${ob.transactions[0].balance}</li>
+													${ob.transactions[0].balance}
+													${ob.currency}</li>
 												<li>${ob.transactions[1].dateOfTransaction}
 													${ob.transactions[1].note} Amount:
 													${ob.transactions[1].amount} Balance:
-													${ob.transactions[1].balance}</li>
+													${ob.transactions[1].balance}
+													${ob.currency}</li>
 												<li>${ob.transactions[2].dateOfTransaction}
 													${ob.transactions[2].note} Amount:
 													${ob.transactions[2].amount} Balance:
-													${ob.transactions[2].balance}</li>
+													${ob.transactions[2].balance}
+													${ob.currency}</li>
 											</ul>
 											<form action="" method="post">
 												<input type="hidden" name="accountNumber"
