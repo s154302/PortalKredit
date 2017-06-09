@@ -33,7 +33,7 @@
 						<div class="form-group">
 							<input type="text" pattern="[0-9]*" class="form-control"
 								name="clientRegNo" placeholder="*Reg. No."
-								title="Please only input numbers.">
+								title="Please only input numbers." value="${user.regNo}" readonly>
 						</div>
 
 						<div class="form-group">
@@ -43,7 +43,7 @@
 
 						<div class="form-group">
 							<input type="text" class="form-control" name="clientID"
-								placeholder="*Client's ID" value="${clientID}">
+								placeholder="*Client's ID" value="${clientID}" readonly>
 						</div>
 
 						<div class="form-group">
