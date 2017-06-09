@@ -1026,7 +1026,7 @@ public final class Controller {
 		String defaultBankAccount = "0000000000";
 		String transactionId = generateTransactionID();
 		if(amount < 0){
-			message = "Withdrawel";
+			message = "Withdrawal";
 		}else if(amount > 0){
 			message = "Deposit";
 		}
