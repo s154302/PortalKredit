@@ -402,7 +402,8 @@ public final class Controller {
 		ps.setString(8, street);
 		ps.setString(9, bankerID);
 		ps.setString(10, postal);
-		ps.setString(11, getCountry(country).toUpperCase());
+		ps.setString(11, country.toUpperCase());
+		System.out.println(country);
 		ps.executeUpdate();
 
 	}
@@ -493,7 +494,7 @@ public final class Controller {
 					"SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = ? AND \"COUNTRY\" = ?");
 
 			ps.setString(1, postal);
-			ps.setString(2, getCountry(country).toUpperCase());
+			ps.setString(2, country.toUpperCase());
 			ResultSet rs = ps.executeQuery();
 
 			rs.next();
@@ -1081,7 +1082,7 @@ public final class Controller {
 		ps.setString(5, street);
 		ps.setString(6, bankerID);
 		ps.setString(7, postal);
-		ps.setString(8, getCountry(country).toUpperCase());
+		ps.setString(8, country.toUpperCase());
 		ps.setString(9, clientID);
 		ps.executeUpdate();
 
@@ -1165,165 +1166,4 @@ public final class Controller {
 		return deleteStatus;
 	}
 
-	public static String getCountry(String countryCode) {
-		String country = new String();
-
-		switch (countryCode) {
-		case "AU":
-			country = "Australia";
-			break;
-		case "AT":
-			country = "Austria";
-			break;
-		case "BE":
-			country = "Belgium";
-			break;
-		case "BR":
-			country = "Brazil";
-			break;
-		case "BG":
-			country = "Bulgaria";
-			break;
-		case "CA":
-			country = "Canada";
-			break;
-		case "CN":
-			country = "China";
-			break;
-		case "HR":
-			country = "Croatia";
-			break;
-		case "CY":
-			country = "Cyprus";
-			break;
-		case "CZ":
-			country = "Czech Republic";
-			break;
-		case "DK":
-			country = "Denmark";
-			break;
-		case "EE":
-			country = "Estonia";
-			break;
-		case "FI":
-			country = "Finland";
-			break;
-		case "FX":
-			country = "France";
-			break;
-		case "DE":
-			country = "Germany";
-			break;
-		case "GR":
-			country = "Greece";
-			break;
-		case "GL":
-			country = "Greenland";
-			break;
-		case "HK":
-			country = "Hong Kong";
-			break;
-		case "HU":
-			country = "Hungary";
-			break;
-		case "IS":
-			country = "Iceland";
-			break;
-		case "IN":
-			country = "India";
-			break;
-		case "ID":
-			country = "Indonesia";
-			break;
-		case "IE":
-			country = "Ireland";
-			break;
-		case "IL":
-			country = "Israel";
-			break;
-		case "IT":
-			country = "Italy";
-			break;
-		case "JP":
-			country = "Japan";
-			break;
-		case "LT":
-			country = "Lithuania";
-			break;
-		case "LU":
-			country = "Luxembourg";
-			break;
-		case "MY":
-			country = "Malaysia";
-			break;
-		case "MT":
-			country = "Malta";
-			break;
-		case "MX":
-			country = "Mexico";
-			break;
-		case "NL":
-			country = "Netherlands";
-			break;
-		case "NZ":
-			country = "New Zealand";
-			break;
-		case "NO":
-			country = "Norway";
-			break;
-		case "PH":
-			country = "Philippines";
-			break;
-		case "PL":
-			country = "Poland";
-			break;
-		case "PT":
-			country = "Portugal";
-			break;
-		case "RO":
-			country = "Romania";
-			break;
-		case "RU":
-			country = "Russia";
-			break;
-		case "SG":
-			country = "Singapore";
-			break;
-		case "SK":
-			country = "Slovakia";
-			break;
-		case "SI":
-			country = "Slovenia";
-			break;
-		case "ZA":
-			country = "South Africa";
-			break;
-		case "KR":
-			country = "South Korea";
-			break;
-		case "ES":
-			country = "Spain";
-			break;
-		case "SE":
-			country = "Sweden";
-			break;
-		case "CH":
-			country = "Switzerland";
-			break;
-		case "TH":
-			country = "Thailand";
-			break;
-		case "GB":
-			country = "United Kingdom";
-			break;
-		case "US":
-			country = "United States";
-			break;
-		default:
-			country = "undefined";
-			break;
-		}
-
-		return country;
-	}
 }
