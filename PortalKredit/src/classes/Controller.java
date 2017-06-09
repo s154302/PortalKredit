@@ -66,7 +66,7 @@ public final class Controller {
 	}
 	
 	public static boolean authenticate(String userID, String password, Connection ds1, HttpSession session) {
-		boolean st = false;
+	
 
 		if (userID.substring(userID.length() - 1).equals("C")) {
 			boolean bool = clientAuthenticate(userID, password, ds1);
@@ -109,7 +109,7 @@ public final class Controller {
 
 	// consider making these private??
 	public static boolean clientAuthenticate(String clientID, String password, Connection con) {
-		boolean st = false;
+		
 		String hash = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -139,7 +139,7 @@ public final class Controller {
 
 	// maybe private
 	public static boolean bankerAuthenticate(String bankerID, String password, Connection con) {
-		boolean st = false;
+		
 		String hash = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -168,7 +168,7 @@ public final class Controller {
 
 	// maybe private ?? - I don't think you can when we say Controller.W/E ;)
 	public static boolean adminAuthenticate(String adminID, String password, Connection con) {
-		boolean st = false;
+		
 		String hash = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;

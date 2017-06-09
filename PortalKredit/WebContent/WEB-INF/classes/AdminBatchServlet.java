@@ -47,7 +47,7 @@ public class AdminBatchServlet extends HttpServlet {
 			Controller.calculateInterestRates(con);
 		} else if(request.getParameter("yInterestRate") != null) {
 			Controller.giveAnualInterest(con);
-		} else if(request.getParameter("backupTransactions") != null){
+		} else if(request.getParameter("backupTrsansactions") != null){
 			Controller.backupTransactions(con);
 		} else if(request.getParameter("insertExchangeRate") != null) {
 			Controller.insertExchangeRates(con);
