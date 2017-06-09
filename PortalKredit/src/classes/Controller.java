@@ -402,7 +402,7 @@ public final class Controller {
 		ps.setString(8, street);
 		ps.setString(9, bankerID);
 		ps.setString(10, postal);
-		ps.setString(11, country.toUpperCase());
+		ps.setString(11, getCountry(country).toUpperCase());
 		ps.executeUpdate();
 
 	}
@@ -436,9 +436,10 @@ public final class Controller {
 		ps.setDouble(8, 0);
 		ps.executeUpdate();
 	}
-	public static String generateAccountNumber(Connection ds1){
+
+	public static String generateAccountNumber(Connection ds1) {
 		String accountNumber = new String();
-		
+
 		int intID = 0;
 		try {
 			// Select the latest ID, and extract only the ID number as an
@@ -460,13 +461,10 @@ public final class Controller {
 			e.printStackTrace();
 		}
 		System.out.println(accountNumber);
-		
-		
-		
+
 		return accountNumber;
 	}
-	
-	
+
 	// Returns all clients associated with a single banker
 	public static ArrayList<Client> getClients(String bankerID, Connection ds1) {
 		ArrayList<Client> clientList = new ArrayList<>();
@@ -495,7 +493,7 @@ public final class Controller {
 					"SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = ? AND \"COUNTRY\" = ?");
 
 			ps.setString(1, postal);
-			ps.setString(2, country);
+			ps.setString(2, getCountry(country).toUpperCase());
 			ResultSet rs = ps.executeQuery();
 
 			rs.next();
@@ -850,8 +848,7 @@ public final class Controller {
 			// Then either commit or roll back
 			// The below check no longer works when a conversion happens
 			// (sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci)
-			if (true
-					&& checkTransaction(transactionID, ds1)) {
+			if (true && checkTransaction(transactionID, ds1)) {
 				ds1.commit();
 				status = true;
 			} else {
@@ -893,26 +890,26 @@ public final class Controller {
 
 	public static double convert(String fromCurrency, String toCurrency, double amount, Connection con) {
 		try {
+			// Create PreparedStatement to retrieve exchange rates
 			PreparedStatement ps = con
 					.prepareStatement("SELECT \"EXCHANGERATE\" FROM \"DTUGRP16\".\"CURRENCY\" WHERE \"CURRENCY\" = ?");
 			ps.setString(1, fromCurrency);
 			ps.executeQuery();
 
+			// Get exchange rate for first account
 			ResultSet rs = ps.getResultSet();
 			rs.next();
 			double rateFrom = rs.getDouble("EXCHANGERATE");
 
 			ps.setString(1, toCurrency);
 			ps.executeQuery();
-			
+
+			// Get
 			rs = ps.getResultSet();
 			rs.next();
 			double rateTo = rs.getDouble("EXCHANGERATE");
-			
-			System.out.println(amount + " " + rateFrom + " " + rateTo);
-			double result = (amount / rateFrom) * rateTo;
-			System.out.println(result);
-			return result;
+
+			return (amount / rateFrom) * rateTo;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -987,11 +984,11 @@ public final class Controller {
 			while (x.hasNext()) {
 				String key = (String) x.next();
 				String exchRate = obj.get(key).toString();
-				
+
 				ps.setString(1, key);
 				ps.setBigDecimal(2, new BigDecimal(exchRate));
 				ps.executeUpdate();
-				
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1084,7 +1081,7 @@ public final class Controller {
 		ps.setString(5, street);
 		ps.setString(6, bankerID);
 		ps.setString(7, postal);
-		ps.setString(8, country);
+		ps.setString(8, getCountry(country).toUpperCase());
 		ps.setString(9, clientID);
 		ps.executeUpdate();
 
@@ -1166,5 +1163,167 @@ public final class Controller {
 		}
 
 		return deleteStatus;
+	}
+
+	public static String getCountry(String countryCode) {
+		String country = new String();
+
+		switch (countryCode) {
+		case "AU":
+			country = "Australia";
+			break;
+		case "AT":
+			country = "Austria";
+			break;
+		case "BE":
+			country = "Belgium";
+			break;
+		case "BR":
+			country = "Brazil";
+			break;
+		case "BG":
+			country = "Bulgaria";
+			break;
+		case "CA":
+			country = "Canada";
+			break;
+		case "CN":
+			country = "China";
+			break;
+		case "HR":
+			country = "Croatia";
+			break;
+		case "CY":
+			country = "Cyprus";
+			break;
+		case "CZ":
+			country = "Czech Republic";
+			break;
+		case "DK":
+			country = "Denmark";
+			break;
+		case "EE":
+			country = "Estonia";
+			break;
+		case "FI":
+			country = "Finland";
+			break;
+		case "FX":
+			country = "France";
+			break;
+		case "DE":
+			country = "Germany";
+			break;
+		case "GR":
+			country = "Greece";
+			break;
+		case "GL":
+			country = "Greenland";
+			break;
+		case "HK":
+			country = "Hong Kong";
+			break;
+		case "HU":
+			country = "Hungary";
+			break;
+		case "IS":
+			country = "Iceland";
+			break;
+		case "IN":
+			country = "India";
+			break;
+		case "ID":
+			country = "Indonesia";
+			break;
+		case "IE":
+			country = "Ireland";
+			break;
+		case "IL":
+			country = "Israel";
+			break;
+		case "IT":
+			country = "Italy";
+			break;
+		case "JP":
+			country = "Japan";
+			break;
+		case "LT":
+			country = "Lithuania";
+			break;
+		case "LU":
+			country = "Luxembourg";
+			break;
+		case "MY":
+			country = "Malaysia";
+			break;
+		case "MT":
+			country = "Malta";
+			break;
+		case "MX":
+			country = "Mexico";
+			break;
+		case "NL":
+			country = "Netherlands";
+			break;
+		case "NZ":
+			country = "New Zealand";
+			break;
+		case "NO":
+			country = "Norway";
+			break;
+		case "PH":
+			country = "Philippines";
+			break;
+		case "PL":
+			country = "Poland";
+			break;
+		case "PT":
+			country = "Portugal";
+			break;
+		case "RO":
+			country = "Romania";
+			break;
+		case "RU":
+			country = "Russia";
+			break;
+		case "SG":
+			country = "Singapore";
+			break;
+		case "SK":
+			country = "Slovakia";
+			break;
+		case "SI":
+			country = "Slovenia";
+			break;
+		case "ZA":
+			country = "South Africa";
+			break;
+		case "KR":
+			country = "South Korea";
+			break;
+		case "ES":
+			country = "Spain";
+			break;
+		case "SE":
+			country = "Sweden";
+			break;
+		case "CH":
+			country = "Switzerland";
+			break;
+		case "TH":
+			country = "Thailand";
+			break;
+		case "GB":
+			country = "United Kingdom";
+			break;
+		case "US":
+			country = "United States";
+			break;
+		default:
+			country = "undefined";
+			break;
+		}
+
+		return country;
 	}
 }
