@@ -11,6 +11,7 @@
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary mb-3 text-center blue-outline">
 				<h1>Create New Account Type</h1>
+				<p style="color: green;">${createAccountTypeCreated}</p>
 				<div class="card-block">
 				<form action="CreateAccountType" method="post">
 					<div class="form-group">
@@ -28,7 +29,7 @@
 							value="createAccountType">Create Account Type</button>
 				</form>
 			</div>
-			<p style="color: red;">${createAccountTypeStatus}</p>
+			<p style="color: red;">${createAccountTypeDenied}</p>
 		</div>
 	</div>
 </div>

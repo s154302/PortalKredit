@@ -1173,7 +1173,7 @@ public final class Controller {
 		boolean createAccountTypeStatus = false;
 		
 		// parsing to big decimal for precision 
-		BigDecimal interestRateBD = new BigDecimal(Double.valueOf(interestRate));
+		BigDecimal interestRateBD = new BigDecimal(Double.valueOf(interestRate/100));
 		
 		try {
 			// Inserting the account type and interest rate in the database
@@ -1186,7 +1186,7 @@ public final class Controller {
 
 		} catch (SQLException e) {
 			//SQL Error printing
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 		return createAccountTypeStatus;
