@@ -167,6 +167,16 @@
 		<servlet-name>BankerDeleteAccountServlet</servlet-name>
 		<url-pattern>/banker/BankerDeleteAccountServlet</url-pattern>
 	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>BankerCreateAccountTypeServlet</servlet-name>
+		<servlet-class>BankerCreateAccountTypeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BankerCreateAccountTypeServlet</servlet-name>
+		<url-pattern>/banker/BankerCreateAccountTypeServlet</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
