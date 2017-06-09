@@ -996,7 +996,7 @@ public final class Controller {
 
 			// The below check no longer works when a conversion happens
 			// (sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci)
-			if (checkTransaction(transactionID, con)) {
+			if (checkTransaction(transactionID, 2, con)) {
 				con.commit();
 
 				status = true;
@@ -1018,10 +1018,13 @@ public final class Controller {
 
 	}
 
-	public static void deposit(String accountNumber, String regNo, Connection con, double amount, String currency){
+	public static boolean deposit(String accountNumber, String regNo, Connection con, double amount, String currency){
 		PreparedStatement ps = null;
+		boolean status = false;
 		String message = null;
 		double balance = 0;
+		String defaultBankAccount = "0000000000";
+		String transactionId = generateTransactionID();
 		if(amount < 0){
 			message = "Withdrawel";
 		}else if(amount > 0){
@@ -1038,12 +1041,22 @@ public final class Controller {
 			int rs = ps.executeUpdate();
 			if(rs == 1){
 				balance = getBalance(accountNumber, regNo, con);
-				createTransaction(generateTransactionID(), accountNumber, "0000000000", amount, regNo, regNo, currency, message, balance, con);
+				createTransaction(transactionId, accountNumber, defaultBankAccount, amount, regNo, regNo, currency, message, balance, con);
+			}
+			if(checkTransaction(transactionId, 1, con)){
+				con.commit();
+				status = true;
+			}else{
+				con.rollback();
+				status = false;
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
+			status = false;
 		}finally{
+			cleanUpResult(null, ps);
 		}
+		return status;
 	}
 	
 	public static double getBalance(String accountNumber, String regNo, Connection con){
@@ -1128,7 +1141,7 @@ public final class Controller {
 	}
 
 	// Used to check if two transactions are placed in the db
-	public static boolean checkTransaction(String transactionId, Connection con) {
+	public static boolean checkTransaction(String transactionId, int count, Connection con) {
 
 		Boolean status = false;
 		int i = 0;
@@ -1145,7 +1158,7 @@ public final class Controller {
 			}
 		}
 		
-		if(i==2){
+		if(i==count){
 			status = true;
 		}else{
 			status = false;
