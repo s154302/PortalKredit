@@ -902,7 +902,7 @@ public final class Controller {
 		// Ensure that negative value transaction can't be executed
 
 		boolean status = false;
-		if(amount < 0){
+		if(amount < 0 || sendAcc.equals("0000000000")){
 			return false;
 		}
 		PreparedStatement oldBalances = null;
@@ -1018,7 +1018,55 @@ public final class Controller {
 
 	}
 
-
+	public static void deposit(String accountNumber, String regNo, Connection con, double amount, String currency){
+		PreparedStatement ps = null;
+		String message = null;
+		double balance = 0;
+		if(amount < 0){
+			message = "Withdrawel";
+		}else if(amount > 0){
+			message = "Deposit";
+		}
+		try{
+			con.setAutoCommit(false);
+			ps = con.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"BALANCE\" = \"BALANCE\" + ?"
+					+ " WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+			BigDecimal bd = new BigDecimal(Double.valueOf(amount));
+			ps.setBigDecimal(1, bd);
+			ps.setString(2, accountNumber);
+			ps.setString(3, regNo);
+			int rs = ps.executeUpdate();
+			if(rs == 1){
+				balance = getBalance(accountNumber, regNo, con);
+				createTransaction(generateTransactionID(), accountNumber, "0000000000", amount, regNo, regNo, currency, message, balance, con);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+		}
+	}
+	
+	public static double getBalance(String accountNumber, String regNo, Connection con){
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		double balance = 0;
+		try{
+			ps = con
+					.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+			ps.setString(1, accountNumber);
+			ps.setString(2, regNo);
+			rs = ps.executeQuery();
+			if(rs.next()){
+				balance = rs.getDouble("BALANCE");
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			cleanUpResult(rs, ps);
+		}
+		return balance;
+	}
+	
 	public static void createTransaction(String transactionID, String acc1, String acc2, double amount, String reg1,
 			String reg2, String currency, String message, double balance, Connection con) {
 	PreparedStatement ps = null;
