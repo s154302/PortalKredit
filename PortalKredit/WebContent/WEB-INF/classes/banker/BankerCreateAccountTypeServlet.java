@@ -47,13 +47,13 @@ public class BankerCreateAccountTypeServlet extends HttpServlet {
 		Connection con = Controller.getConnection(ds1);
 		
 		String accountType = request.getParameter("accountType");
-		System.out.println("interest rate: "+request.getParameter("interestRate"));
 		Double interestRate = Double.parseDouble(request.getParameter("interestRate"));
 		boolean status = Controller.createAccountType(accountType, interestRate, con);
+		
 		if(status){
-			request.setAttribute("createAccountTypeStatus", "Account Type and Interest Rate has been created");
+			request.setAttribute("createAccountTypeCreated", "Account Type and Interest Rate has been created");
 		} else {
-			request.setAttribute("createAccountTypeStatus", "Account Type and Interest Rate could not be created");
+			request.setAttribute("createAccountTypeDenied", "Account Type and Interest Rate could not be created");
 		}
 		request.getRequestDispatcher("CreateAccountType.jsp").forward(request, response);
 		
