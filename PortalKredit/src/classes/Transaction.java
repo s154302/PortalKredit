@@ -6,8 +6,7 @@ import java.sql.Date;
  * Created by Alexander Armstrong on 5/03/2017.
  */
 public class Transaction {
-	private int regNo, recieveRegNo ; 
-	private String accountNumber, recieveAccount, currency, note, transactionID;
+	private String accountNumber, recieveAccount, currency, note, transactionID, regNo, recieveRegNo;
 	private double amount, balance;
 	private Date dateOfTransaction;
 	
@@ -16,7 +15,7 @@ public class Transaction {
 	}
 	
 	public Transaction(String transactionID, String accountNumber,
-			int regNo, String recieveAccount, int recieveRegNo,
+			String regNo, String recieveAccount, String recieveRegNo,
 			Date dateOfTransaction, double amount, String currency, double balance, String note){
 		this.transactionID = transactionID;
 		this.accountNumber = accountNumber;
@@ -48,16 +47,16 @@ public class Transaction {
 	public void setTransactionID(String transactionID) {
 		this.transactionID = transactionID;
 	}
-	public int getRegNo() {
+	public String getRegNo() {
 		return regNo;
 	}
-	public void setRegNo(int regNo) {
+	public void setRegNo(String regNo) {
 		this.regNo = regNo;
 	}
-	public int getRecieveRegNo() {
+	public String getRecieveRegNo() {
 		return recieveRegNo;
 	}
-	public void setRecieveRegNo(int recieveRegNo) {
+	public void setRecieveRegNo(String recieveRegNo) {
 		this.recieveRegNo = recieveRegNo;
 	}
 	public String getAccountNumber() {

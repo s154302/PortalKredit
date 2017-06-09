@@ -61,7 +61,7 @@ public class BankerCreateAccountServlet extends HttpServlet {
 	private void createAccount(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		String accountName = request.getParameter("clientAccountName");
 		String accountNumber = request.getParameter("clientAccountNumber");
-		int regNo = Integer.parseInt(request.getParameter("clientRegNo"));
+		String regNo = request.getParameter("clientRegNo");
 		String accountType = request.getParameter("clientAccountType");
 		String clientID = request.getParameter("clientID");
 		double balance = Double.parseDouble(request.getParameter("clientBalance"));

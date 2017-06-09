@@ -79,7 +79,7 @@ public class BankerCreateClientServlet extends HttpServlet {
 		Connection con = Controller.getConnection(ds1);
 		try {
 			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
-					Integer.parseInt(postal), country, con);
+					postal, country, con);
 
 
 			Banker banker = (Banker) request.getSession().getAttribute("user");

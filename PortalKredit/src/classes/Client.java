@@ -6,8 +6,7 @@ import java.util.ArrayList;
  */
 public class Client {
 
-	private int  postal;
-	private String email, fullAddress, fullName, firstName, lastName, clientID, street, country, city, CPR, phoneNo, bankerID;
+	private String email, postal, fullAddress, fullName, firstName, lastName, clientID, street, country, city, CPR, phoneNo, bankerID;
 	private ArrayList<Account> accounts;
 
 	public Client(){
@@ -16,7 +15,7 @@ public class Client {
 	}
 	
 	public Client(String email, String firstName, String lastName, String clientID,
-			String street, String country, String city, String CPR, String phoneNo, int postal){
+			String street, String country, String city, String CPR, String phoneNo, String postal){
 		this.email = email;
 		setFirstName(firstName);
 		setLastName(lastName);
@@ -30,7 +29,7 @@ public class Client {
 	}
 	
 	
-	public Account findAccount(String accountNumber, int regNo) {
+	public Account findAccount(String accountNumber, String regNo) {
 
 		for(Account account : accounts){
 			if(account.getAccountNumber().equals(accountNumber) && account.getRegNo() == regNo){
@@ -171,11 +170,11 @@ public class Client {
 		setFullAddress();
 	}
 
-	public int getPostal() {
+	public String getPostal() {
 		return postal;
 	}
 
-	public void setPostal(int postal) {
+	public void setPostal(String postal) {
 		this.postal = postal;
 		setFullAddress();
 	}

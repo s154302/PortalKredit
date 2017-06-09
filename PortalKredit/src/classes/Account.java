@@ -7,8 +7,7 @@ import java.util.Date;
  */
 public class Account {
 
-	private int regNo;
-	private String currency, accountNumber, accountType, clientID, accountName;
+	private String currency, accountNumber, accountType, clientID, accountName, regNo;
 	private double balance, interestRate;
 	private ArrayList<Transaction> transactions;
 	
@@ -17,7 +16,7 @@ public class Account {
 		
 	}
 	
-	public Account(String accountNumber, int regNo, String accountType,
+	public Account(String accountNumber, String regNo, String accountType,
 			String clientID, double balance, String currency, double interestRate, String accountName){
 		this.accountNumber = accountNumber;
 		this.regNo = regNo;
@@ -83,11 +82,11 @@ public class Account {
 		this.transactions = transactions;
 	}
 
-	public int getRegNo() {
+	public String getRegNo() {
 		return regNo;
 	}
 
-	public void setRegNo(int regNo) {
+	public void setRegNo(String regNo) {
 		this.regNo = regNo;
 	}
 

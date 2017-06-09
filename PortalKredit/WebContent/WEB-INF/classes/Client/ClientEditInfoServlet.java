@@ -64,7 +64,7 @@ public class ClientEditInfoServlet extends HttpServlet {
 		String email = request.getParameter("email"); 
 		String mobile = request.getParameter("mobile");  
 		String street = request.getParameter("street"); 
-		int postal = Integer.parseInt(request.getParameter("postal"));
+		String postal = request.getParameter("postal");
 		Connection con = Controller.getConnection(ds1);
 		try {
 			if(!request.getParameter("password").isEmpty()){
