@@ -97,7 +97,7 @@ var BFHCountriesList = {
  * ========================================================== */
  
 var BFHCurrenciesList = {
-  'AUD':{'label':'Australian dollar','currencyflag':'AUD','symbol':'$'},
+  'AUD':{'label':'Australian dollarydoos','currencyflag':'AUD','symbol':'$'},
   'BGN':{'label':'Bulgarian lev','currencyflag':'','symbol':'лв'},
   'BRL':{'label':'Brazilian real','currencyflag':'','symbol':'R$'},
   'CAD':{'label':'Canadian dollar','currencyflag':'','symbol':'$'},

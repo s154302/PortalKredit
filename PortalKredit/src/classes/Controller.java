@@ -782,22 +782,24 @@ public final class Controller {
 
 			// Extract the used currencies, and the old balances before they are
 			// changed
-			PreparedStatement oldBalances = ds1.prepareStatement(
-					"SELECT \"BALANCE\", \"CURRENCY\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ? OR \"ACCOUNTNUMBER\" = ?");
-
-			oldBalances.setString(1, sendAcc);
-			oldBalances.setString(2, reciAcc);
-			oldBalances.executeQuery();
-			ResultSet rsOldBalances = oldBalances.getResultSet();
+			PreparedStatement oldBalance = ds1.prepareStatement(
+					"SELECT \"BALANCE\", \"CURRENCY\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ?");
+			
+			oldBalance.setString(1, sendAcc);
+			oldBalance.executeQuery();
+			ResultSet rsOldSend = oldBalance.getResultSet();
 
 			// Define variables for old balances
-			rsOldBalances.next();
-			double oldBalanceSend = rsOldBalances.getDouble("BALANCE");
-			String currencySend = rsOldBalances.getString("CURRENCY");
+			rsOldSend.next();
+			double oldBalanceSend = rsOldSend.getDouble("BALANCE");
+			String currencySend = rsOldSend.getString("CURRENCY");
 
-			rsOldBalances.next();
-			double oldBalanceReci = rsOldBalances.getDouble("BALANCE");
-			String currencyReci = rsOldBalances.getString("CURRENCY");
+			oldBalance.setString(1, reciAcc);
+			oldBalance.executeQuery();
+			ResultSet rsOldReci = oldBalance.getResultSet();
+			rsOldReci.next();
+			double oldBalanceReci = rsOldReci.getDouble("BALANCE");
+			String currencyReci = rsOldReci.getString("CURRENCY");
 
 			// Define transaction amount converted to receiving account's
 			// currency
@@ -845,7 +847,7 @@ public final class Controller {
 			double reciBalance = rsCheck2.getDouble("BALANCE");
 
 			// Insert transaction for recipient
-			createTransaction(transactionID, reciAcc, sendAcc, amount, reciReg, sendReg, currency, reciMessage,
+			createTransaction(transactionID, reciAcc, sendAcc, reciAmount, reciReg, sendReg, currency, reciMessage,
 					reciBalance, ds1);
 
 			// Check that no money has been lost
