@@ -8,7 +8,7 @@ SET CURRENT SQLID = 'DTUGRP16';
 -- Place --
 -----------
 CREATE TABLE DTUGRP16.Place (
-    postal INT NOT NULL,
+    postal VARCHAR(10) NOT NULL,
     city VARCHAR(45) NOT NULL,
     country VARCHAR(45) NOT NULL,
     PRIMARY KEY (postal, country)
@@ -18,12 +18,12 @@ CREATE TABLE DTUGRP16.Place (
 -- Branch --
 ------------
 CREATE TABLE DTUGRP16. Branch (
-	regNo INT NOT NULL,
+	regNo VARCHAR(6) NOT NULL,
 	bankName VARCHAR(20) NOT NULL,
-	postal INT NOT NULL,
+	postal VARCHAR(10) NOT NULL,
 	country VARCHAR(45) NOT NULL,
 	street VARCHAR(45) NOT NULL,
-	phone CHAR(11),
+	phone VARCHAR(15),
 	PRIMARY KEY (regNo),
 	FOREIGN KEY (postal, country) REFERENCES DTUGRP16. Place (postal, country)
 );
@@ -36,9 +36,9 @@ CREATE TABLE DTUGRP16.Banker (
     password VARCHAR(60) NOT NULL,
     firstName VARCHAR(45) NOT NULL,
     lastName VARCHAR(45) NOT NULL,
-    regNo INT NOT NULL,
+    regNo VARCHAR(6) NOT NULL,
     email VARCHAR(45) NOT NULL,
-    mobile CHAR(11),
+    mobile VARCHAR(15),
     PRIMARY KEY (bankerID)
  ,
  	CONSTRAINT fk_banker_branch FOREIGN KEY (regNo) REFERENCES DTUGRP16. Branch (regNo)
@@ -57,7 +57,7 @@ CREATE TABLE DTUGRP16.Client (
     mobile CHAR(11),
     street VARCHAR(45),
     bankerID CHAR(7) NOT NULL,
-    postal INT NOT NULL,
+    postal VARCHAR(10) NOT NULL,
     country VARCHAR(45),
     
     PRIMARY KEY (clientID),
@@ -87,7 +87,7 @@ CREATE TABLE DTUGRP16.Currency (
 -------------
 CREATE TABLE DTUGRP16.Account (
     accountNumber CHAR(10) NOT NULL,
-    regNo INT NOT NULL,
+    regNo VARCHAR(6) NOT NULL,
     accountName VARCHAR(25),
     accountType VARCHAR(45) NOT NULL,
     clientID CHAR(9) NOT NULL,
@@ -106,9 +106,9 @@ CREATE TABLE DTUGRP16.Account (
 CREATE TABLE "DTUGRP16"."TRANSACTION" (
     transactionID VARCHAR(60) NOT NULL,
     accountNumber CHAR(10) NOT NULL,
-    regNo INT NOT NULL,
+    regNo VARCHAR(6) NOT NULL,
     recieveAccount CHAR(10) NOT NULL,
-    recieveRegNo INT NOT NULL,
+    recieveRegNo VARCHAR(6) NOT NULL,
     dateOfTransaction DATE NOT NULL,
     amount DECIMAL(10,2) NOT NULL,		-- Changed from value since value appears to be a reserved keyword
     currency CHAR(3) NOT NULL,
@@ -123,12 +123,12 @@ CREATE TABLE "DTUGRP16"."TRANSACTION" (
 -----------
 -- TRANSACTIONSOLD --
 -----------
-CREATE TABLE "DTUGRP16"."TRANSACTION" (
+CREATE TABLE "DTUGRP16"."TRANSACTIONOLD" (
     transactionID VARCHAR(60) NOT NULL,
     accountNumber CHAR(10) NOT NULL,
-    regNo INT NOT NULL,
+    regNo VARCHAR(6) NOT NULL,
     recieveAccount CHAR(10) NOT NULL,
-    recieveRegNo INT NOT NULL,
+    recieveRegNo VARCHAR(6) NOT NULL,
     dateOfTransaction DATE NOT NULL,
     amount DECIMAL(10,2) NOT NULL,		-- Changed from value since value appears to be a reserved keyword
     currency CHAR(3) NOT NULL,
@@ -143,8 +143,8 @@ CREATE TABLE "DTUGRP16"."TRANSACTION" (
 -----------
 -- Admin --
 -----------
-CREATE TABLE DTUGRP16.Admin (
-	adminID VARCHAR(25) NOT NULL,
-	password VARCHAR(60) NOT NULL,
-	PRIMARY KEY(adminID)
-	);
+--CREATE TABLE DTUGRP16.Admin (
+	--adminID VARCHAR(25) NOT NULL,
+--	password VARCHAR(60) NOT NULL,
+	--PRIMARY KEY(adminID)
+	--);
