@@ -65,23 +65,23 @@ public final class Controller {
 		}
 	}
 	
-	public static boolean authenticate(String userID, String password, Connection ds1, HttpSession session) {
+	public static boolean authenticate(String userID, String password, Connection con, HttpSession session) {
 		boolean st = false;
 
 		if (userID.substring(userID.length() - 1).equals("C")) {
-			boolean bool = clientAuthenticate(userID, password, ds1);
+			boolean bool = clientAuthenticate(userID, password, con);
 			if (bool) {
 				session.setAttribute("type", Type.client);
 			}
 			return bool;
 		} else if (userID.substring(userID.length() - 1).equals("B")) {
-			boolean bool = bankerAuthenticate(userID, password, ds1);
+			boolean bool = bankerAuthenticate(userID, password, con);
 			if (bool) {
 				session.setAttribute("type", Type.banker);
 			}
 			return bool;
 		} else {
-			boolean bool = adminAuthenticate(userID, password, ds1);
+			boolean bool = adminAuthenticate(userID, password, con);
 			if (bool) {
 				session.setAttribute("type", Type.admin);
 			}
