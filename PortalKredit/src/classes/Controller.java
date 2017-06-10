@@ -351,7 +351,7 @@ public final class Controller {
 		try {
 			ps = con.prepareStatement(
 					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?"
-							+ "ORDER BY DATEOFTRANSACTION DESC FETCH FIRST 3 ROWS ONLY");
+							+ " FETCH FIRST 3 ROWS ONLY");
 
 			ps.setString(1, accountNumber);
 			ps.setString(2, regNo);
@@ -421,7 +421,7 @@ public final class Controller {
 			try {
 				if(session.getAttribute("loadedOldTransactions") == null){
 					ps = con.prepareStatement(
-							"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+							"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ? ORDER BY DATEOFTRANSACTION DESC");
 
 				ps.setString(1, accountNumber);
 				ps.setString(2, regNo);

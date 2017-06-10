@@ -19,12 +19,8 @@
 				<div class="card-block">
 					<form action="" method="post">
 						<div class="form-group">
-							<select class="form-control" name="senderAcc" required>
-								<c:forEach var="acc" items="${accounts}">
-									<option value="${acc.regNo}.${acc.accountNumber}">
-										${acc.accountName} ${acc.regNo} ${acc.accountNumber}</option>
-								</c:forEach>
-							</select>
+							<input type="text" class="form-control" name="fromAccount"
+								placeholder="*FromAccount" required value="${fromAccount}">
 						</div>
 
 						<div class="form-group">
@@ -39,7 +35,7 @@
 
 						<div class="form-group">
 							<input type="text" class="form-control" name="message"
-								placeholder="*Message to self" required value="${message}">
+								placeholder="*Message" required value="${message}">
 						</div>
 
 						<div class="form-group">
