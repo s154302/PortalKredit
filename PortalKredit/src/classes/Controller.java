@@ -902,7 +902,7 @@ public final class Controller {
 		// Ensure that negative value transaction can't be executed
 
 		boolean status = false;
-		if(amount < 0){
+		if(amount < 0 || sendAcc.equals("0000000000")){
 			return false;
 		}
 		PreparedStatement oldBalances = null;
@@ -996,7 +996,7 @@ public final class Controller {
 
 			// The below check no longer works when a conversion happens
 			// (sendBalance + reciBalance) == (oldBalanceSend + oldBalanceReci)
-			if (checkTransaction(transactionID, con)) {
+			if (checkTransaction(transactionID, 2, con)) {
 				con.commit();
 
 				status = true;
@@ -1018,7 +1018,68 @@ public final class Controller {
 
 	}
 
-
+	public static boolean deposit(String accountNumber, String regNo, Connection con, double amount, String currency){
+		PreparedStatement ps = null;
+		boolean status = false;
+		String message = null;
+		double balance = 0;
+		String defaultBankAccount = "0000000000";
+		String transactionId = generateTransactionID();
+		if(amount < 0){
+			message = "Withdrawal";
+		}else if(amount > 0){
+			message = "Deposit";
+		}
+		try{
+			con.setAutoCommit(false);
+			ps = con.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"BALANCE\" = \"BALANCE\" + ?"
+					+ " WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+			BigDecimal bd = new BigDecimal(Double.valueOf(amount));
+			ps.setBigDecimal(1, bd);
+			ps.setString(2, accountNumber);
+			ps.setString(3, regNo);
+			int rs = ps.executeUpdate();
+			if(rs == 1){
+				balance = getBalance(accountNumber, regNo, con);
+				createTransaction(transactionId, accountNumber, defaultBankAccount, amount, regNo, regNo, currency, message, balance, con);
+			}
+			if(checkTransaction(transactionId, 1, con)){
+				con.commit();
+				status = true;
+			}else{
+				con.rollback();
+				status = false;
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			status = false;
+		}finally{
+			cleanUpResult(null, ps);
+		}
+		return status;
+	}
+	
+	public static double getBalance(String accountNumber, String regNo, Connection con){
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		double balance = 0;
+		try{
+			ps = con
+					.prepareStatement("SELECT \"BALANCE\" FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+			ps.setString(1, accountNumber);
+			ps.setString(2, regNo);
+			rs = ps.executeQuery();
+			if(rs.next()){
+				balance = rs.getDouble("BALANCE");
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			cleanUpResult(rs, ps);
+		}
+		return balance;
+	}
+	
 	public static void createTransaction(String transactionID, String acc1, String acc2, double amount, String reg1,
 			String reg2, String currency, String message, double balance, Connection con) {
 	PreparedStatement ps = null;
@@ -1080,7 +1141,7 @@ public final class Controller {
 	}
 
 	// Used to check if two transactions are placed in the db
-	public static boolean checkTransaction(String transactionId, Connection con) {
+	public static boolean checkTransaction(String transactionId, int count, Connection con) {
 
 		Boolean status = false;
 		int i = 0;
@@ -1097,7 +1158,7 @@ public final class Controller {
 			}
 		}
 		
-		if(i==2){
+		if(i==count){
 			status = true;
 		}else{
 			status = false;
