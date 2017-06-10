@@ -14,7 +14,7 @@
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary mb-3 text-center blue-outline">
-				<h1>Does not work yet Deposit</h1>
+				<h1>Deposit</h1>
 				<p style="color: red;">${status}</p>
 				<div class="card-block">
 					<form action="" method="post">

@@ -19,7 +19,7 @@ import classes.Controller;
 public class BankerDepositServlet extends HttpServlet {
 	//Copied from clientPayment
 	private static final long serialVersionUID = 1L;
-	String accountNumber, amount, currency, userId, password;
+	String accountNumber, strAmount, currency, userId, password, reciAccCurrency, regNo;
 		
 	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
@@ -48,15 +48,17 @@ public class BankerDepositServlet extends HttpServlet {
 		if(Controller.checkAuth(Controller.Type.banker, session)){
 			Banker banker = (Banker)session.getAttribute("user");
 			accountNumber = request.getParameter("reciAcc");
-			amount = request.getParameter("amount");
+			regNo = banker.getRegNo();
+			strAmount = request.getParameter("amount");
 			currency = request.getParameter("currency");
 			userId = (String) session.getAttribute("userID");
 			password = request.getParameter("password");
-			
 			Boolean correctPw = Controller.authenticate(userId, password, con, session);
 			
+			
+			
 			if(correctPw){
-				if(Controller.deposit(accountNumber, banker.getRegNo(), con, Double.parseDouble(amount), currency)){
+				if(Controller.deposit(accountNumber, regNo, con, Double.parseDouble(strAmount), currency)){
 					request.setAttribute("status", "Sussces");
 				}else{
 					request.setAttribute("status", "Error somthing went wrong");
@@ -78,7 +80,7 @@ public class BankerDepositServlet extends HttpServlet {
 	}
 	
 	private HttpServletRequest keepInputs(HttpServletRequest request){	
-		request.setAttribute("amount", amount);
+		request.setAttribute("amount", strAmount);
 		request.setAttribute("currency", currency);
 		request.setAttribute("reciAcc", accountNumber);
 		return request;

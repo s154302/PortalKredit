@@ -319,6 +319,26 @@ public final class Controller {
 
 		return account;
 	}
+	
+	public static String getAccountCurrency(String accountNumber, String regNo, Connection con){
+		String currency = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try{
+			ps = con.prepareStatement("SELECT CURRENCY FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+			ps.setString(1, accountNumber);
+			ps.setString(2, regNo);
+			rs = ps.executeQuery();
+			if(rs.next()){
+				currency = rs.getString("CURRENCY");
+			}
+		}catch (SQLException e){
+			e.printStackTrace();
+		}finally{
+			cleanUpResult(rs, ps);
+		}
+		return currency;
+	}
 
 	// Returns the 3 newest transactions associated with an account number and
 	// regno
@@ -986,7 +1006,7 @@ public final class Controller {
 			double reciBalance = rsCheck2.getDouble("BALANCE");
 
 			// Insert transaction for recipient
-			createTransaction(transactionID, reciAcc, sendAcc, reciAmount, reciReg, sendReg, currency, reciMessage,
+			createTransaction(transactionID, reciAcc, sendAcc, reciAmount, reciReg, sendReg, currencyReci, reciMessage,
 					reciBalance, con);
 
 			// Check that no money has been lost or gained,
@@ -1023,7 +1043,6 @@ public final class Controller {
 		boolean status = false;
 		String message = null;
 		double balance = 0;
-		String defaultBankAccount = "0000000000";
 		String transactionId = generateTransactionID();
 		if(amount < 0){
 			message = "Withdrawal";
@@ -1032,6 +1051,10 @@ public final class Controller {
 		}
 		try{
 			con.setAutoCommit(false);
+			
+			String accountCurrency = getAccountCurrency(accountNumber, regNo, con);
+			amount = convert(currency, accountCurrency, amount, con);
+			
 			ps = con.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"BALANCE\" = \"BALANCE\" + ?"
 					+ " WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
 			BigDecimal bd = new BigDecimal(Double.valueOf(amount));
@@ -1041,7 +1064,7 @@ public final class Controller {
 			int rs = ps.executeUpdate();
 			if(rs == 1){
 				balance = getBalance(accountNumber, regNo, con);
-				createTransaction(transactionId, accountNumber, defaultBankAccount, amount, regNo, regNo, currency, message, balance, con);
+				createTransaction(transactionId, accountNumber, accountNumber, amount, regNo, regNo, currency, message, balance, con);
 			}
 			if(checkTransaction(transactionId, 1, con)){
 				con.commit();
@@ -1082,9 +1105,8 @@ public final class Controller {
 	
 	public static void createTransaction(String transactionID, String acc1, String acc2, double amount, String reg1,
 			String reg2, String currency, String message, double balance, Connection con) {
-	PreparedStatement ps = null;
-
-
+	
+		PreparedStatement ps = null;
 		try {
 
 			// Inserts a transaction into the TRANSACTION table
@@ -1112,32 +1134,39 @@ public final class Controller {
 
 
 	public static double convert(String fromCurrency, String toCurrency, double amount, Connection con) {
+		double value = 0.0;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
 			// Create PreparedStatement to retrieve exchange rates
-			PreparedStatement ps = con
+			ps = con
 					.prepareStatement("SELECT \"EXCHANGERATE\" FROM \"DTUGRP16\".\"CURRENCY\" WHERE \"CURRENCY\" = ?");
 			ps.setString(1, fromCurrency);
-			ps.executeQuery();
+			rs = ps.executeQuery();
 
 			// Get exchange rate for first account
-			ResultSet rs = ps.getResultSet();
-			rs.next();
-			double rateFrom = rs.getDouble("EXCHANGERATE");
-
+			//rs = ps.getResultSet();
+			double rateFrom = 1;
+			if(rs.next()){
+				rateFrom = rs.getDouble("EXCHANGERATE");
+			}
+			 
+			cleanUpResult(rs, null);
 			ps.setString(1, toCurrency);
-			ps.executeQuery();
+			rs = ps.executeQuery();
 
 			// Get
-			rs = ps.getResultSet();
-			rs.next();
-			double rateTo = rs.getDouble("EXCHANGERATE");
-
-			return (amount / rateFrom) * rateTo;
-
+			if(rs.next()){
+				double rateTo = rs.getDouble("EXCHANGERATE");
+				value = (amount / rateFrom) * rateTo;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally{
+			cleanUpResult(rs, ps);
 		}
-		return 0.0;
+	
+		return value;
 	}
 
 	// Used to check if two transactions are placed in the db
