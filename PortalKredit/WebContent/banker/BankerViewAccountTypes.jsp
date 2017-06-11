@@ -14,6 +14,7 @@
 			<div class="card card-outline-primary text-center blue-outline">
 				<h1>Account Types</h1>
 				<div class="card-block">
+				<p style="color: red;">${status}</p>
 					<table class="table table-bordered">
 						<thead>
 							<tr>
@@ -32,7 +33,7 @@
 									<td>
 										<form action="" method="post">
 											<button class="btn btn-primary btn-block btn-action"
-												type="submit" name="username" value="${ob.name}">Delete</button>
+												type="submit" name="accountType" value="${ob.name}">Delete</button>
 										</form>
 								</tr>
 							</c:forEach>

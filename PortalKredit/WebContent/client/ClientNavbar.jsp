@@ -6,7 +6,7 @@
 		aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<a class="navbar-brand" href="#"><img
+	<a class="navbar-brand" href="accounts"><img
 		src="../assets/images/logo.png" width="60" height="60" alt=""></a>
 	<div class="collapse navbar-collapse" id="navbarNavDropdown">
 		<ul class="navbar-nav">

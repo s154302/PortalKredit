@@ -37,7 +37,19 @@ public class BankerViewAccountTypes extends HttpServlet {
 		}
 	}
 	
-	protected void doPost() throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(Controller.checkAuth(Controller.Type.banker, request.getSession())){
+			Connection con = Controller.getConnection(ds1);
+			String accountType = request.getParameter("accountType");
+			if(Controller.deleteAccountType(accountType, con)){
+				request.setAttribute("status", accountType + " Deleted");
+			}else{
+				request.setAttribute("status", accountType + " Could not be deleted - try again");
+			}
+			request.getRequestDispatcher("BankerViewAccountTypes.jsp").forward(request, response);
+		}else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
 }

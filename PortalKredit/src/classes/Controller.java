@@ -1505,5 +1505,24 @@ public final class Controller {
 		
 		return accountTypes;
 	}
+	
+	public static boolean deleteAccountType(String accountType, Connection con){
+		boolean status = false;
+		PreparedStatement ps = null;
+		try{
+			ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"ACCOUNTTYPE\" = ?");
+			ps.setString(1, accountType);
+			if(ps.executeUpdate() == 1){
+				status = true;
+			}
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			status = false;
+		}finally{
+			cleanUpResult(null, ps);
+		}
+		return status;
+	}
 
 }
