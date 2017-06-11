@@ -1459,13 +1459,13 @@ public final class Controller {
 
 	public static boolean createAccountType(String accountType, Double interestRate, Connection con) {
 		boolean createAccountTypeStatus = false;
-		
+		PreparedStatement ps = null;
 		// parsing to big decimal for precision 
 		BigDecimal interestRateBD = new BigDecimal(Double.valueOf(interestRate/100));
 		
 		try {
 			// Inserting the account type and interest rate in the database
-			PreparedStatement ps = con.prepareStatement(
+			ps = con.prepareStatement(
 					"INSERT INTO \"DTUGRP16\".\"ACCOUNTTYPE\" VALUES(?, ?)");
 			ps.setString(1, accountType);
 			ps.setBigDecimal(2, interestRateBD);
@@ -1475,9 +1475,35 @@ public final class Controller {
 		} catch (SQLException e) {
 			//SQL Error printing
 			//e.printStackTrace();
+		}finally{
+			cleanUpResult(null, ps);
 		}
 
 		return createAccountTypeStatus;
+	}
+	
+	//Get all the account types as a arrayList
+	public static ArrayList<AccountType> getAccountTypes(Connection con){
+		ArrayList<AccountType> accountTypes = new ArrayList<AccountType>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String accountType = null;
+		BigDecimal interestRate = null;
+		try{
+			ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNTTYPES\"");
+			rs = ps.executeQuery();
+			while(rs.next()){
+				accountType = rs.getString("ACCOUNTTYPE");
+				interestRate = rs.getBigDecimal("INTERESTRATE");
+				accountTypes.add(new AccountType(accountType, interestRate));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			cleanUpResult(rs, ps);
+		}
+		
+		return accountTypes;
 	}
 
 }
