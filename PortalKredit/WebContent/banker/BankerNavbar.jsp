@@ -20,6 +20,8 @@
 				href="Deposit">Deposit</a></li>
 			<li class="nav-item active"><a class="nav-link"
 				href="Transaction">Transaction</a></li>
+			<li class="nav-item active"><a class="nav-link"
+				href="BankerViewAccountTypes">Account Types</a></li>	
 		</ul>
 	</div>
 	<p class="col-2" style="color: white">Logged in as: <br>${user.fullName}</p>

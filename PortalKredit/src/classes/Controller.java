@@ -1490,7 +1490,7 @@ public final class Controller {
 		String accountType = null;
 		BigDecimal interestRate = null;
 		try{
-			ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNTTYPES\"");
+			ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNTTYPE\"");
 			rs = ps.executeQuery();
 			while(rs.next()){
 				accountType = rs.getString("ACCOUNTTYPE");
