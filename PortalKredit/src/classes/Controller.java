@@ -1638,7 +1638,7 @@ public final class Controller {
 		return status;
 	}
 	
-	//Used to get all acocunt associated with one branch
+	//Used to check if there are one or more accounts open at a given regno
 	public static boolean checkForOpenAccounts(String regNo, Connection con){
 		PreparedStatement ps = null;
 		ResultSet rs = null;
