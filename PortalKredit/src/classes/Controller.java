@@ -1528,6 +1528,7 @@ public final class Controller {
 		return status;
 	}
 	
+	//Used to return a single branch
 	public static Branch getBranchInfo(String regNo, Connection con){
 		if(regNo.length() != 4){
 			return null;
@@ -1556,6 +1557,7 @@ public final class Controller {
 		return branch;
 	}
 	
+	//Used to return all branches
 	public static ArrayList<Branch> getBranches(Connection con){
 		ArrayList<Branch> branches = new ArrayList<Branch>();
 		
@@ -1584,6 +1586,7 @@ public final class Controller {
 		return branches;
 	}
 	
+	//Used to create a branch and insert it into DB
 	public static boolean createBranch(String regNo, String bankName, String postal, String country, String street, String phone, Connection con){
 		boolean status = false;
 		if(regNo.length() != 4){
@@ -1609,6 +1612,49 @@ public final class Controller {
 			cleanUpResult(null, ps);
 		}
 		
+		return status;
+	}
+	
+	//Used to delete a branch form DB
+	public static boolean deleteBranch(String regNo, Connection con){
+		boolean status = false;
+		if(regNo.length() != 4){
+			return false;
+		}
+		PreparedStatement ps = null;
+		try{
+			ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"BRANCH\" WHERE \"REGNO\" = ?");
+			ps.setString(1, regNo);
+			if(ps.executeUpdate() == 1){
+				status = true;
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			status = false;
+		}finally{
+			cleanUpResult(null, ps);
+		}
+		
+		return status;
+	}
+	
+	//Used to get all acocunt associated with one branch
+	public static boolean checkForOpenAccounts(String regNo, Connection con){
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean status = true;
+		try{
+			ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? FETCH FIRST 1 ROWS ONLY");
+			ps.setString(1, regNo);
+			rs = ps.executeQuery();
+			status = rs.next();
+		}catch(SQLException e){
+			e.printStackTrace();
+			status = true;
+		}finally{
+			cleanUpResult(rs, ps);
+			
+		}
 		return status;
 	}
 

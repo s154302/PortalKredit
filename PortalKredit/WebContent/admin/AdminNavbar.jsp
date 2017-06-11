@@ -20,6 +20,7 @@
 					<a class="dropdown-item" href="AdminCreateClient">Create Client</a>
 					<a class="dropdown-item" href="AdminCreateBanker">Create Banker</a>
 					<a class="dropdown-item" href="AdminCreateAdmin">Create Admin</a>
+					<a class="dropdown-item" href="AdminCreateBranch">Create Branch</a>
 				</div></li>
 
 			<li class="nav-item dropdown"><a
@@ -30,6 +31,7 @@
 					<a class="dropdown-item" href="AdminDeleteClient">Delete Client</a>
 					<a class="dropdown-item" href="AdminDeleteBanker">Delete Banker</a>
 					<a class="dropdown-item" href="AdminDeleteAdmin">Delete Admin</a>
+					<a class="dropdown-item" href="AdminDeleteBranch">Delete Branch</a>
 				</div></li>
 			<li class="nav-item"><a class="nav-link"
 				href="AdminBatch">Batch</a></li>

@@ -18,10 +18,6 @@ import classes.Controller;
 public class AdminBatchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public AdminBatchServlet() {
-        super();
-
-    }
     @Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
