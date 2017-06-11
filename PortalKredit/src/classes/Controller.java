@@ -214,8 +214,6 @@ public final class Controller {
 			banker.setEmail(rs.getString("EMAIL"));
 			banker.setPhoneNo(rs.getString("MOBILE"));
 
-			// TODO - Consider if this only should be called when the
-			// information is needed
 			banker.setClients(getClients(userId, con));
 
 		} catch (SQLException e) {
@@ -266,10 +264,13 @@ public final class Controller {
 			rs = ps.executeQuery();
 
 			Account account;
+			String accountType;
 			while (rs.next()) {
-				account = new Account(rs.getString("ACCOUNTNUMBER"), rs.getString("REGNO"), rs.getString("ACCOUNTTYPE"),
+				accountType = rs.getString("ACCOUNTTYPE");
+				account = new Account(rs.getString("ACCOUNTNUMBER"), rs.getString("REGNO"), accountType,
 						rs.getString("CLIENTID"), rs.getDouble("BALANCE"), rs.getString("CURRENCY"),
 						findInterestRate(rs.getString("ACCOUNTTYPE"), con), rs.getString("accountName"));
+				account.setInterestRate(findInterestRate(accountType, con));
 				account.setTransactions(get3NewestTransactions(account.getAccountNumber(), account.getRegNo(), con));
 				accountList.add(account);
 			}
@@ -301,12 +302,14 @@ public final class Controller {
 			rs.next();
 			account.setAccountNumber(rs.getString("ACCOUNTNUMBER"));
 			account.setRegNo(rs.getString("REGNO"));
-			account.setAccountType(rs.getString("ACCOUNTTYPE"));
+			String accountType = rs.getString("ACCOUNTTYPE");
+			account.setAccountType(accountType);
 			account.setClientID(rs.getString("CLIENTID"));
 			account.setBalance(rs.getDouble("BALANCE"));
 			account.setCurrency(rs.getString("CURRENCY"));
 			account.setAccountName(rs.getString("ACCOUNTNAME"));
-
+			account.setInterestRate(findInterestRate(accountType, con));
+			
 			account.setTransactions(getNewTransactions(rs.getString("ACCOUNTNUMBER"), rs.getString("REGNO"), con));
 
 
@@ -1301,8 +1304,8 @@ public final class Controller {
 			ps = con
 					.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" = "
 							+ "\"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" + "
-							+ "((SELECT INTERESTRATE FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"DTUGRP16\".\"ACCOUNT\".\"ACCOUNTTYPE\" = \"DTUGRP16\".\"ACCOUNTTYPE\".\"ACCOUNTTYPE\")"
-							+ "/365)*\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\"");
+							+ "(SELECT INTERESTRATE FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"DTUGRP16\".\"ACCOUNT\".\"ACCOUNTTYPE\" = \"DTUGRP16\".\"ACCOUNTTYPE\".\"ACCOUNTTYPE\")"
+							+ "/365.25*\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\"");
 			ps.executeUpdate();
 			status = true;
 		} catch (Exception e) {
@@ -1522,6 +1525,90 @@ public final class Controller {
 		}finally{
 			cleanUpResult(null, ps);
 		}
+		return status;
+	}
+	
+	public static Branch getBranchInfo(String regNo, Connection con){
+		if(regNo.length() != 4){
+			return null;
+		}
+		Branch branch = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try{
+			ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BRANCH\" WHERE \"REGNO\" = ?");
+			ps.setString(1, regNo);
+			rs = ps.executeQuery();
+			if(rs.next()){
+				String bankName = rs.getString("BANKNAME");
+				String postal = rs.getString("POSTAL");
+				String country = rs.getString("COUNTRY");
+				String city = findCity(postal, country, con);
+				String street = rs.getString("STREET");
+				String phone = rs.getString("PHONE");
+				branch = new Branch(regNo, bankName, postal, country, street, phone, city);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			cleanUpResult(rs,ps);
+		}
+		return branch;
+	}
+	
+	public static ArrayList<Branch> getBranches(Connection con){
+		ArrayList<Branch> branches = new ArrayList<Branch>();
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String regNo, bankName, postal, country, city, street, phone;
+		try{
+			ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BRANCH\"");
+			rs = ps.executeQuery();
+			while(rs.next()){
+				regNo = rs.getString("REGNO");
+				bankName = rs.getString("BANKNAME");
+				postal = rs.getString("POSTAL");
+				country = rs.getString("COUNTRY");
+				city = findCity(postal, country, con);
+				street = rs.getString("STREET");
+				phone = rs.getString("PHONE");
+				branches.add(new Branch(regNo, bankName, postal, country, street, phone, city));
+				
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			cleanUpResult(rs,ps);
+		}
+		return branches;
+	}
+	
+	public static boolean createBranch(String regNo, String bankName, String postal, String country, String street, String phone, Connection con){
+		boolean status = false;
+		if(regNo.length() != 4){
+			return false;
+		}
+		PreparedStatement ps = null;
+		
+		try{			
+			ps = con.prepareStatement("INSERT INTO \"DTUGRP16\".\"BRANCH\" (REGNO, BANKNAME, POSTAL, COUNTRY, STREET, PHONE) VALUES (?, ?, ?, ?, ?, ?) ");
+			ps.setString(1, regNo);
+			ps.setString(2, bankName);
+			ps.setString(3, postal);
+			ps.setString(4, country);
+			ps.setString(5, street);
+			ps.setString(6, phone);
+			if(ps.executeUpdate() == 1){
+				status = true;
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			status = false;
+		}finally{
+			cleanUpResult(null, ps);
+		}
+		
 		return status;
 	}
 

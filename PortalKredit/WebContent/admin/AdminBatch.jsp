@@ -13,6 +13,7 @@
 	<div class="center-text col-4 offset-4 batch">
 		<div class="btn-group-vertical">
 			<form class="form-inline" action="AdminBatchServlet" method="post">
+				<p style="color: red;">${status}</p>
 				<button class="btn btn-primary btn-block" type="submit"
 					name="exchangeRate">Update Exchange Rates</button>
 

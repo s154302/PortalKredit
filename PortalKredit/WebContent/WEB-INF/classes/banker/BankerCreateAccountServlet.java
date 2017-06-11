@@ -29,6 +29,9 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		
 		if(Controller.checkAuth(Controller.Type.banker, session)){
+			Connection con = Controller.getConnection(ds1);
+			session.setAttribute("accountTypes", Controller.getAccountTypes(con));
+			Controller.cleanUpConnection(con);
 			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
 		}
 		else{

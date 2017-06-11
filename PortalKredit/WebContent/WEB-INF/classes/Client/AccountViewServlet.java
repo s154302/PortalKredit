@@ -34,11 +34,19 @@ public class AccountViewServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
-		Account account = (Account)session.getAttribute("account");
-		Connection con = Controller.getConnection(ds1);
-		session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con));
-		Controller.cleanUpConnection(con);
-		request.getRequestDispatcher("accountView.jsp").forward(request, response);
+		if(Controller.checkAuth(Controller.Type.client, session)){
+			Account account = (Account)session.getAttribute("account");
+			Connection con = Controller.getConnection(ds1);
+			session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con));
+			Controller.cleanUpConnection(con);
+			request.getRequestDispatcher("accountView.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+		
 	}
 	
 	@Override

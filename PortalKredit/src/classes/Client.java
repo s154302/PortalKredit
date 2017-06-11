@@ -52,14 +52,9 @@ public class Client {
 			+ " City: " + getCity()
 			+ " Country: " + getCountry()
 			+ " Postal: " + getPostal()
-			+ " FullAddress: " + getFullAddress();
-		int i = 1;
-//		for(Account account : accounts){
-//			try{
-//				clientString = clientString + " " + "Account: " + i +  " AccountNum: " + account.getAccountNumber() + " RegNo: " + account.getRegNo() + " ";
-//				i++;
-//			}catch(Exception e){}
-//		}
+			+ " FullAddress: " + getFullAddress()
+			+ "Accounts: " + accounts.toString();
+		
 				
 		return clientString;
 	}
@@ -96,7 +91,7 @@ public class Client {
 		return email;
 	}
 
-	public void setFullAddress() {
+	private void setFullAddress() {
 		try{
 			this.fullAddress = getStreet() + " " + getPostal() + " " + getCity() + " " + getCountry();
 		}catch(Exception e){}
@@ -118,7 +113,7 @@ public class Client {
 		return fullName;
 	}
 
-	public void setFullName() {
+	private void setFullName() {
 		try{
 			this.fullName = getFirstName() + " " + getLastName();
 		}catch(Exception e){}
