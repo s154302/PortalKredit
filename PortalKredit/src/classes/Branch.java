@@ -8,13 +8,13 @@ public class Branch {
 	}
 	
 	public Branch(String regNo, String bankName, String postal, String country, String street, String phone, String city){
-		this.regNo = regNo;
-		this.bankName = bankName;
-		this.postal = postal;
-		this.country = country;
-		this.street = street;
-		this.phone = phone;
-		this.city = city;
+		setRegNo(regNo);
+		setBankName(bankName);
+		setPostal(postal);
+		setCountry(country);
+		setStreet(street);
+		setPhone(phone);
+		setCity(city);
 	}
 
 	public String getRegNo() {
@@ -68,7 +68,7 @@ public class Branch {
 		this.phone = phone;
 	}
 
-	String getFullAddress() {
+	public String getFullAddress() {
 		return fullAddress;
 	}
 

@@ -194,7 +194,7 @@ public final class Controller {
 
 	}
 
-	// Fills a banker client object with data and returns it
+	// Fills a banker user object with data and returns it
 	public static Banker getBankerInfo(String userId, Connection con) {
 		Banker banker = new Banker();
 		PreparedStatement ps = null;
@@ -1656,6 +1656,25 @@ public final class Controller {
 			
 		}
 		return status;
+	}
+	
+	public static Banker getAdvisor(String clientId, Connection con){
+		Banker banker = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try{
+			ps = con.prepareStatement("SELECT BANKERID FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\" = ?");
+			ps.setString(1, clientId);
+			rs = ps.executeQuery();
+			if(rs.next()){
+				banker = getBankerInfo(rs.getString("BANKERID"), con);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			cleanUpResult(rs, ps);
+		}
+		return banker;
 	}
 
 }
