@@ -7,14 +7,13 @@
 
 .blue-outline {
 	border-color: #0078ff;
-	margin: 0 auto; /* Added */
-	float: none; /* Added */
-	margin-bottom: 10px; /* Added */
+	margin: 0 auto;
+	float: none;
+	margin-bottom: 10px;
 }
 
 .pad-row {
-	padding-top: 50px; /* Whatever the height of your navbar is; the
-                             default is 50px */
+	padding-top: 40px;
 }
 
 .row>h1 {
@@ -27,4 +26,8 @@
 
 .noresize {
   resize: none; 
+}
+
+.navbar-texpad {
+	padding-top: 15px;
 }

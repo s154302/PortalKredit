@@ -20,7 +20,7 @@
 								<th>bankerID</th>
 								<th>First name</th>
 								<th>Last name</th>
-								<th>Reg No.</th>
+								<th>Reg. No.</th>
 								<th>Phone No.</th>
 								<th>E-mail</th>
 								<th>Delete</th>
