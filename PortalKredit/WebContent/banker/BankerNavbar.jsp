@@ -15,13 +15,18 @@
 			<li class="nav-item active"><a class="nav-link"
 				href="CreateClient">Create Client</a></li>
 			<li class="nav-item active"><a class="nav-link"
-				href="CreateAccountType">Create Account Type</a></li>
-			<li class="nav-item active"><a class="nav-link"
 				href="Deposit">Deposit</a></li>
 			<li class="nav-item active"><a class="nav-link"
 				href="Transaction">Transaction</a></li>
-			<li class="nav-item active"><a class="nav-link"
-				href="BankerViewAccountTypes">Account Types</a></li>	
+			<li class="nav-item active"></li>	
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#"
+				id="navbarDropdownMenuLink" data-toggle="dropdown"
+				aria-haspopup="true" aria-expanded="false">Account Type</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+					<a class="dropdown-item" href="CreateAccountType">Create Account Type</a>
+					<a class="dropdown-item" href="BankerViewAccountTypes">View Account Types</a>
+				</div></li>
 		</ul>
 	</div>
 	<p class="col-2" style="color: white">Logged in as: <br>${user.fullName}</p>

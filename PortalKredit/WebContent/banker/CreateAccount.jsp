@@ -26,8 +26,6 @@
 								placeholder="Account Name">
 						</div>
 
-
-
 						<div class="form-group">
 							<input type="text" pattern="[0-9]*" class="form-control"
 								name="clientRegNo" placeholder="*Reg. No."
