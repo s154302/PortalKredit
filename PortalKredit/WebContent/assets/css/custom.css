@@ -25,3 +25,6 @@
 	padding-top: 100px;
 }
 
+.noresize {
+  resize: none; 
+}

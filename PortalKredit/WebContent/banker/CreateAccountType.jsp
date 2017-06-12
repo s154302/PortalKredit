@@ -13,28 +13,29 @@
 				<h1>Create New Account Type</h1>
 				<p style="color: green;">${createAccountTypeCreated}</p>
 				<div class="card-block">
-				<form action="CreateAccountType" method="post">
-					<div class="form-group">
-						<input type="text" class="form-control" name="accountType"
-							placeholder="*Account Type" maxlength="45" required>
-					</div>
-					
-					<div class="form-group">
-							<input type="text" pattern="[0-9]+([.][0-9]+)?" class="form-control"
-								name="interestRate" placeholder="*Interest Rate"
+					<form action="CreateAccountType" method="post">
+						<div class="form-group">
+							<input type="text" class="form-control" name="accountType"
+								placeholder="*Account Type" maxlength="45" required>
+						</div>
+
+						<div class="form-group">
+							<input type="text" pattern="[0-9]+([.][0-9]+)?"
+								class="form-control" name="interestRate"
+								placeholder="*Interest Rate"
 								title="Please only input Numbers. E.g. 0.4" required>
-					</div>
-					
-					<button class="btn btn-primary btn-block btn-action" type="submit"
+						</div>
+
+						<button class="btn btn-primary btn-block btn-action" type="submit"
 							value="createAccountType">Create Account Type</button>
-				</form>
+					</form>
+				</div>
+				<p style="color: red;">${createAccountTypeDenied}</p>
 			</div>
-			<p style="color: red;">${createAccountTypeDenied}</p>
 		</div>
 	</div>
-</div>
-		
-		
+
+
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
