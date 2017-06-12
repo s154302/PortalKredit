@@ -9,25 +9,28 @@
 </head>
 
 <body>
-	<jsp:include page="AdminNavbar.jsp"/>
+	<jsp:include page="AdminNavbar.jsp" />
 	<div class="row pad-row">
 		<div class="col-4 offset-4 text-center">
 			<h1>Delete Client!</h1>
 			<form action="" method="post">
-				<div class="form-inline row offset-1">
-					<input class="form-control mb-2 mr-sm-2 mb-sm-0" type="text"
-						placeholder="Search Clients" name="search-term">
-
-					<button class="btn btn-primary btn-action" type="submit"
-						value="search-client" name="search-client">
-						<img
-							src="../assets/images/glyphicons_free/glyphicons/png/glyphicons-28-search-white.png"
-							width="15" height="15" aria-hidden="true" />Search
-					</button>
+				<div class="form-inline row offset-2">
+					<div class="input-group">
+						<input class="form-control" type="text"
+							placeholder="Search Clients" name="search-term"> <span
+							class="input-group-btn">
+							<button class="btn btn-primary btn-action" type="submit"
+								value="search-client" name="search-client">
+								<img
+									src="../assets/images/glyphicons_free/glyphicons/png/glyphicons-28-search-white.png"
+									width="15" height="15" aria-hidden="true" />Search
+							</button>
+						</span>
+					</div>
 				</div>
 			</form>
 
-			
+
 			<div class="card card-outline-primary blue-outline">
 				<div class="card-block">
 					<table class="table table-hover">

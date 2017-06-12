@@ -21,8 +21,6 @@ import javax.sql.DataSource;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 
-// REMEMBER st IS STATEMENT
-
 public final class Controller {
 	public static enum Type {
 		client, banker, admin
