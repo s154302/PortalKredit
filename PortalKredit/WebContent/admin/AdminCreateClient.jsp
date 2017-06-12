@@ -6,9 +6,9 @@
 <title>Welcome</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-<link href="../assets/css/custom.css" rel="stylesheet">
 <link href="../assets/css/bootstrap-formhelpers.min.css"
 	rel="stylesheet">
+<link href="../assets/css/custom.css" rel="stylesheet">
 </head>
 
 <body>

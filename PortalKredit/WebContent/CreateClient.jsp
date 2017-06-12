@@ -51,7 +51,7 @@
 					</div>
 
 					<div class="form-group">
-						<select class="form-control bfh-countries" data-country="DK"
+						<select class="form-control bfh-countries" data-country="Denmark"
 							id="createClientCountry" name="clientCountry"></select>
 					</div>
 
@@ -60,7 +60,7 @@
 
 				</form>
 			</div>
-			<p style="color: red;">${createClientStatus}</p>
+			<p style="color: red">${createClientStatus}</p>
 		</div>
 	</div>
 </div>
