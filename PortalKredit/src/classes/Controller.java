@@ -354,7 +354,7 @@ public final class Controller {
 		try {
 			ps = con.prepareStatement(
 					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?"
-							+ " FETCH FIRST 3 ROWS ONLY");
+							+ "ORDER BY DATEOFTRANSACTION DESC FETCH FIRST 3 ROWS ONLY");
 
 			ps.setString(1, accountNumber);
 			ps.setString(2, regNo);
@@ -391,7 +391,7 @@ public final class Controller {
 		ResultSet rs = null;
 		try {
 			ps = con.prepareStatement(
-					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ? ORDER BY DATEOFTRANSACTION DESC");
 
 			ps.setString(1, accountNumber);
 			ps.setString(2, string);
@@ -414,32 +414,25 @@ public final class Controller {
 	
 	// Returns all 'old' transactions associated with an account
 
-	public static ArrayList<Transaction> getOldTransactions(String accountNumber, String regNo, Connection con,
-			HttpSession session) {
-
+	public static ArrayList<Transaction> getOldTransactions(String accountNumber, String regNo, Connection con) {
 
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-			try {
-				if(session.getAttribute("loadedOldTransactions") == null){
-					ps = con.prepareStatement(
-							"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ? ORDER BY DATEOFTRANSACTION DESC");
+		try {
+				ps = con.prepareStatement(
+						"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ? ORDER BY DATEOFTRANSACTION DESC");
 
 				ps.setString(1, accountNumber);
 				ps.setString(2, regNo);
-
-
-					rs = ps.executeQuery();
-
+				
+				rs = ps.executeQuery();
 
 				while (rs.next()) {
 					transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
 							rs.getString("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getString("RECIEVEREGNO"),
 							rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"),
 							rs.getDouble("BALANCE"), rs.getString("NOTE")));
-					session.setAttribute("loadedOldTransactions", true);
-				}
 				}
 				
 			} catch (SQLException e) {
