@@ -44,7 +44,7 @@ public class AdminCreateBranch extends HttpServlet {
 				if(Controller.createBranch(regNo, bankName, postal, country, street, phone, con)){
 					request.setAttribute("status", "Branch was created successfully");
 				}else{
-					request.setAttribute("status", "Error - Somthing went wrong");
+					request.setAttribute("status", "Error - something went wrong");
 					keepValues(request);
 				}
 			}

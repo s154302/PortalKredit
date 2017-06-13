@@ -61,7 +61,7 @@ public class BankerDepositServlet extends HttpServlet {
 				if(Controller.deposit(accountNumber, regNo, con, Double.parseDouble(strAmount), currency)){
 					request.setAttribute("status", "Sussces");
 				}else{
-					request.setAttribute("status", "Error somthing went wrong");
+					request.setAttribute("status", "Error something went wrong");
 					request = keepInputs(request);
 				}
 			}else{
