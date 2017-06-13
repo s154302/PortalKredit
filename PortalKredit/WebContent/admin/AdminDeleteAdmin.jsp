@@ -19,7 +19,6 @@
 
 							<tr>
 								<th>Login</th>
-								<th>Password</th>
 								<th>Delete</th>
 							</tr>
 						</thead>
@@ -29,8 +28,6 @@
 							<c:forEach var="ob" items="${list}">
 								<tr>
 									<td><c:out value="${ob.username}" /></td>
-									<td><c:out value="${ob.password}" /></td>
-
 									<td>
 										<form action="" method="post">
 											<button class="btn btn-sm btn-primary btn-block btn-action"

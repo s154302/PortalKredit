@@ -9,40 +9,41 @@
 </head>
 
 <body>
-	<jsp:include page="BankerNavbar.jsp"/>
+	<jsp:include page="BankerNavbar.jsp" />
 	<div class="row pad-row">
-			<div class="card card-outline-primary text-center blue-outline">
-				<h1>Account Types</h1>
-				<div class="card-block">
+		<div class="card card-outline-primary text-center blue-outline">
+			<h1>Account Types</h1>
+			<div class="card-block">
 				<p style="color: red;">${status}</p>
-					<table class="table table-bordered">
-						<thead>
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Account Type</th>
+							<th>Interest Rate</th>
+							<th></th>
+						</tr>
+					</thead>
+
+					<tbody>
+
+						<c:forEach var="ob" items="${accountTypes}">
 							<tr>
-								<th>Account Type</th>
-								<th>Interest Rate</th>
+								<td><c:out value="${ob.name}" /></td>
+								<td><c:out value="${ob.interestRate.stripTrailingZeros() * 100} %" /></td>
+
+								<td>
+									<form action="" method="post">
+										<button class="btn btn-primary btn-block btn-action"
+											type="submit" name="accountType" value="${ob.name}">Delete</button>
+									</form>
 							</tr>
-						</thead>
+						</c:forEach>
 
-						<tbody>
-
-							<c:forEach var="ob" items="${accountTypes}">
-								<tr>
-									<td><c:out value="${ob.name}" /></td>
-									<td><c:out value="${ob.interestRate}" /></td>
-
-									<td>
-										<form action="" method="post">
-											<button class="btn btn-primary btn-block btn-action"
-												type="submit" name="accountType" value="${ob.name}">Delete</button>
-										</form>
-								</tr>
-							</c:forEach>
-
-						</tbody>
-					</table>
-				</div>
+					</tbody>
+				</table>
 			</div>
 		</div>
+	</div>
 	</div>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
