@@ -181,4 +181,13 @@ public class Client {
 	public void setBankerID(String bankerID) {
 		this.bankerID = bankerID;
 	}
+	
+	public boolean isInAccountList(String accountNumber, String regNo){
+		for(Account account : accounts){
+			if(account.getAccountNumber().equals(accountNumber) && account.getRegNo().equals(regNo)){
+				return true;
+			}
+		}
+		return false;
+	}
 }

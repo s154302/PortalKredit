@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import classes.Client;
 import classes.Controller;
 
 @WebServlet("/client/payments")
@@ -81,12 +82,13 @@ public class ClientPaymentsServlet extends HttpServlet {
 		String sendReg = strsendReg;
 		String reciReg = strreciReg;
 		double amount = Double.parseDouble(stramount);
-		
+		Client client = (Client)session.getAttribute("user");
+		Boolean ownAccount = client.isInAccountList(sendAcc, strsendReg);
 		Connection con = Controller.getConnection(ds1);
 		String userID = (String) session.getAttribute("userID");
 		Boolean correctPw = Controller.authenticate(userID, password, con, session);
 
-		if(correctPw){
+		if(correctPw && ownAccount){
 			Boolean status = Controller.transaction(sendAcc, reciAcc, amount, sendReg, reciReg,
 					currency, strmessage, strreciMessage, con);
 			
