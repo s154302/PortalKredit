@@ -35,7 +35,7 @@
 
 						<div class="form-group">
 							<select class="form-control bfh-currencies"
-								name="currency" data-currency="${currency}"></select>
+								name="currency" data-currency="DKK"></select>
 						</div>
 
 						<div class="form-group">

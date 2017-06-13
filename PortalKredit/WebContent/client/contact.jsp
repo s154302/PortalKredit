@@ -43,8 +43,9 @@
 				</table>
 
 				<div class="form-group">
-					<textarea class="form-control noresize" id="exampleTextarea"
-						rows="12"></textarea>
+					<div class="container">
+						<textarea class="form-control noresize" id="textarea" rows="12"></textarea>
+					</div>
 				</div>
 
 				<div class="form-group">
