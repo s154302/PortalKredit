@@ -518,9 +518,12 @@ public final class Controller {
 	}
 
 
-	public static void createAccount(String accountName, String accountNumber, String regNo, String accountType,
+	public static boolean createAccount(String accountName, String accountNumber, String regNo, String accountType,
 			String clientID, double balance, String currency, Connection con) throws SQLException {
-		PreparedStatement ps = con.prepareStatement("INSERT INTO \"DTUGRP16\".\"ACCOUNT\" "
+		
+		PreparedStatement ps = null;
+		try{
+		ps = con.prepareStatement("INSERT INTO \"DTUGRP16\".\"ACCOUNT\" "
 
 				+ "(ACCOUNTNUMBER, REGNO, ACCOUNTNAME, ACCOUNTTYPE, CLIENTID, BALANCE, CURRENCY, INTEREST) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -534,8 +537,17 @@ public final class Controller {
 		ps.setString(7, currency);
 		ps.setDouble(8, 0);
 		ps.executeUpdate();
+		
+		return true;
+		} catch(SQLException e){
+			e.printStackTrace();
+			return false;
+			
+		}finally{
+			cleanUpResult(null,ps);
+		}
 
-		cleanUpResult(null,ps);
+		
 
 	}
 
@@ -693,15 +705,17 @@ public final class Controller {
 		return adminList;
 	}
 
-	public static void deleteAdmin(String adminID, Connection con) {
+	public static boolean deleteAdmin(String adminID, Connection con) {
 		PreparedStatement ps = null;
 		try {
 			ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"ADMIN\" WHERE \"ADMINID\"=?");
 			ps.setString(1, adminID);
 			ps.executeUpdate();
+			return true;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		} finally{
 			cleanUpResult(null,ps);
 		}
@@ -738,7 +752,7 @@ public final class Controller {
 		return ID;
 	}
 
-	public static void createBanker(String firstName, String lastName, String password, String email, String telephone,
+	public static boolean createBanker(String firstName, String lastName, String password, String email, String telephone,
 			String regno, Connection con) {
 		PreparedStatement ps = null;
 		try {
@@ -753,24 +767,28 @@ public final class Controller {
 			ps.setString(6, email);
 			ps.setString(7, telephone);
 			ps.executeUpdate();
+			
+			return true;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		} finally{
 			cleanUpResult(null, ps);
 		}
 
 	}
 
-	public static void deleteClient(String clientID, Connection con) {
+	public static boolean deleteClient(String clientID, Connection con) {
 		PreparedStatement ps = null;
 		try {
 			ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\"=?");
 			ps.setString(1, clientID);
 			ps.executeUpdate();
-
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		} finally{
 			cleanUpResult(null, ps);
 		}
@@ -849,16 +867,18 @@ public final class Controller {
 		return bankerList;
 	}
 
-	public static void deleteBanker(String bankerID, Connection con) {
+	public static boolean deleteBanker(String bankerID, Connection con) {
 		PreparedStatement ps = null;
 		try {
 			ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"BANKER\" "
 					+ "WHERE \"BANKERID\"=?");
 			ps.setString(1, bankerID);
 			ps.executeUpdate();
+			return true;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		} finally{
 			cleanUpResult(null, ps);
 		}
@@ -1103,7 +1123,7 @@ public final class Controller {
 		return balance;
 	}
 	
-	public static void createTransaction(String transactionID, String acc1, String acc2, double amount, String reg1,
+	public static boolean createTransaction(String transactionID, String acc1, String acc2, double amount, String reg1,
 			String reg2, String currency, String message, double balance, Connection con) {
 	
 		PreparedStatement ps = null;
@@ -1124,9 +1144,11 @@ public final class Controller {
 			ps.setString(9, message);
 			ps.setDouble(10, balance);
 			ps.executeUpdate();
+			return true;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		} finally{
 			cleanUpResult(null, ps);
 		}
@@ -1205,7 +1227,7 @@ public final class Controller {
 	}
 
 
-	public static void editAccount(String accountName, String accountNumber, String regNo, String accountType,
+	public static boolean editAccount(String accountName, String accountNumber, String regNo, String accountType,
 			String clientID, double balance, String currency, Connection con) {
 	PreparedStatement ps = null;
 
@@ -1221,9 +1243,11 @@ public final class Controller {
 			ps.setString(5, accountNumber);
 			ps.setString(6, regNo);
 			ps.executeUpdate();
+			return true;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		} finally{
 			cleanUpResult(null, ps);
 		}
@@ -1338,10 +1362,11 @@ public final class Controller {
 
 	}
 
-	public static void editClient(String clientID, String firstName, String lastName, String email, String mobile,
-			String street, String bankerID, String postal, String country, Connection con) throws SQLException {
-
-		PreparedStatement ps = con.prepareStatement(
+	public static boolean editClient(String clientID, String firstName, String lastName, String email, String mobile,
+			String street, String bankerID, String postal, String country, Connection con) {
+		PreparedStatement ps = null;
+		try{
+		ps = con.prepareStatement(
 				"UPDATE \"DTUGRP16\".\"CLIENT\" SET (FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) "
 						+ "= (?,?,?,?,?,?,?,?) WHERE CLIENTID = ?");
 
@@ -1356,15 +1381,22 @@ public final class Controller {
 		ps.setString(8, country.toUpperCase());
 		ps.setString(9, clientID);
 		ps.executeUpdate();
-
+		return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+			return false;
+		}
+		finally{
 		cleanUpResult(null, ps);
+		}
 	}
 
 
-	public static void clientEditClient(String clientID, String email, String mobile, String street, String postal,
-			Connection con) throws SQLException {
-
-		PreparedStatement ps = con.prepareStatement(
+	public static boolean clientEditClient(String clientID, String email, String mobile, String street, String postal,
+			Connection con) {
+		PreparedStatement ps = null;
+		try{
+		ps = con.prepareStatement(
 				"UPDATE \"DTUGRP16\".\"CLIENT\" SET (EMAIL, MOBILE, STREET, POSTAL) = (?,?,?,?) WHERE CLIENTID = ?");
 
 
@@ -1374,20 +1406,35 @@ public final class Controller {
 		ps.setString(4, postal);
 		ps.setString(5, clientID);
 		ps.executeUpdate();
-
+		return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+			return false;
+		}
+		finally{
 		cleanUpResult(null, ps);
+		}
 	}
 
-	public static void changeClientPassword(String clientID, String password, Connection con) throws SQLException {
+	public static boolean changeClientPassword(String clientID, String password, Connection con) throws SQLException {
+		PreparedStatement ps = null;
+		try{
+			
 		
-		PreparedStatement ps = con.prepareStatement(
+		ps = con.prepareStatement(
 			"UPDATE \"DTUGRP16\".\"CLIENT\" SET \"DTUGRP16\".\"CLIENT\".\"PASSWORD\" = ? WHERE \"CLIENTID\" = ?");
 
 		ps.setString(1, BCrypt.hashpw(password, BCrypt.gensalt(14)));
 		ps.setString(2, clientID);
 		ps.executeUpdate();
+		return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+			return false;
+		}finally{
 
 		cleanUpResult(null, ps);
+		}
 	}
 	
 	//Used as a "batch" to place transaction into the db for old transactions
