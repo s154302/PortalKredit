@@ -1,5 +1,7 @@
 <!DOCTYPE HTML><%@page language="java"
 	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <html>
 
 <head>
@@ -24,8 +26,6 @@
 								placeholder="Account Name">
 						</div>
 
-
-
 						<div class="form-group">
 							<input type="text" pattern="[0-9]*" class="form-control"
 								name="clientRegNo" placeholder="*Reg. No."
@@ -33,8 +33,11 @@
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="clientAccountType"
-								placeholder="*Account Type">
+							<select class="form-control" name="clientAccountType" required>
+								<c:forEach var="acc" items="${accountTypes}">
+										<option value="${acc.name}">${acc.name}</option>
+									</c:forEach>
+							</select>
 						</div>
 
 						<div class="form-group">
@@ -45,7 +48,7 @@
 						<div class="form-group">
 							<input type="text" pattern="[0-9]*" class="form-control"
 								name="clientBalance" placeholder="*Balance"
-								title="Please only input numbers.">
+								title="Please only input numbers." required>
 						</div>
 
 						<div class="form-group">

@@ -23,12 +23,19 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		super();
 	}
 	
+	// Is called from ViewSingleClient.jsp file
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
+		//Authenticating the user
 		if(Controller.checkAuth(Controller.Type.banker, session)){
+			Connection con = Controller.getConnection(ds1);
+			
+			//Setting accountTypes for dropdown
+			session.setAttribute("accountTypes", Controller.getAccountTypes(con));
+			Controller.cleanUpConnection(con);
 			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
 		}
 		else{
@@ -48,18 +55,15 @@ public class BankerCreateAccountServlet extends HttpServlet {
 			
 			createAccount(request, response);
 		
-		}
-		else{
+		} else{
 			request.getSession().invalidate();
 			response.sendRedirect("../index");
 		}
-		
-//		Banker banker = (Banker) session.getAttribute("user");
-//		banker.getClient(clientID).setAccounts( Controller.getAccounts(clientID, ds1));
-//		session.setAttribute("user", banker);
-
 	}
+	
 	private void createAccount(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+		
+		//Saving information from the user's input and Banker's information
 		Banker banker = (Banker) request.getSession().getAttribute("user");
 		String accountName = request.getParameter("clientAccountName");
 		String accountNumber = request.getParameter("clientAccountNumber");
@@ -68,18 +72,17 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		String clientID = (String) request.getSession().getAttribute("clientID");
 		double balance = Double.parseDouble(request.getParameter("clientBalance"));
 		String currency = request.getParameter("clientCurrency");
-		System.out.println(currency);
 		
 		request.getSession().setAttribute("clientID", clientID);
-
 		Connection con = Controller.getConnection(ds1);
 
 		try {
+			// Creating the account
 			Controller.createAccount(accountName, accountNumber, regNo, accountType, clientID, balance, currency, con);
 			response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			// Catching error and informing the user
 			e.printStackTrace();
 			request.setAttribute("createAccountStatus", "Wrong value inserted");
 			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);

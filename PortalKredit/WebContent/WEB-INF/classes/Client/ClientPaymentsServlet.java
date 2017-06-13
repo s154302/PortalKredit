@@ -54,10 +54,6 @@ public class ClientPaymentsServlet extends HttpServlet {
 			request.getSession().invalidate();
 			response.sendRedirect("../index");
 		}
-		
-
-		
-		
 	}
 	
 	//Used to keep the written input in the input fields

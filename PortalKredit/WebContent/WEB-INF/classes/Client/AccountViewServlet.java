@@ -34,11 +34,19 @@ public class AccountViewServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
-		Account account = (Account)session.getAttribute("account");
-		Connection con = Controller.getConnection(ds1);
-		session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con));
-		Controller.cleanUpConnection(con);
-		request.getRequestDispatcher("accountView.jsp").forward(request, response);
+		if(Controller.checkAuth(Controller.Type.client, session)){
+			Account account = (Account)session.getAttribute("account");
+			Connection con = Controller.getConnection(ds1);
+			session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con));
+			Controller.cleanUpConnection(con);
+			request.getRequestDispatcher("accountView.jsp").forward(request, response);
+		}
+		else{
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+		
+		
 	}
 	
 	@Override
@@ -55,12 +63,18 @@ public class AccountViewServlet extends HttpServlet {
 		}
 		
 	}
+	
 	private void accountTransactions(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-		Account account = (Account)session.getAttribute("account");
-		ArrayList<Transaction> transactions = (ArrayList<Transaction>) session.getAttribute("transactions");
 		Connection con = Controller.getConnection(ds1);
-		transactions.addAll(Controller.getOldTransactions(account.getAccountNumber(), account.getRegNo(), con, session));
+		
+		// Finding old and new transactions from the DB
+		Account account = (Account)session.getAttribute("account");
+		ArrayList<Transaction> transactions = Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con);
+		ArrayList<Transaction> oldTransactions = Controller.getOldTransactions(account.getAccountNumber(), account.getRegNo(), con);
+		
+		transactions.addAll(oldTransactions);
 		session.setAttribute("transactions", transactions);
+		
 		Controller.cleanUpConnection(con);
 		request.getRequestDispatcher("accountView.jsp").forward(request, response);
 	}

@@ -10,18 +10,53 @@
 	<jsp:include page="ClientNavbar.jsp"></jsp:include>
 	<h1 class="text-center">Contact your advisor</h1>
 
-	<div class="form-group">
+	<div class="row pad-row">
+		<div class="col-4 offset-4">
+			<div class="card card-outline-primary text-center blue-outline">
+				<table class="table table-hover">
+					<tbody>
+						<tr>
+							Name: ${banker.fullName}
+							<br>
+						</tr>
+						<tr>
+							Email: ${banker.email}
+							<br>
+						</tr>
+						<tr>
+							Advisor Phone: ${banker.phoneNo}
+							<br>
+						</tr>
+						<tr>
+							Bank Name: ${branch.bankName}
+							<br>
+						</tr>
+						<tr>
+							Bank Address: ${branch.fullAddress}
+							<br>
+						</tr>
+						<tr>
+							Bank Phone: ${branch.phone}
+							<br>
+						</tr>
+					</tbody>
+				</table>
 
-		<textarea class="form-control col-4 offset-4" id="exampleTextarea"
-			rows="12"></textarea>
-		<form action="" method="post">
-			<button class="btn btn-primary btn-block col-4 offset-4"
-				type="submit" name="contactAdvisor"> Send help pls
-				</button>
-		</form>
+				<div class="form-group">
+					<div class="container">
+						<textarea class="form-control noresize" id="textarea" rows="12"></textarea>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<form action="" method="post">
+						<button class="btn btn-primary btn-block col-4 offset-4"
+							type="submit" name="contactAdvisor">Send</button>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
-
-
 
 
 	<script

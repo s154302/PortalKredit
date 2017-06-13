@@ -21,8 +21,6 @@ import javax.sql.DataSource;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 
-// REMEMBER st IS STATEMENT
-
 public final class Controller {
 	public static enum Type {
 		client, banker, admin
@@ -194,7 +192,7 @@ public final class Controller {
 
 	}
 
-	// Fills a banker client object with data and returns it
+	// Fills a banker user object with data and returns it
 	public static Banker getBankerInfo(String userId, Connection con) {
 		Banker banker = new Banker();
 		PreparedStatement ps = null;
@@ -214,8 +212,6 @@ public final class Controller {
 			banker.setEmail(rs.getString("EMAIL"));
 			banker.setPhoneNo(rs.getString("MOBILE"));
 
-			// TODO - Consider if this only should be called when the
-			// information is needed
 			banker.setClients(getClients(userId, con));
 
 		} catch (SQLException e) {
@@ -266,10 +262,13 @@ public final class Controller {
 			rs = ps.executeQuery();
 
 			Account account;
+			String accountType;
 			while (rs.next()) {
-				account = new Account(rs.getString("ACCOUNTNUMBER"), rs.getString("REGNO"), rs.getString("ACCOUNTTYPE"),
+				accountType = rs.getString("ACCOUNTTYPE");
+				account = new Account(rs.getString("ACCOUNTNUMBER"), rs.getString("REGNO"), accountType,
 						rs.getString("CLIENTID"), rs.getDouble("BALANCE"), rs.getString("CURRENCY"),
 						findInterestRate(rs.getString("ACCOUNTTYPE"), con), rs.getString("accountName"));
+				account.setInterestRate(findInterestRate(accountType, con));
 				account.setTransactions(get3NewestTransactions(account.getAccountNumber(), account.getRegNo(), con));
 				accountList.add(account);
 			}
@@ -282,7 +281,6 @@ public final class Controller {
 	}
 
 	// Fills a single account object with data and returns it
-
 	public static Account getAccountInfo(String accountNumber, String regNo, Connection con) {
 
 		Account account = new Account();
@@ -301,12 +299,14 @@ public final class Controller {
 			rs.next();
 			account.setAccountNumber(rs.getString("ACCOUNTNUMBER"));
 			account.setRegNo(rs.getString("REGNO"));
-			account.setAccountType(rs.getString("ACCOUNTTYPE"));
+			String accountType = rs.getString("ACCOUNTTYPE");
+			account.setAccountType(accountType);
 			account.setClientID(rs.getString("CLIENTID"));
 			account.setBalance(rs.getDouble("BALANCE"));
 			account.setCurrency(rs.getString("CURRENCY"));
 			account.setAccountName(rs.getString("ACCOUNTNAME"));
-
+			account.setInterestRate(findInterestRate(accountType, con));
+			
 			account.setTransactions(getNewTransactions(rs.getString("ACCOUNTNUMBER"), rs.getString("REGNO"), con));
 
 
@@ -342,7 +342,6 @@ public final class Controller {
 
 	// Returns the 3 newest transactions associated with an account number and
 	// regno
-
 	public static ArrayList<Transaction> get3NewestTransactions(String accountNumber, String regNo, Connection con) {
 
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
@@ -351,7 +350,7 @@ public final class Controller {
 		try {
 			ps = con.prepareStatement(
 					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?"
-							+ " FETCH FIRST 3 ROWS ONLY");
+							+ "ORDER BY DATEOFTRANSACTION DESC FETCH FIRST 3 ROWS ONLY");
 
 			ps.setString(1, accountNumber);
 			ps.setString(2, regNo);
@@ -379,7 +378,6 @@ public final class Controller {
 	}
 
 	// Returns all 'new' transactions associated with an account
-
 	public static ArrayList<Transaction> getNewTransactions(String accountNumber, String string, Connection con) {
 
 
@@ -388,7 +386,7 @@ public final class Controller {
 		ResultSet rs = null;
 		try {
 			ps = con.prepareStatement(
-					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ?");
+					"SELECT * FROM \"DTUGRP16\".\"TRANSACTION\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ? ORDER BY DATEOFTRANSACTION DESC");
 
 			ps.setString(1, accountNumber);
 			ps.setString(2, string);
@@ -410,33 +408,25 @@ public final class Controller {
 	}
 	
 	// Returns all 'old' transactions associated with an account
-
-	public static ArrayList<Transaction> getOldTransactions(String accountNumber, String regNo, Connection con,
-			HttpSession session) {
-
+	public static ArrayList<Transaction> getOldTransactions(String accountNumber, String regNo, Connection con) {
 
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-			try {
-				if(session.getAttribute("loadedOldTransactions") == null){
-					ps = con.prepareStatement(
-							"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ? ORDER BY DATEOFTRANSACTION DESC");
+		try {
+				ps = con.prepareStatement(
+						"SELECT * FROM \"DTUGRP16\".\"TRANSACTIONOLD\" WHERE \"ACCOUNTNUMBER\" = ? AND \"REGNO\" = ? ORDER BY DATEOFTRANSACTION DESC");
 
 				ps.setString(1, accountNumber);
 				ps.setString(2, regNo);
-
-
-					rs = ps.executeQuery();
-
+				
+				rs = ps.executeQuery();
 
 				while (rs.next()) {
 					transactionList.add(new Transaction(rs.getString("TRANSACTIONID"), rs.getString("ACCOUNTNUMBER"),
 							rs.getString("REGNO"), rs.getString("RECIEVEACCOUNT"), rs.getString("RECIEVEREGNO"),
 							rs.getDate("DATEOFTRANSACTION"), rs.getDouble("AMOUNT"), rs.getString("CURRENCY"),
 							rs.getDouble("BALANCE"), rs.getString("NOTE")));
-					session.setAttribute("loadedOldTransactions", true);
-				}
 				}
 				
 			} catch (SQLException e) {
@@ -588,7 +578,6 @@ public final class Controller {
 	}
 
 	// Returns the city associated with the postal and country
-
 	public static String findCity(String postal, String country, Connection con) {
 
 		String city = "Orgrimmar";
@@ -598,18 +587,13 @@ public final class Controller {
 			ps = con.prepareStatement(
 					"SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = ? AND \"COUNTRY\" = ?");
 
-
 			ps.setString(1, postal);
 			ps.setString(2, country.toUpperCase());
 			rs = ps.executeQuery();
 			
-			//maybe handle if the city doesnt exist
 			if(rs.next()){
 				city = rs.getString("CITY");
 			}
-
-
-			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -648,6 +632,7 @@ public final class Controller {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
+			
 			// Select the latest ID, and extract only the ID number as an
 			// integer
 			ps = con.prepareStatement("(SELECT INTEGER(SUBSTR(clientID, 1, 8)) "
@@ -1301,8 +1286,8 @@ public final class Controller {
 			ps = con
 					.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" = "
 							+ "\"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" + "
-							+ "((SELECT INTERESTRATE FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"DTUGRP16\".\"ACCOUNT\".\"ACCOUNTTYPE\" = \"DTUGRP16\".\"ACCOUNTTYPE\".\"ACCOUNTTYPE\")"
-							+ "/365)*\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\"");
+							+ "(SELECT INTERESTRATE FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"DTUGRP16\".\"ACCOUNT\".\"ACCOUNTTYPE\" = \"DTUGRP16\".\"ACCOUNTTYPE\".\"ACCOUNTTYPE\")"
+							+ "/365.25*\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\"");
 			ps.executeUpdate();
 			status = true;
 		} catch (Exception e) {
@@ -1523,6 +1508,155 @@ public final class Controller {
 			cleanUpResult(null, ps);
 		}
 		return status;
+	}
+	
+	//Used to return a single branch
+	public static Branch getBranchInfo(String regNo, Connection con){
+		if(regNo.length() != 4){
+			return null;
+		}
+		Branch branch = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try{
+			ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BRANCH\" WHERE \"REGNO\" = ?");
+			ps.setString(1, regNo);
+			rs = ps.executeQuery();
+			if(rs.next()){
+				String bankName = rs.getString("BANKNAME");
+				String postal = rs.getString("POSTAL");
+				String country = rs.getString("COUNTRY");
+				String city = findCity(postal, country, con);
+				String street = rs.getString("STREET");
+				String phone = rs.getString("PHONE");
+				branch = new Branch(regNo, bankName, postal, country, street, phone, city);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			cleanUpResult(rs,ps);
+		}
+		return branch;
+	}
+	
+	//Used to return all branches
+	public static ArrayList<Branch> getBranches(Connection con){
+		ArrayList<Branch> branches = new ArrayList<Branch>();
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String regNo, bankName, postal, country, city, street, phone;
+		try{
+			ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"BRANCH\"");
+			rs = ps.executeQuery();
+			while(rs.next()){
+				regNo = rs.getString("REGNO");
+				bankName = rs.getString("BANKNAME");
+				postal = rs.getString("POSTAL");
+				country = rs.getString("COUNTRY");
+				city = findCity(postal, country, con);
+				street = rs.getString("STREET");
+				phone = rs.getString("PHONE");
+				branches.add(new Branch(regNo, bankName, postal, country, street, phone, city));
+				
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			cleanUpResult(rs,ps);
+		}
+		return branches;
+	}
+	
+	//Used to create a branch and insert it into DB
+	public static boolean createBranch(String regNo, String bankName, String postal, String country, String street, String phone, Connection con){
+		boolean status = false;
+		if(regNo.length() != 4){
+			return false;
+		}
+		PreparedStatement ps = null;
+		
+		try{			
+			ps = con.prepareStatement("INSERT INTO \"DTUGRP16\".\"BRANCH\" (REGNO, BANKNAME, POSTAL, COUNTRY, STREET, PHONE) VALUES (?, ?, ?, ?, ?, ?) ");
+			ps.setString(1, regNo);
+			ps.setString(2, bankName);
+			ps.setString(3, postal);
+			ps.setString(4, country);
+			ps.setString(5, street);
+			ps.setString(6, phone);
+			if(ps.executeUpdate() == 1){
+				status = true;
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			status = false;
+		}finally{
+			cleanUpResult(null, ps);
+		}
+		
+		return status;
+	}
+	
+	//Used to delete a branch form DB
+	public static boolean deleteBranch(String regNo, Connection con){
+		boolean status = false;
+		if(regNo.length() != 4){
+			return false;
+		}
+		PreparedStatement ps = null;
+		try{
+			ps = con.prepareStatement("DELETE FROM \"DTUGRP16\".\"BRANCH\" WHERE \"REGNO\" = ?");
+			ps.setString(1, regNo);
+			if(ps.executeUpdate() == 1){
+				status = true;
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+			status = false;
+		}finally{
+			cleanUpResult(null, ps);
+		}
+		
+		return status;
+	}
+	
+	//Used to check if there are one or more accounts open at a given regno
+	public static boolean checkForOpenAccounts(String regNo, Connection con){
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean status = true;
+		try{
+			ps = con.prepareStatement("SELECT * FROM \"DTUGRP16\".\"ACCOUNT\" WHERE \"REGNO\" = ? FETCH FIRST 1 ROWS ONLY");
+			ps.setString(1, regNo);
+			rs = ps.executeQuery();
+			status = rs.next();
+		}catch(SQLException e){
+			e.printStackTrace();
+			status = true;
+		}finally{
+			cleanUpResult(rs, ps);
+			
+		}
+		return status;
+	}
+	
+	public static Banker getAdvisor(String clientId, Connection con){
+		Banker banker = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try{
+			ps = con.prepareStatement("SELECT BANKERID FROM \"DTUGRP16\".\"CLIENT\" WHERE \"CLIENTID\" = ?");
+			ps.setString(1, clientId);
+			rs = ps.executeQuery();
+			if(rs.next()){
+				banker = getBankerInfo(rs.getString("BANKERID"), con);
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			cleanUpResult(rs, ps);
+		}
+		return banker;
 	}
 
 }

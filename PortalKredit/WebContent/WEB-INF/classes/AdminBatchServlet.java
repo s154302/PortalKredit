@@ -18,10 +18,6 @@ import classes.Controller;
 public class AdminBatchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public AdminBatchServlet() {
-        super();
-
-    }
     @Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,14 +39,28 @@ public class AdminBatchServlet extends HttpServlet {
 		Connection con = Controller.getConnection(ds1);
 		if(request.getParameter("exchangeRate") != null) {
 			Controller.updateExchangeRates(con);
+			request.setAttribute("status", "Updated exchange rates");
 		} else if(request.getParameter("dInterestRate") != null) {
-			Controller.calculateInterestRates(con);
+			if(Controller.calculateInterestRates(con)){
+				request.setAttribute("status", "Daily interest updated");
+			}else{
+				request.setAttribute("status", "Updating daily interest failed");
+			}
 		} else if(request.getParameter("yInterestRate") != null) {
-			Controller.giveAnualInterest(con);
+			if(Controller.giveAnualInterest(con)){
+				request.setAttribute("status", "Yearly interest updated");
+			}else{
+				request.setAttribute("status", "Updating yearly interest failed");
+			}
 		} else if(request.getParameter("backupTrsansactions") != null){
-			Controller.backupTransactions(con);
+			if(Controller.backupTransactions(con)){
+				request.setAttribute("status", "Transactions moved to backup");
+			}else{
+				request.setAttribute("status", "Backuping transactions failed");
+			}		
 		} else if(request.getParameter("insertExchangeRate") != null) {
 			Controller.insertExchangeRates(con);
+			request.setAttribute("status", "New Exchange rates inserted");
 
 		}
 		Controller.cleanUpConnection(con);

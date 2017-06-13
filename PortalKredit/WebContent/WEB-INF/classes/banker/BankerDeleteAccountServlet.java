@@ -26,6 +26,7 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	
+	// Called from ViewClientAccount.jsp
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
