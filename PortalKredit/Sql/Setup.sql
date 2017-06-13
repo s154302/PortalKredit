@@ -70,7 +70,7 @@ CREATE TABLE DTUGRP16.Client (
 ------------------
 CREATE TABLE DTUGRP16.AccountType (
 	accountType VARCHAR(45) NOT NULL,
-	interestRate DECIMAL(6,5) NOT NULL,
+	interestRate DECIMAL(5,4) NOT NULL,
 	PRIMARY KEY(accountType)
 );
 ------------
@@ -93,7 +93,7 @@ CREATE TABLE DTUGRP16.Account (
     clientID CHAR(9) NOT NULL,
     balance DECIMAL(12,2),
     currency CHAR(3),
-    interest DECIMAL(14,4),
+    interest DECIMAL(20,4),
     PRIMARY KEY (accountNumber, regNo),
     FOREIGN KEY (clientID) REFERENCES DTUGRP16. Client (clientID),
     FOREIGN KEY (accountType) REFERENCES DTUGRP16. AccountType (accountType),
@@ -109,7 +109,7 @@ CREATE TABLE "DTUGRP16"."TRANSACTION" (
     regNo VARCHAR(6) NOT NULL,
     recieveAccount CHAR(10) NOT NULL,
     recieveRegNo VARCHAR(6) NOT NULL,
-    dateOfTransaction DATE NOT NULL,
+    dateOfTransaction TIMESTAMP NOT NULL,
     amount DECIMAL(10,2) NOT NULL,		-- Changed from value since value appears to be a reserved keyword
     currency CHAR(3) NOT NULL,
     note VARCHAR(3000),
@@ -129,7 +129,7 @@ CREATE TABLE "DTUGRP16"."TRANSACTIONOLD" (
     regNo VARCHAR(6) NOT NULL,
     recieveAccount CHAR(10) NOT NULL,
     recieveRegNo VARCHAR(6) NOT NULL,
-    dateOfTransaction DATE NOT NULL,
+    dateOfTransaction TIMESTAMP NOT NULL,
     amount DECIMAL(10,2) NOT NULL,		-- Changed from value since value appears to be a reserved keyword
     currency CHAR(3) NOT NULL,
     note VARCHAR(3000),
