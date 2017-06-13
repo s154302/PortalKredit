@@ -77,25 +77,24 @@ public class BankerCreateClientServlet extends HttpServlet {
 		String country = request.getParameter("clientCountry");
 
 		Connection con = Controller.getConnection(ds1);
-		try {
-			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
+		
+			boolean status = Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
 					postal, country, con);
 
-
+			if(status){
+				request.setAttribute("status", "Client was created");
+			}
+			else{
+				request.setAttribute("status", "Client wasn't created due to an error");
+			}
 			Banker banker = (Banker) request.getSession().getAttribute("user");
 			banker.setClients(Controller.getClients(banker.getBankerID(), con));
 			request.getSession().setAttribute("user", banker);
 
 			
 			response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			request.setAttribute("createClientStatus", "Wrong value inserted");
-			request.getRequestDispatcher("CreateClient.jsp").forward(request, response);
-		}finally{
+		
 			Controller.cleanUpConnection(con);
-		}
+		
 	}
 }
