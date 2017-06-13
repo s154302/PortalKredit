@@ -93,7 +93,7 @@ public class ClientPaymentsServlet extends HttpServlet {
 			if(status){
 				request.setAttribute("status", "Payment complete");
 			}else{
-				request.setAttribute("status", "Payment incomplete - somthing went wrong");
+				request.setAttribute("status", "Payment incomplete - something went wrong");
 				request = keepInputs(request); 
 				
 			}
