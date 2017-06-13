@@ -23,7 +23,7 @@ CREATE TABLE DTUGRP16. Branch (
 	postal VARCHAR(10) NOT NULL,
 	country VARCHAR(45) NOT NULL,
 	street VARCHAR(45) NOT NULL,
-	phone VARCHAR(15),
+	phone VARCHAR(20),
 	PRIMARY KEY (regNo),
 	FOREIGN KEY (postal, country) REFERENCES DTUGRP16. Place (postal, country)
 );
@@ -38,7 +38,7 @@ CREATE TABLE DTUGRP16.Banker (
     lastName VARCHAR(45) NOT NULL,
     regNo VARCHAR(6) NOT NULL,
     email VARCHAR(45) NOT NULL,
-    mobile VARCHAR(15),
+    mobile VARCHAR(20),
     PRIMARY KEY (bankerID)
  ,
  	CONSTRAINT fk_banker_branch FOREIGN KEY (regNo) REFERENCES DTUGRP16. Branch (regNo)
@@ -54,7 +54,7 @@ CREATE TABLE DTUGRP16.Client (
     first_name VARCHAR(45) NOT NULL,
     last_name VARCHAR(45) NOT NULL,
     email VARCHAR(45),
-    mobile CHAR(11),
+    mobile VARCHAR(20),
     street VARCHAR(45),
     bankerID CHAR(7) NOT NULL,
     postal VARCHAR(10) NOT NULL,

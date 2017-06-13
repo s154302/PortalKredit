@@ -311,7 +311,6 @@ public final class Controller {
 
 
 		} catch (SQLException e) {
-
 			e.printStackTrace();
 		} finally{
 			cleanUpResult(rs,ps);
