@@ -281,7 +281,6 @@ public final class Controller {
 	}
 
 	// Fills a single account object with data and returns it
-
 	public static Account getAccountInfo(String accountNumber, String regNo, Connection con) {
 
 		Account account = new Account();
@@ -343,7 +342,6 @@ public final class Controller {
 
 	// Returns the 3 newest transactions associated with an account number and
 	// regno
-
 	public static ArrayList<Transaction> get3NewestTransactions(String accountNumber, String regNo, Connection con) {
 
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
@@ -380,7 +378,6 @@ public final class Controller {
 	}
 
 	// Returns all 'new' transactions associated with an account
-
 	public static ArrayList<Transaction> getNewTransactions(String accountNumber, String string, Connection con) {
 
 
@@ -411,7 +408,6 @@ public final class Controller {
 	}
 	
 	// Returns all 'old' transactions associated with an account
-
 	public static ArrayList<Transaction> getOldTransactions(String accountNumber, String regNo, Connection con) {
 
 		ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
@@ -582,7 +578,6 @@ public final class Controller {
 	}
 
 	// Returns the city associated with the postal and country
-
 	public static String findCity(String postal, String country, Connection con) {
 
 		String city = "Orgrimmar";
@@ -592,18 +587,13 @@ public final class Controller {
 			ps = con.prepareStatement(
 					"SELECT CITY FROM \"DTUGRP16\".\"PLACE\" WHERE \"POSTAL\" = ? AND \"COUNTRY\" = ?");
 
-
 			ps.setString(1, postal);
 			ps.setString(2, country.toUpperCase());
 			rs = ps.executeQuery();
 			
-			//maybe handle if the city doesnt exist
 			if(rs.next()){
 				city = rs.getString("CITY");
 			}
-
-
-			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -642,6 +632,7 @@ public final class Controller {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
+			
 			// Select the latest ID, and extract only the ID number as an
 			// integer
 			ps = con.prepareStatement("(SELECT INTEGER(SUBSTR(clientID, 1, 8)) "
