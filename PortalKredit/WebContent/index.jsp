@@ -34,7 +34,9 @@
 							<input type="password" class="form-control"
 								name="password" placeholder="Password" required >
 						</div>
-						<button class="btn btn-primary btn-block btn-action" type="submit" value="login">Log
+						<button class="btn btn-primary btn-block btn-action" type="submit" value="login"><img
+						src="assets/images/glyphicons_free/glyphicons/png/glyphicons-387-log-in-white.png"
+						width="17" height="15" alt=""> Log
 							in</button>
 
 					</form>

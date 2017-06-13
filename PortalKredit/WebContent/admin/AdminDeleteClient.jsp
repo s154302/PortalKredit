@@ -1,6 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
+<!DOCTYPE HTML><%@page language="java"
+	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<html>
+
 <head>
 <title>Welcome</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -10,9 +14,10 @@
 
 <body>
 	<jsp:include page="AdminNavbar.jsp" />
+
 	<div class="row pad-row">
-		<div class="col-4 offset-4 text-center">
-			<div class="card card-outline-primary blue-outline">
+		<div class="col-4 offset-4">
+			<div class="card card-outline-primary mb-3 text-center blue-outline">
 				<h1>View Clients</h1>
 				<div class="card-block">
 					<form action="" method="post">
@@ -74,3 +79,4 @@
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
 </body>
+</html>

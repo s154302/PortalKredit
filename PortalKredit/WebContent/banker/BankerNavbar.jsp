@@ -1,5 +1,5 @@
 <nav
-	class="navbar navbar-toggleable-md navbar-inverse bg-primary custom-navbar">
+	class="navbar navbar-default navbar-toggleable-md navbar-inverse bg-primary custom-navbar">
 	<div class="container">
 		<button class="navbar-toggler navbar-toggler-right" type="button"
 			data-toggle="collapse" data-target="#navbarNavDropdown"

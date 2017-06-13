@@ -1,6 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
+<!DOCTYPE HTML><%@page language="java"
+	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<html>
+
 <head>
 <title>Welcome</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -9,9 +13,10 @@
 </head>
 
 <body>
-	<jsp:include page="AdminNavbar.jsp"/>
-	<div class="row pad-row" style="align: center">
-			<div class="card card-outline-primary text-center blue-outline">
+	<jsp:include page="AdminNavbar.jsp" />
+	<div class="row pad-row">
+		<div class="col-4 offset-4">
+			<div class="card card-outline-primary mb-3 text-center blue-outline">
 				<h1>Delete Admin!</h1>
 				<div class="card-block">
 					<table class="table table-sm table-bordered">
@@ -45,3 +50,5 @@
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
 </body>
+
+</html>

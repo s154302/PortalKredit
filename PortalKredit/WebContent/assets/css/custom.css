@@ -31,3 +31,8 @@
 .navbar-texpad {
 	padding-top: 15px;
 }
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    border-bottom: 3px solid orange;
+    margin-bottom: -3px;
+}
