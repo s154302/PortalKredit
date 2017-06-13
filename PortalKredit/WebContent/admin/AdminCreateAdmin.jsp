@@ -19,12 +19,12 @@
 					<form action="" method="post">
 						<div class="form-group">
 							<input type="text" class="form-control" name="adminID"
-								placeholder="Admin username">
+								placeholder="*Admin username">
 						</div>
 
 						<div class="form-group">
 							<input type="password" class="form-control" name="adminPassword"
-								placeholder="Password">
+								placeholder="*Password">
 						</div>
 						<p>
 							${status}

@@ -37,11 +37,6 @@
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="bankerTelephone"
-								placeholder="Phone Number">
-						</div>
-
-						<div class="form-group">
 							<input type="text" class="form-control bfh-phone"
 								name="bankerTelephone" placeholder="Phone Number">
 						</div>

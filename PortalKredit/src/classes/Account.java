@@ -106,9 +106,9 @@ public class Account {
 		this.clientID = clientID;
 	}
 
-	public double getInterestRate() {
-		return interestRate;
-	}
+//	public double getInterestRate() {
+//		return interestRate;
+//	}
 
 	public void setInterestRate(double interestRate) {
 		this.interestRate = interestRate;
