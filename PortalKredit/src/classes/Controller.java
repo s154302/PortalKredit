@@ -311,7 +311,6 @@ public final class Controller {
 
 
 		} catch (SQLException e) {
-
 			e.printStackTrace();
 		} finally{
 			cleanUpResult(rs,ps);
@@ -463,11 +462,14 @@ public final class Controller {
 	}
 
 
-	public static void createClient(String firstName, String lastName, String password, String CPR, String email,
+	public static boolean createClient(String firstName, String lastName, String password, String CPR, String email,
 			String mobile, String street, String bankerID, String postal, String country, Connection con)
 
-			throws SQLException {
-		PreparedStatement ps = con.prepareStatement(
+			 {
+		boolean status= false;
+		PreparedStatement ps = null;
+		try{
+		ps = con.prepareStatement(
 				"INSERT INTO \"DTUGRP16\".\"CLIENT\" (CLIENTID, PASSWORD, CPR, FIRST_NAME, LAST_NAME, EMAIL, MOBILE, STREET, BANKERID, POSTAL, COUNTRY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		ps.setString(1, generateClientID(con));
 		ps.setString(2, password);
@@ -482,24 +484,36 @@ public final class Controller {
 		ps.setString(10, postal);
 
 		ps.setString(11, country.toUpperCase());
-		System.out.println(country);
 		ps.executeUpdate();
+		status = true;
+		} catch(SQLException e){
+			status = false;
+			e.printStackTrace();
+		}
+		finally{
+		
 		cleanUpResult(null, ps);
+		}
+		return status;
 	}
 
-	public static void createAdmin(String username, String password, Connection con) {
+	public static boolean createAdmin(String username, String password, Connection con) {
 		PreparedStatement ps = null;
+		boolean status = false;
 		try {
 			ps = con
 					.prepareStatement("INSERT INTO \"DTUGRP16\".\"ADMIN\" (ADMINID, password) VALUES(?, ?)");
 			ps.setString(1, username);
 			ps.setString(2, password);
 			ps.executeUpdate();
+			status = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			status = false;
 		}finally{
 			cleanUpResult(null, ps);
 		}
+		return status;
 	}
 
 

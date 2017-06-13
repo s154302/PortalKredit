@@ -57,6 +57,9 @@
 
 					<button class="btn btn-primary btn-block btn-action" type="submit"
 						value="createClient">Create Client</button>
+					<p>
+						${status}
+					</p>
 
 				</form>
 			</div>

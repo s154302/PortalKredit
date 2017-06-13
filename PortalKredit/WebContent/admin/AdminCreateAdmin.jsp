@@ -26,6 +26,9 @@
 							<input type="password" class="form-control" name="adminPassword"
 								placeholder="*Password">
 						</div>
+						<p>
+							${status}
+						</p>
 						<button class="btn btn-primary btn-block btn-action" type="submit"
 							value="createAdmin">Create Admin</button>
 					</form>
