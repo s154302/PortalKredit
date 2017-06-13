@@ -60,7 +60,7 @@
 						</div>
 
 						<button class="btn btn-primary btn-block btn-action" type="submit"
-							value="createClient">Submit payment</button>
+							value="submitPayment">Submit payment</button>
 					</form>
 				</div>
 			</div>
