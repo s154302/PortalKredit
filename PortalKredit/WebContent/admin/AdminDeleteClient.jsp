@@ -6,7 +6,7 @@
 <html>
 
 <head>
-<title>Welcome</title>
+<title>View Client</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/custom.css">
@@ -29,48 +29,50 @@
 									value="search-client" name="search-client">
 									<img
 										src="../assets/images/glyphicons_free/glyphicons/png/glyphicons-28-search-white.png"
-										width="15" height="15" aria-hidden="true" />Search
+										width="15" height="15" aria-hidden="true" />
 								</button>
 							</span>
 						</div>
 					</form>
-					<table class="table table-hover">
-						<thead>
-							<th></th>
-							<th></th>
-							<th></th>
-						</thead>
+					<div class="pad-row">
+						<table class="table table-hover">
+							<thead>
+								<th></th>
+								<th></th>
+								<th></th>
+							</thead>
 
-						<tbody>
+							<tbody>
 
-							<c:forEach var="ob" items="${list}">
-								<tr data-toggle="collapse" data-target="#${ob.clientID}"
-									class="clickable">
-									<td><c:out value="${ob.clientID}" /></td>
-									<td><c:out value="${ob.firstName}" /></td>
-									<td><c:out value="${ob.lastName}" /></td>
-								</tr>
-								<tr>
-									<td colspan="3">
-										<div id="${ob.clientID}" class="collapse">
-											<ul>
-												<li>CPR: ${ob.CPR}</li>
-												<li>Email: ${ob.email}</li>
-												<li>Mobile: ${ob.phoneNo}</li>
-												<li>Street: ${ob.street}</li>
-												<li>City: ${ob.postal}</li>
-												<li>Country: ${ob.country}</li>
-											</ul>
-											<form action="" method="post">
-												<button class="btn btn-primary btn-block btn-action"
-													type="submit" name="username" value="${ob.clientID}">Delete</button>
-											</form>
-										</div>
-									</td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+								<c:forEach var="ob" items="${list}">
+									<tr data-toggle="collapse" data-target="#${ob.clientID}"
+										class="clickable">
+										<td><c:out value="${ob.clientID}" /></td>
+										<td><c:out value="${ob.firstName}" /></td>
+										<td><c:out value="${ob.lastName}" /></td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											<div id="${ob.clientID}" class="collapse">
+												<ul>
+													<li>CPR: ${ob.CPR}</li>
+													<li>Email: ${ob.email}</li>
+													<li>Mobile: ${ob.phoneNo}</li>
+													<li>Street: ${ob.street}</li>
+													<li>City: ${ob.postal}</li>
+													<li>Country: ${ob.country}</li>
+												</ul>
+												<form action="" method="post">
+													<button class="btn btn-primary btn-block btn-action"
+														type="submit" name="username" value="${ob.clientID}">Delete</button>
+												</form>
+											</div>
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
