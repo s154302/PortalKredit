@@ -43,7 +43,7 @@ public class CreateClientServlet extends HttpServlet {
 		
 
 	}
-	private void createClient(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	private void createClient(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		String firstName = request.getParameter("clientFirstName");
 		String lastName = request.getParameter("clientLastName");
 		String password = request.getParameter("clientPassword");
@@ -67,7 +67,7 @@ public class CreateClientServlet extends HttpServlet {
 		}
 		Controller.cleanUpConnection(con);
 		
-		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateClient");
+		doGet(request,response);
 		
 	}
 }

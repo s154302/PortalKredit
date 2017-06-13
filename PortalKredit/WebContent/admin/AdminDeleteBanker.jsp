@@ -52,6 +52,10 @@
 
 						</tbody>
 					</table>
+						<p>
+							${status}
+						</p>
+					
 				</div>
 			</div>
 		</div>

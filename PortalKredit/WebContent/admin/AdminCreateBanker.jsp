@@ -45,6 +45,9 @@
 							<input type="text" class="form-control" name="bankerReg"
 								placeholder="*Registration Number">
 						</div>
+						<p>
+							${status}
+						</p>
 
 						<button class="btn btn-primary btn-block btn-action" type="submit"
 							value="createClient">Create Banker</button>

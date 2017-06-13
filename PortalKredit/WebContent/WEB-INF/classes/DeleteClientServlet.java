@@ -61,7 +61,11 @@ public class DeleteClientServlet extends HttpServlet {
 			request.getRequestDispatcher("AdminDeleteClient.jsp").forward(request, response);
 		}
 		if(delete != null) {
-			Controller.deleteClient(delete, con);
+			if(Controller.deleteClient(delete, con)){
+				request.setAttribute("status", delete + " was deleted.");
+			}else{
+				request.setAttribute("status", delete + " couldn't be deleted");
+			}
 			doGet(request, response);
 		}
 		Controller.cleanUpConnection(con);

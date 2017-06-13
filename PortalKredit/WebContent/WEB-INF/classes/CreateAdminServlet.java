@@ -46,7 +46,7 @@ public class CreateAdminServlet extends HttpServlet {
 
 	}
 	
-	private void createAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	private void createAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		String adminID = request.getParameter("adminID");
 		String adminPassword = request.getParameter("adminPassword");
 		String hashed = BCrypt.hashpw(adminPassword, BCrypt.gensalt(14));
@@ -60,7 +60,7 @@ public class CreateAdminServlet extends HttpServlet {
 		else{
 			request.setAttribute("status", "Admin wasn't created due to an error");
 		}
-		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateAdmin");
+		doGet(request,response);
 		
 	}
 

@@ -41,7 +41,7 @@ public class CreateBankerServlet extends HttpServlet {
 		Controller.adminCheckAuth("AdminCreateBanker.jsp",request,response);
 
 	}
-	private void createBanker(HttpServletRequest request, HttpServletResponse response) throws IOException{
+	private void createBanker(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		String firstName = request.getParameter("bankerFirstName");
 		String lastName = request.getParameter("bankerLastName");
 		String password = request.getParameter("bankerPassword");
@@ -51,9 +51,13 @@ public class CreateBankerServlet extends HttpServlet {
 		String regno = request.getParameter("bankerReg");
 		
 		Connection con = Controller.getConnection(ds1);
-		Controller.createBanker(firstName, lastName, hashed, email, telephone, regno, con);
+		if(Controller.createBanker(firstName, lastName, hashed, email, telephone, regno, con)){
+			request.setAttribute("status", "Banker created");
+		}else{
+			request.setAttribute("status", "The banker wasn't created due to an error");
+		}
 		Controller.cleanUpConnection(con);
-		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateBanker");
+		doGet(request,response);
 		
 	}
 

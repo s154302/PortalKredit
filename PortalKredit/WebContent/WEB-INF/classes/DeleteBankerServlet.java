@@ -48,7 +48,11 @@ public class DeleteBankerServlet extends HttpServlet {
 	private void deleteBanker(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		String bankerID = request.getParameter("username");
 		Connection con = Controller.getConnection(ds1);
-		Controller.deleteBanker(bankerID, con);
+		if(Controller.deleteBanker(bankerID, con)){
+			request.setAttribute("status", bankerID + " was deleted");
+		}else{
+			request.setAttribute("status", bankerID + " couldn't be deleted.");
+		}
 		Controller.cleanUpConnection(con);
 		doGet(request, response);
 	}

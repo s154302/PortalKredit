@@ -53,7 +53,11 @@ public class DeleteAdminServlet extends HttpServlet {
 		String adminID = request.getParameter("username");
 		
 		Connection con = Controller.getConnection(ds1);
-		Controller.deleteAdmin(adminID, con);
+		if(Controller.deleteAdmin(adminID, con)){
+			request.setAttribute("status", adminID + " was deleted.");
+		}else{
+			request.setAttribute("status", adminID + "couldn't be deleted.");
+		}
 		Controller.cleanUpConnection(con);
 		doGet(request, response);
 		
