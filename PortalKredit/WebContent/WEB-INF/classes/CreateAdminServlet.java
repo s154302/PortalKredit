@@ -52,8 +52,14 @@ public class CreateAdminServlet extends HttpServlet {
 		String hashed = BCrypt.hashpw(adminPassword, BCrypt.gensalt(14));
 		
 		Connection con = Controller.getConnection(ds1);
-		Controller.createAdmin(adminID, hashed, con);
+		boolean status = Controller.createAdmin(adminID, hashed, con);
 		Controller.cleanUpConnection(con);
+		if(status){
+			request.setAttribute("status", "Admin was created");
+		}
+		else{
+			request.setAttribute("status", "Admin wasn't created due to an error");
+		}
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateAdmin");
 		
 	}

@@ -57,16 +57,16 @@ public class CreateClientServlet extends HttpServlet {
 		String country = request.getParameter("clientCountry");
 		
 		Connection con = Controller.getConnection(ds1);
-		try {
-			Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
+		
+		boolean status = Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
 					postal, country, con);
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			Controller.cleanUpConnection(con);
+		if(status){
+			request.setAttribute("status", "Client was created");
+		}else{
+			request.setAttribute("Status", "Client wasn't created due to an error");
 		}
+		Controller.cleanUpConnection(con);
+		
 		response.sendRedirect(request.getContextPath() + "/admin/AdminCreateClient");
 		
 	}

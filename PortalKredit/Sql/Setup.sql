@@ -109,7 +109,7 @@ CREATE TABLE "DTUGRP16"."TRANSACTION" (
     regNo VARCHAR(6) NOT NULL,
     recieveAccount CHAR(10) NOT NULL,
     recieveRegNo VARCHAR(6) NOT NULL,
-    dateOfTransaction DATE NOT NULL,
+    dateOfTransaction TIMESTAMP NOT NULL,
     amount DECIMAL(10,2) NOT NULL,		-- Changed from value since value appears to be a reserved keyword
     currency CHAR(3) NOT NULL,
     note VARCHAR(3000),
@@ -129,7 +129,7 @@ CREATE TABLE "DTUGRP16"."TRANSACTIONOLD" (
     regNo VARCHAR(6) NOT NULL,
     recieveAccount CHAR(10) NOT NULL,
     recieveRegNo VARCHAR(6) NOT NULL,
-    dateOfTransaction DATE NOT NULL,
+    dateOfTransaction TIMESTAMP NOT NULL,
     amount DECIMAL(10,2) NOT NULL,		-- Changed from value since value appears to be a reserved keyword
     currency CHAR(3) NOT NULL,
     note VARCHAR(3000),
