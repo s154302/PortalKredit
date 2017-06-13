@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -1137,7 +1138,8 @@ public final class Controller {
 			ps.setString(3, reg1);
 			ps.setString(4, acc2);
 			ps.setString(5, reg2);
-			ps.setDate(6, new java.sql.Date(System.currentTimeMillis()));
+			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+			ps.setTimestamp(6, timestamp);
 			ps.setBigDecimal(7, new BigDecimal(Double.valueOf(amount)));
 			ps.setString(8, currency);
 			ps.setString(9, message);
