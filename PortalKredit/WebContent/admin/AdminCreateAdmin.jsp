@@ -9,8 +9,8 @@
 <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
 
-<body>
-	<jsp:include page="AdminNavbar.jsp"/>
+<body onload="createAdminStatus()">
+	<jsp:include page="AdminNavbar.jsp" />
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary mb-3 text-center blue-outline">
@@ -26,9 +26,13 @@
 							<input type="password" class="form-control" name="adminPassword"
 								placeholder="*Password">
 						</div>
-						<p>
-							${status}
-						</p>
+						
+						<div class="form-control-feedback hidden-xs-up"
+							id="createAdminResult" role="alert">
+							<input type="text" class="form-control hidden-xs-up"
+								value="${createAdminStatus}" id="createAdminBool">
+						</div>
+						
 						<button class="btn btn-primary btn-block btn-action" type="submit"
 							value="createAdmin">Create Admin</button>
 					</form>
@@ -38,7 +42,9 @@
 	</div>
 
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
+	<script src="../assets/js/bootstrap-formhelpers.js"></script>
+	<script src="../assets/js/form-input.js"></script>
 </body>
 </html>

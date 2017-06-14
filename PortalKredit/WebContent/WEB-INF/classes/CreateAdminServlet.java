@@ -43,7 +43,9 @@ public class CreateAdminServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		
 		Model.adminCheckAuth("AdminCreateAdmin.jsp",request,response);
-
+		if(request.getAttribute("createAdminStatus") == null) {
+			request.setAttribute("createAdminStatus", 0);
+		}
 	}
 	
 	private void createAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
@@ -55,10 +57,10 @@ public class CreateAdminServlet extends HttpServlet {
 		boolean status = Model.createAdmin(adminID, hashed, con);
 		Model.cleanUpConnection(con);
 		if(status){
-			request.setAttribute("status", "Admin was created");
+			request.setAttribute("createAdminStatus", 1);
 		}
 		else{
-			request.setAttribute("status", "Admin wasn't created due to an error");
+			request.setAttribute("createAdminStatus", -1);
 		}
 		doGet(request,response);
 		

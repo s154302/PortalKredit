@@ -32,8 +32,8 @@
 						</div>
 
 						<div class="form-group" id="passForm">
-							<input type="password" class="form-control"
-								name="password" placeholder="Password" id="password" value="">
+							<input type="password" class="form-control" name="password"
+								placeholder="Password" id="password" value="">
 						</div>
 						<div class="form-group">
 							<button class="btn btn-primary btn-block btn-action"
@@ -43,12 +43,10 @@
 									width="17" height="15" alt=""> Log in
 							</button>
 						</div>
-						<div class="container">
-							<div class="alert alert-danger hidden-xs-up" role="alert" id="loginError">
-								<input type="text" class="form-control hidden-xs-up"
-									value="${loginStatus}" id="passBool"> <strong>Error:</strong>
-								Incorrect user name or password.
-							</div>
+						<div class="alert alert-danger hidden-xs-up" role="alert"
+							id="loginError">
+							<input type="text" class="form-control hidden-xs-up"
+								value="${loginStatus}" id="passBool">
 						</div>
 					</form>
 				</div>

@@ -26,10 +26,9 @@ public class LogOutServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getSession().invalidate();
-		request.setAttribute("loginStatus", true);
+		request.setAttribute("loginStatus", 1);
 		response.sendRedirect(request.getContextPath()+"/index");
 		//request.getRequestDispatcher("../index.jsp").forward(request, response);
 	}
-	
 
 }
