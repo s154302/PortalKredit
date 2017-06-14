@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 import classes.Banker;
 import classes.Branch;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/client/contact")
 public class ClientContactServlet extends HttpServlet {
@@ -32,17 +32,17 @@ public class ClientContactServlet extends HttpServlet {
 			throws ServletException, IOException{
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.client, session)){
-			Connection con = Controller.getConnection(ds1);
-			Banker banker = Controller.getAdvisor((String) session.getAttribute("userID"), con);
+		if(Model.checkAuth(Model.Type.client, session)){
+			Connection con = Model.getConnection(ds1);
+			Banker banker = Model.getAdvisor((String) session.getAttribute("userID"), con);
 			
 			session.setAttribute("banker", banker);
 			if(banker != null){
-				Branch branch = Controller.getBranchInfo(banker.getRegNo(), con);
+				Branch branch = Model.getBranchInfo(banker.getRegNo(), con);
 				session.setAttribute("branch", branch);
 			}
 
-			Controller.cleanUpConnection(con);
+			Model.cleanUpConnection(con);
 			request.getRequestDispatcher("contact.jsp").forward(request, response);
 		}
 		else{
@@ -55,7 +55,7 @@ public class ClientContactServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 
-		if(Controller.checkAuth(Controller.Type.client, request.getSession())){
+		if(Model.checkAuth(Model.Type.client, request.getSession())){
 			
 		}
 		else{

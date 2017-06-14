@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import classes.Controller;
+import classes.Model;
 
 /*
  * Servlet implementation class CreateAdminServlet
@@ -22,7 +22,7 @@ public class AdminBatchServlet extends HttpServlet {
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+		if(Model.checkAuth(Model.Type.admin, request.getSession())){
 			checkButtons(request,response);
 		}
 		else{
@@ -33,37 +33,37 @@ public class AdminBatchServlet extends HttpServlet {
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		
-		Controller.adminCheckAuth("AdminBatch.jsp",request,response);
+		Model.adminCheckAuth("AdminBatch.jsp",request,response);
 	}
 	private void checkButtons(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-		Connection con = Controller.getConnection(ds1);
+		Connection con = Model.getConnection(ds1);
 		if(request.getParameter("exchangeRate") != null) {
-			Controller.updateExchangeRates(con);
+			Model.updateExchangeRates(con);
 			request.setAttribute("status", "Updated exchange rates");
 		} else if(request.getParameter("dInterestRate") != null) {
-			if(Controller.calculateInterestRates(con)){
+			if(Model.calculateInterestRates(con)){
 				request.setAttribute("status", "Daily interest updated");
 			}else{
 				request.setAttribute("status", "Updating daily interest failed");
 			}
 		} else if(request.getParameter("yInterestRate") != null) {
-			if(Controller.giveAnualInterest(con)){
+			if(Model.giveAnualInterest(con)){
 				request.setAttribute("status", "Yearly interest updated");
 			}else{
 				request.setAttribute("status", "Updating yearly interest failed");
 			}
 		} else if(request.getParameter("backupTrsansactions") != null){
-			if(Controller.backupTransactions(con)){
+			if(Model.backupTransactions(con)){
 				request.setAttribute("status", "Transactions moved to backup");
 			}else{
 				request.setAttribute("status", "Backuping transactions failed");
 			}		
 		} else if(request.getParameter("insertExchangeRate") != null) {
-			Controller.insertExchangeRates(con);
+			Model.insertExchangeRates(con);
 			request.setAttribute("status", "New Exchange rates inserted");
 
 		}
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 		doGet(request, response);
 	}
 	

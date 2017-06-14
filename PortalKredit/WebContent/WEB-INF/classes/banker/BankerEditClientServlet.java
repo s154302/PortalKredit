@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/EditClient")
 public class BankerEditClientServlet extends HttpServlet {
@@ -27,7 +27,7 @@ public class BankerEditClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			request.getRequestDispatcher("EditClient.jsp").forward(request, response);
 		}
 		else{
@@ -43,7 +43,7 @@ public class BankerEditClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			editClient(request, response, session);
 			
 		}
@@ -70,26 +70,26 @@ public class BankerEditClientServlet extends HttpServlet {
 		String postal = request.getParameter("postal");
 		String country = request.getParameter("country"); 
 		
-		Connection con = Controller.getConnection(ds1);
+		Connection con = Model.getConnection(ds1);
 		try {
 			
 			if(!request.getParameter("password").isEmpty()){
-				Controller.changeClientPassword(clientID, password, con);
+				Model.changeClientPassword(clientID, password, con);
 			}
 			
-			Controller.editClient(clientID, firstName, lastName, email,
+			Model.editClient(clientID, firstName, lastName, email,
 					mobile, street, bankerID, postal, country, con);
 
 			
 			session.setAttribute("clientID", clientID);
 			response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
-			session.setAttribute("user", Controller.getBankerInfo((String) session.getAttribute("userID"), con));
+			session.setAttribute("user", Model.getBankerInfo((String) session.getAttribute("userID"), con));
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
-			Controller.cleanUpConnection(con);
+			Model.cleanUpConnection(con);
 		}
 	}
 }

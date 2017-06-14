@@ -1,5 +1,4 @@
 function checkInput(value) {
-	console.log("Test")
 	if (value == "cheese") {
 		$("#form1").removeClass("has-danger").removeClass("alert-danger")
 				.addClass("has-success");

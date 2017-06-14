@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Banker;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/Transaction")
 public class BankerTransactionServlet extends HttpServlet {
@@ -29,7 +29,7 @@ public class BankerTransactionServlet extends HttpServlet {
 			throws ServletException, IOException{
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 		
 		request.getRequestDispatcher("Transaction.jsp").forward(request, response);
 		}
@@ -43,7 +43,7 @@ public class BankerTransactionServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			payment(request, response, session);
 		}
 		else{
@@ -80,12 +80,12 @@ public class BankerTransactionServlet extends HttpServlet {
 		password = request.getParameter("password");
 		double amount = Double.parseDouble(stramount);
 		
-		Connection con = Controller.getConnection(ds1);
+		Connection con = Model.getConnection(ds1);
 		String userID = (String) session.getAttribute("userID");
-		Boolean correctPw = Controller.authenticate(userID, password, con, session);
+		Boolean correctPw = Model.authenticate(userID, password, con, session);
 
 		if(correctPw){
-			Boolean status = Controller.transaction(sendAcc, reciAcc, amount, strsendReg, strreciReg,
+			Boolean status = Model.transaction(sendAcc, reciAcc, amount, strsendReg, strreciReg,
 					currency, strmessage, strreciMessage, con);
 			
 			if(status){
@@ -100,7 +100,7 @@ public class BankerTransactionServlet extends HttpServlet {
 			request = keepInputs(request); 
 		}
 		
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 		request.getRequestDispatcher("Transaction.jsp").forward(request, response);
 		
 	}

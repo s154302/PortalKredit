@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 import classes.Banker;
 import classes.Client;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/ViewClients")
 public class BankerViewClientServlet extends HttpServlet {
@@ -32,7 +32,7 @@ public class BankerViewClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			Banker banker = (Banker) session.getAttribute("user");
 		
 			ArrayList<Client> clientList = banker.getClients();
@@ -51,7 +51,7 @@ public class BankerViewClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			viewClient(request, response, session);
 			
 		}
@@ -72,12 +72,12 @@ public class BankerViewClientServlet extends HttpServlet {
 		
 		} else if(request.getParameter("EditUsername") != null){
 			
-			Connection con = Controller.getConnection(ds1);
+			Connection con = Model.getConnection(ds1);
 			String clientID = request.getParameter("EditUsername");
 			session.setAttribute("clientID", clientID);
-			session.setAttribute("client", (Client) Controller.getClientInfo(clientID, con));
+			session.setAttribute("client", (Client) Model.getClientInfo(clientID, con));
 			
-			Controller.cleanUpConnection(con);
+			Model.cleanUpConnection(con);
 			response.sendRedirect(request.getContextPath() + "/banker/EditClient");
 			
 		} 

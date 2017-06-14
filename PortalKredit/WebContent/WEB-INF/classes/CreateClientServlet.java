@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/AdminCreateClient")
 public class CreateClientServlet extends HttpServlet {
@@ -27,7 +27,7 @@ public class CreateClientServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		
-		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+		if(Model.checkAuth(Model.Type.admin, request.getSession())){
 			createClient(request,response);
 		}
 		else{
@@ -39,8 +39,10 @@ public class CreateClientServlet extends HttpServlet {
 		
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		Controller.adminCheckAuth("AdminCreateClient.jsp",request,response);
-		
+		Model.adminCheckAuth("AdminCreateClient.jsp",request,response);
+		if(request.getAttribute("createClientStatus") == null) {
+			request.setAttribute("createClientStatus", 0);
+		}
 
 	}
 	private void createClient(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
@@ -56,16 +58,16 @@ public class CreateClientServlet extends HttpServlet {
 		String postal = request.getParameter("clientCity");
 		String country = request.getParameter("clientCountry");
 		
-		Connection con = Controller.getConnection(ds1);
+		Connection con = Model.getConnection(ds1);
 		
-		boolean status = Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
+		boolean status = Model.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
 					postal, country, con);
 		if(status){
-			request.setAttribute("status", "Client was created");
+			request.setAttribute("createClientStatus", 1);
 		}else{
-			request.setAttribute("Status", "Client wasn't created due to an error");
+			request.setAttribute("createClientStatus", -1);
 		}
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 		
 		doGet(request,response);
 		

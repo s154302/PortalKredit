@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import classes.Controller;
+import classes.Model;
 
 /*
  * Servlet implementation class CreateAdminServlet
@@ -30,7 +30,7 @@ public class CreateAdminServlet extends HttpServlet {
 	private DataSource ds1;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+		if(Model.checkAuth(Model.Type.admin, request.getSession())){
 			createAdmin(request,response);
 		}
 		else{
@@ -42,7 +42,7 @@ public class CreateAdminServlet extends HttpServlet {
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		
-		Controller.adminCheckAuth("AdminCreateAdmin.jsp",request,response);
+		Model.adminCheckAuth("AdminCreateAdmin.jsp",request,response);
 
 	}
 	
@@ -51,9 +51,9 @@ public class CreateAdminServlet extends HttpServlet {
 		String adminPassword = request.getParameter("adminPassword");
 		String hashed = BCrypt.hashpw(adminPassword, BCrypt.gensalt(14));
 		
-		Connection con = Controller.getConnection(ds1);
-		boolean status = Controller.createAdmin(adminID, hashed, con);
-		Controller.cleanUpConnection(con);
+		Connection con = Model.getConnection(ds1);
+		boolean status = Model.createAdmin(adminID, hashed, con);
+		Model.cleanUpConnection(con);
 		if(status){
 			request.setAttribute("status", "Admin was created");
 		}

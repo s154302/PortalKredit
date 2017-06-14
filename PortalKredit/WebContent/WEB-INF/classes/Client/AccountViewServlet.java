@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Account;
-import classes.Controller;
+import classes.Model;
 import classes.Transaction;
 
 @WebServlet("/client/accountView")
@@ -34,11 +34,11 @@ public class AccountViewServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
-		if(Controller.checkAuth(Controller.Type.client, session)){
+		if(Model.checkAuth(Model.Type.client, session)){
 			Account account = (Account)session.getAttribute("account");
-			Connection con = Controller.getConnection(ds1);
-			session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con));
-			Controller.cleanUpConnection(con);
+			Connection con = Model.getConnection(ds1);
+			session.setAttribute("transactions", Model.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con));
+			Model.cleanUpConnection(con);
 			request.getRequestDispatcher("accountView.jsp").forward(request, response);
 		}
 		else{
@@ -54,7 +54,7 @@ public class AccountViewServlet extends HttpServlet {
 			throws ServletException, IOException{
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.client, session)){
+		if(Model.checkAuth(Model.Type.client, session)){
 			accountTransactions(request, response, session);
 		}
 		else{
@@ -65,17 +65,17 @@ public class AccountViewServlet extends HttpServlet {
 	}
 	
 	private void accountTransactions(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
-		Connection con = Controller.getConnection(ds1);
+		Connection con = Model.getConnection(ds1);
 		
 		// Finding old and new transactions from the DB
 		Account account = (Account)session.getAttribute("account");
-		ArrayList<Transaction> transactions = Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con);
-		ArrayList<Transaction> oldTransactions = Controller.getOldTransactions(account.getAccountNumber(), account.getRegNo(), con);
+		ArrayList<Transaction> transactions = Model.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con);
+		ArrayList<Transaction> oldTransactions = Model.getOldTransactions(account.getAccountNumber(), account.getRegNo(), con);
 		
 		transactions.addAll(oldTransactions);
 		session.setAttribute("transactions", transactions);
 		
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 		request.getRequestDispatcher("accountView.jsp").forward(request, response);
 	}
 }

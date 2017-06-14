@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Client;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/client/editInfo")
 public class ClientEditInfoServlet extends HttpServlet {
@@ -29,7 +29,7 @@ public class ClientEditInfoServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.client, session)){
+		if(Model.checkAuth(Model.Type.client, session)){
 			request.getRequestDispatcher("EditInfo.jsp").forward(request, response);
 		}
 		else{
@@ -45,7 +45,7 @@ public class ClientEditInfoServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.client, session)){
+		if(Model.checkAuth(Model.Type.client, session)){
  
 			
 			editInfo(request, response, session);
@@ -65,13 +65,13 @@ public class ClientEditInfoServlet extends HttpServlet {
 		String mobile = request.getParameter("mobile");  
 		String street = request.getParameter("street"); 
 		String postal = request.getParameter("postal");
-		Connection con = Controller.getConnection(ds1);
+		Connection con = Model.getConnection(ds1);
 		try {
 			if(!request.getParameter("password").isEmpty()){
-				Controller.changeClientPassword(clientID, password, con);
+				Model.changeClientPassword(clientID, password, con);
 			}
 			
-			Controller.clientEditClient(clientID, email, mobile, street, postal, con);
+			Model.clientEditClient(clientID, email, mobile, street, postal, con);
 			Client client = (Client)session.getAttribute("user");
 			client.setEmail(email);
 			client.setPhoneNo(mobile);
@@ -85,7 +85,7 @@ public class ClientEditInfoServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
-			Controller.cleanUpConnection(con);
+			Model.cleanUpConnection(con);
 		}
 	}
 }

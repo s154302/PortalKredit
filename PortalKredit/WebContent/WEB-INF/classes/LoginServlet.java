@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import classes.Controller;
+import classes.Model;
 
 /**
  * Servlet implementation class LoginServlet
@@ -34,30 +34,30 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		boolean st = false;
 		
-		Connection con= Controller.getConnection(ds1);
+		Connection con= Model.getConnection(ds1);
 		
-		st = Controller.authenticate(userID, password, con, session);
+		st = Model.authenticate(userID, password, con, session);
 		
 		if(st) {
 			session.setAttribute("userID", userID);
-			switch((Controller.Type)session.getAttribute("type")){
+			switch((Model.Type)session.getAttribute("type")){
 			case client:
-				session.setAttribute("user", Controller.getClientInfo(userID, con));
+				session.setAttribute("user", Model.getClientInfo(userID, con));
 				response.sendRedirect(request.getContextPath() + "/client/accounts");
 				break;
 			case banker:
-				session.setAttribute("user", Controller.getBankerInfo(userID, con));
+				session.setAttribute("user", Model.getBankerInfo(userID, con));
 				response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
 				break;
 			case admin:
-				session.setAttribute("user", Controller.getAdminInfo(userID, con));
+				session.setAttribute("user", Model.getAdminInfo(userID, con));
 				response.sendRedirect(request.getContextPath() + "/admin/AdminFrontpage");
 				break;
 			default:
 				break;
 			}
 			request.setAttribute("loginStatus", 1);
-			Controller.cleanUpConnection(con);
+			Model.cleanUpConnection(con);
 		} else {
 			request.setAttribute("loginStatus", 0);
 			System.out.println(request.getAttribute("loginStatus"));

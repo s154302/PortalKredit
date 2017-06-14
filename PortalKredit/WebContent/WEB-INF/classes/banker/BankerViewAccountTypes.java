@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.AccountType;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/BankerViewAccountTypes")
 public class BankerViewAccountTypes extends HttpServlet {
@@ -24,12 +24,12 @@ public class BankerViewAccountTypes extends HttpServlet {
 	private DataSource ds1;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(Controller.checkAuth(Controller.Type.banker, request.getSession())){
+		if(Model.checkAuth(Model.Type.banker, request.getSession())){
 			HttpSession session = request.getSession();
-			Connection con = Controller.getConnection(ds1);
-			ArrayList<AccountType> accountTypes = Controller.getAccountTypes(con);
+			Connection con = Model.getConnection(ds1);
+			ArrayList<AccountType> accountTypes = Model.getAccountTypes(con);
 			session.setAttribute("accountTypes", accountTypes);
-			Controller.cleanUpConnection(con);
+			Model.cleanUpConnection(con);
 			request.getRequestDispatcher("BankerViewAccountTypes.jsp").forward(request, response);
 		}else{
 			request.getSession().invalidate();
@@ -38,10 +38,10 @@ public class BankerViewAccountTypes extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(Controller.checkAuth(Controller.Type.banker, request.getSession())){
-			Connection con = Controller.getConnection(ds1);
+		if(Model.checkAuth(Model.Type.banker, request.getSession())){
+			Connection con = Model.getConnection(ds1);
 			String accountType = request.getParameter("accountType");
-			if(Controller.deleteAccountType(accountType, con)){
+			if(Model.deleteAccountType(accountType, con)){
 				request.setAttribute("status", accountType + " Deleted");
 			}else{
 				request.setAttribute("status", accountType + " Could not be deleted - try again");

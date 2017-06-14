@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 import classes.Account;
 import classes.Banker;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/CreateAccountType")
 public class BankerCreateAccountTypeServlet extends HttpServlet {
@@ -33,7 +33,7 @@ public class BankerCreateAccountTypeServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		
 		// Checking Authentication
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			request.getRequestDispatcher("CreateAccountType.jsp").forward(request, response);
 		} else{
 			request.getSession().invalidate();
@@ -45,14 +45,14 @@ public class BankerCreateAccountTypeServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		Connection con = Controller.getConnection(ds1);
+		Connection con = Model.getConnection(ds1);
 		
 		// Saving parameters
 		String accountType = request.getParameter("accountType");
 		Double interestRate = Double.parseDouble(request.getParameter("interestRate"));
 		
 		// Creating Account
-		boolean status = Controller.createAccountType(accountType, interestRate, con);
+		boolean status = Model.createAccountType(accountType, interestRate, con);
 		
 		// Checking status and redirecting accordingly
 		if(status){
@@ -62,7 +62,7 @@ public class BankerCreateAccountTypeServlet extends HttpServlet {
 		}
 		request.getRequestDispatcher("CreateAccountType.jsp").forward(request, response);
 
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 	}
 
 

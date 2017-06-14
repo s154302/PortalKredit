@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 
-public final class Controller {
+public final class Model {
 	public static enum Type {
 		client, banker, admin
 	}
@@ -97,7 +97,7 @@ public final class Controller {
 	public static void adminCheckAuth(String redirectUrl, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html");
-		if (Controller.checkAuth(Controller.Type.admin, request.getSession())) {
+		if (Model.checkAuth(Model.Type.admin, request.getSession())) {
 			request.getRequestDispatcher(redirectUrl).forward(request, response);
 
 		} else {
@@ -466,7 +466,6 @@ public final class Controller {
 			String mobile, String street, String bankerID, String postal, String country, Connection con)
 
 			 {
-		boolean status= false;
 		PreparedStatement ps = null;
 		try{
 		ps = con.prepareStatement(
@@ -485,16 +484,15 @@ public final class Controller {
 
 		ps.setString(11, country.toUpperCase());
 		ps.executeUpdate();
-		status = true;
+		return true;
 		} catch(SQLException e){
-			status = false;
 			e.printStackTrace();
+			return false;
 		}
 		finally{
 		
 		cleanUpResult(null, ps);
 		}
-		return status;
 	}
 
 	public static boolean createAdmin(String username, String password, Connection con) {

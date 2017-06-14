@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 import classes.Account;
 import classes.Client;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/ViewClientAccount")
 public class BankerAccountViewServlet extends HttpServlet {
@@ -36,13 +36,13 @@ public class BankerAccountViewServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		// Checking the user has access to the page, else redirect to the login page
-		if(Controller.checkAuth(Controller.Type.banker, session)){
-			Connection con = Controller.getConnection(ds1);
+		if(Model.checkAuth(Model.Type.banker, session)){
+			Connection con = Model.getConnection(ds1);
 			Account account = (Account) session.getAttribute("account");
 			
 			// Finding the transactions on the given account
-			session.setAttribute("transactions", Controller.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con));
-			Controller.cleanUpConnection(con);
+			session.setAttribute("transactions", Model.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con));
+			Model.cleanUpConnection(con);
 			request.getRequestDispatcher("ViewClientAccount.jsp").forward(request, response);
 
 		} else{
