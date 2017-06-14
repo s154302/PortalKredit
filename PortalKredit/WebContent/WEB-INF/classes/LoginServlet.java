@@ -56,9 +56,11 @@ public class LoginServlet extends HttpServlet {
 			default:
 				break;
 			}
+			request.setAttribute("loginStatus", 1);
 			Controller.cleanUpConnection(con);
 		} else {
-			request.setAttribute("logingStatus", "Wrong userID or Password");
+			request.setAttribute("loginStatus", 0);
+			System.out.println(request.getAttribute("loginStatus"));
 			request.setAttribute("userID", userID);
 			request.getRequestDispatcher("index.jsp").forward(request, response);
 		}
@@ -66,9 +68,10 @@ public class LoginServlet extends HttpServlet {
 		
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		
-			request.getRequestDispatcher("index.jsp").forward(request, response);
-	
+		if(request.getAttribute("loginStatus") == null) {
+			request.setAttribute("loginStatus", 1);
+		}	
+		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
 
 }

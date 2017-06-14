@@ -106,7 +106,6 @@ public final class Controller {
 		}
 	}
 
-	// consider making these private??
 	public static boolean clientAuthenticate(String clientID, String password, Connection con) {
 		
 		String hash = null;
