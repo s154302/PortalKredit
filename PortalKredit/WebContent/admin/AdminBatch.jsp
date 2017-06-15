@@ -11,9 +11,14 @@
 	<jsp:include page="AdminNavbar.jsp"></jsp:include>
 
 	<div class="center-text col-4 offset-4 batch">
+		<div class="form-control-feedback hidden-xs-up"
+			id="deleteClientResult" role="alert">
+			<input type="hidden" value="${deleteClientStatus}"
+				id="deleteClientBool"> <input type="hidden"
+				value="${deleteClient}" id="clientName">
+		</div>
 		<div class="btn-group-vertical">
 			<form class="form-inline" action="AdminBatchServlet" method="post">
-
 				<button class="btn btn-primary btn-block" type="submit"
 					name="exchangeRate">Update Exchange Rates</button>
 
