@@ -38,8 +38,12 @@ public class AdminBatchServlet extends HttpServlet {
 	private void checkButtons(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		Connection con = Controller.getConnection(ds1);
 		if(request.getParameter("exchangeRate") != null) {
-			Controller.updateExchangeRates(con);
-			request.setAttribute("status", "Updated exchange rates");
+			if(Controller.updateExchangeRates(con)){
+				request.setAttribute("status", "Updated exchange rates");
+			}else{
+				request.setAttribute("status", "Updating exchange rates failed");
+			}
+
 		} else if(request.getParameter("dInterestRate") != null) {
 			if(Controller.calculateInterestRates(con)){
 				request.setAttribute("status", "Daily interest updated");
@@ -59,9 +63,11 @@ public class AdminBatchServlet extends HttpServlet {
 				request.setAttribute("status", "Backuping transactions failed");
 			}		
 		} else if(request.getParameter("insertExchangeRate") != null) {
-			Controller.insertExchangeRates(con);
-			request.setAttribute("status", "New Exchange rates inserted");
-
+			if(Controller.insertExchangeRates(con)){
+				request.setAttribute("status", "New Exchange rates inserted");
+			}else{
+				request.setAttribute("status", "Failed to insert new exchange rates");
+			}
 		}
 		Controller.cleanUpConnection(con);
 		doGet(request, response);

@@ -1254,7 +1254,8 @@ public final class Controller {
 		}
 	}
 
-	public static void insertExchangeRates(Connection con) throws IOException {
+	public static boolean insertExchangeRates(Connection con) throws IOException {
+		boolean status = false;
 		String s = "http://api.fixer.io/latest";
 		URL url = new URL(s);
 		Scanner scan = new Scanner(url.openStream());
@@ -1278,14 +1279,18 @@ public final class Controller {
 				ps.executeUpdate();
 
 			}
+		status = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			status = false;
 		} finally{
 			cleanUpResult(null, ps);
 		}
+		return status;
 	}
 
-	public static void updateExchangeRates(Connection con) throws IOException {
+	public static boolean updateExchangeRates(Connection con) throws IOException {
+		boolean status = false;
 		String s = "http://api.fixer.io/latest";
 		URL url = new URL(s);
 
@@ -1310,11 +1315,14 @@ public final class Controller {
 				ps.executeUpdate();
 
 			}
+			status = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			status = false;
 		} finally{
 			cleanUpResult(null, ps);
 		}
+		return status;
 
 	}
 	
