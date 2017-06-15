@@ -28,24 +28,14 @@ public class Account {
 		this.accountName = accountName;
 	}
 	
-	public void fetchData(Date beginDate, Date endDate) {
-
-	}
-
 	public String toString(){
 		String accountString = 
 				"AccountNumber: " + getAccountNumber()
 				+ " RegNo: " + getRegNo()
 				+ " Balance: " + getBalance()
 				+ " Currency: " + getCurrency()
-				+ " AccountName: " + accountName;
-		for(Transaction transaction : transactions){
-			int i = 1;
-			try{
-				accountString = accountString + " Transaction: " + i + " " + transaction.getTransactionID();
-				i++;
-			}catch(NullPointerException e) {}
-		}
+				+ " AccountName: " + accountName
+				+ " Transactions: " + transactions;
 		
 		return accountString;
 	}
