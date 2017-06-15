@@ -5,7 +5,7 @@ function createClientStatus() {
 		$("#createClientResult").addClass("hidden-xs-up");
 	} else if (status == 1) {
 		$("#createClientResult").removeClass("hidden-xs-up").html(
-				"<strong>Succes:</strong> Client was created succesfully.")
+				"<strong>Success:</strong> Client was created successfully.")
 				.addClass("alert alert-success");
 
 	} else if (status == -1) {
@@ -24,7 +24,7 @@ function createBankerStatus() {
 		$("#createBankerResult").addClass("hidden-xs-up");
 	} else if (status == 1) {
 		$("#createBankerResult").removeClass("hidden-xs-up").html(
-				"<strong>Succes:</strong> Banker was created succesfully.")
+				"<strong>Success:</strong> Banker was created succesfully.")
 				.addClass("alert alert-success");
 
 	} else if (status == -1) {
@@ -43,7 +43,7 @@ function createAdminStatus() {
 		$("#createAdminResult").addClass("hidden-xs-up");
 	} else if (status == 1) {
 		$("#createAdminResult").removeClass("hidden-xs-up").html(
-				"<strong>Succes:</strong> Admin was created succesfully.")
+				"<strong>Success:</strong> Admin was created succesfully.")
 				.addClass("alert alert-success");
 
 	} else if (status == -1) {
@@ -62,7 +62,7 @@ function createBranchStatus() {
 		$("#createBranchResult").addClass("hidden-xs-up");
 	} else if (status == 1) {
 		$("#createBranchResult").removeClass("hidden-xs-up").html(
-				"<strong>Succes:</strong> Branch was created succesfully.")
+				"<strong>Success:</strong> Branch was created succesfully.")
 				.addClass("alert alert-success");
 
 	} else if (status == -1) {
@@ -82,8 +82,9 @@ function deleteAdminStatus() {
 		$("#deleteAdminResult").addClass("hidden-xs-up");
 	} else if (status == 1) {
 		$("#deleteAdminResult").removeClass("hidden-xs-up").html(
-				"<strong>Succes:</strong> " + name + " was deleted succesfully.")
-				.addClass("alert alert-success");
+				"<strong>Success:</strong> " + name
+						+ " was deleted succesfully.").addClass(
+				"alert alert-success");
 
 	} else if (status == -1) {
 		$("#deleteAdminResult")
@@ -102,8 +103,9 @@ function deleteClientStatus() {
 		$("#deleteClientResult").addClass("hidden-xs-up");
 	} else if (status == 1) {
 		$("#deleteClientResult").removeClass("hidden-xs-up").html(
-				"<strong>Succes:</strong> " + name + " was deleted succesfully.")
-				.addClass("alert alert-success");
+				"<strong>Success:</strong> " + name
+						+ " was deleted succesfully.").addClass(
+				"alert alert-success");
 
 	} else if (status == -1) {
 		$("#deleteClientResult")
@@ -122,8 +124,9 @@ function deleteBankerStatus() {
 		$("#deleteBankerResult").addClass("hidden-xs-up");
 	} else if (status == 1) {
 		$("#deleteBankerResult").removeClass("hidden-xs-up").html(
-				"<strong>Succes:</strong> " + name + " was deleted succesfully.")
-				.addClass("alert alert-success");
+				"<strong>Success:</strong> " + name
+						+ " was deleted succesfully.").addClass(
+				"alert alert-success");
 
 	} else if (status == -1) {
 		$("#deleteBankerResult")
@@ -142,8 +145,9 @@ function deleteBranchStatus() {
 		$("#deleteBranchResult").addClass("hidden-xs-up");
 	} else if (status == 1) {
 		$("#deleteBranchResult").removeClass("hidden-xs-up").html(
-				"<strong>Succes:</strong> " + name + " was deleted succesfully.")
-				.addClass("alert alert-success");
+				"<strong>Success:</strong> " + name
+						+ " was deleted succesfully.").addClass(
+				"alert alert-success");
 
 	} else if (status == -1) {
 		$("#deleteBranchResult")
@@ -155,25 +159,23 @@ function deleteBranchStatus() {
 }
 
 function batch() {
-	
+	var status = $("#status").val();
+	var message = $("#batchResult");
+	message.removeClass("hidden-xs-up");
+	console.log(status.substr(status.length - 1));
+	switch (status.substr(status.length - 1)) {
+	case "S":
+		message.html("<strong>Success:</strong> Operation was performed succesfully.").addClass("alert alert-success")
+		break;
+
+	case "F":
+		message.html(
+		"<strong>Error:</strong> An error has occurred.")
+		.addClass("alert alert-danger");
+		break;
+
+	default:
+
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -44,7 +44,7 @@ public class AdminBatchServlet extends HttpServlet {
 		Connection con = Model.getConnection(ds1);
 		if (request.getParameter("exchangeRate") != null) {
 			Model.updateExchangeRates(con);
-			request.setAttribute("status", "Updated exchange rates");
+			request.setAttribute("status", "exchangeU");
 		} else if (request.getParameter("dInterestRate") != null) {
 			if (Model.calculateInterestRates(con)) {
 				request.setAttribute("status", "dInterestRateS");
@@ -65,7 +65,7 @@ public class AdminBatchServlet extends HttpServlet {
 			}
 		} else if (request.getParameter("insertExchangeRate") != null) {
 			Model.insertExchangeRates(con);
-			request.setAttribute("status", "New Exchange rates inserted");
+			request.setAttribute("status", "exchangeI");
 
 		}
 		Model.cleanUpConnection(con);
