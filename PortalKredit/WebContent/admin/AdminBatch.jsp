@@ -12,10 +12,10 @@
 
 	<div class="center-text col-4 offset-4 batch">
 		<div class="form-control-feedback hidden-xs-up"
-			id="deleteClientResult" role="alert">
-			<input type="hidden" value="${deleteClientStatus}"
-				id="deleteClientBool"> <input type="hidden"
-				value="${deleteClient}" id="clientName">
+			id="batchResult" role="alert">
+			<input type="hidden" value="${batchStatus}"
+				id="batchBool"> <input type="hidden"
+				value="${batch}" id="clientName">
 		</div>
 		<div class="btn-group-vertical">
 			<form class="form-inline" action="AdminBatchServlet" method="post">
