@@ -51,7 +51,7 @@
 						<div class="form-group" id="bankerTelephoneForm">
 							<input type="text" class="form-control" name="bankerTelephone"
 								placeholder="Phone Number" id="bankerTelephone"
-								oninput="numberError(this.id)">
+								oninput="numberError(this.id)" maxlength="20">
 							<div
 								class="form-control-feedback alert alert-danger hidden-xs-up"
 								id="bankerTelephoneHelp"></div>
@@ -84,5 +84,6 @@
 	<script src="../assets/js/bootstrap.min.js"></script>
 	<script src="../assets/js/bootstrap-formhelpers.js"></script>
 	<script src="../assets/js/form-input.js"></script>
+	<script src="../assets/js/error-messages.js"></script>
 </body>
 </html>

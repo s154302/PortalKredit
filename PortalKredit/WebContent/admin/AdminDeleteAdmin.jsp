@@ -12,24 +12,27 @@
 <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
 
-<body>
+<body onload="deleteAdminStatus()">
 	<jsp:include page="AdminNavbar.jsp" />
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary mb-3 text-center blue-outline">
 				<h1>Delete Admin!</h1>
 				<div class="card-block">
+					<div class="form-control-feedback hidden-xs-up"
+						id="deleteAdminResult" role="alert">
+						<input type="hidden" value="${deleteAdminStatus}"
+							id="deleteAdminBool"> <input type="hidden"
+							value="${deleteAdmin}" id="adminName">
+					</div>
 					<table class="table table-sm table-bordered">
 						<thead>
-
 							<tr>
 								<th>Login</th>
 								<th>Delete</th>
 							</tr>
 						</thead>
-
 						<tbody>
-
 							<c:forEach var="ob" items="${list}">
 								<tr>
 									<td><c:out value="${ob.username}" /></td>
@@ -42,17 +45,16 @@
 							</c:forEach>
 						</tbody>
 					</table>
-						<p>
-							${status}
-						</p>
-					
 				</div>
 			</div>
 		</div>
 	</div>
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
+	<script src="../assets/js/bootstrap-formhelpers.js"></script>
+	<script src="../assets/js/form-input.js"></script>
+	<script src="../assets/js/error-messages.js"></script>
 </body>
 
 </html>

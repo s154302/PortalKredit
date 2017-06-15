@@ -27,13 +27,15 @@ public class DeleteAdminServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		//TODO - bliver der tjekekr Auth rigtigt her ? 
+		//TODO - Is Auth checked correctly here?
 		Connection con = Model.getConnection(ds1);
 		ArrayList<Admin> adminList = Model.getAdminList(con);
 		Model.cleanUpConnection(con);
 		request.setAttribute("list", adminList);
 		Model.adminCheckAuth("AdminDeleteAdmin.jsp",request,response);
-		
+		if(request.getAttribute("deleteAdminStatus") == null) {
+			request.setAttribute("deleteAdminStatus", 0);
+		}
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -54,10 +56,11 @@ public class DeleteAdminServlet extends HttpServlet {
 		
 		Connection con = Model.getConnection(ds1);
 		if(Model.deleteAdmin(adminID, con)){
-			request.setAttribute("status", adminID + " was deleted.");
+			request.setAttribute("deleteAdminStatus", 1);
 		}else{
-			request.setAttribute("status", adminID + "couldn't be deleted.");
+			request.setAttribute("deleteAdminStatus", -1);
 		}
+		request.setAttribute("deleteAdmin", adminID);
 		Model.cleanUpConnection(con);
 		doGet(request, response);
 		

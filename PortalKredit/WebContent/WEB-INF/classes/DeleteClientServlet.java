@@ -21,6 +21,7 @@ public class DeleteClientServlet extends HttpServlet {
 	public DeleteClientServlet(){
 		super();
 	}
+	
 	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	
@@ -33,7 +34,9 @@ public class DeleteClientServlet extends HttpServlet {
 
 		Model.cleanUpConnection(con);
 		Model.adminCheckAuth("AdminDeleteClient.jsp", request, response);
-		
+		if(request.getAttribute("deleteClientStatus") == null) {
+			request.setAttribute("deleteClientStatus", 0);
+		}
 	}
 	
 	@Override
@@ -50,6 +53,7 @@ public class DeleteClientServlet extends HttpServlet {
 		}
 		
 	}
+	
 	private void deleteClient(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		String search = request.getParameter("search-client");
 		String delete = request.getParameter("username");
@@ -62,10 +66,11 @@ public class DeleteClientServlet extends HttpServlet {
 		}
 		if(delete != null) {
 			if(Model.deleteClient(delete, con)){
-				request.setAttribute("status", delete + " was deleted.");
+				request.setAttribute("deleteClientStatus", 1);
 			}else{
-				request.setAttribute("status", delete + " couldn't be deleted");
+				request.setAttribute("deleteClientStatus", -1);
 			}
+			request.setAttribute("deleteClient", delete);
 			doGet(request, response);
 		}
 		Model.cleanUpConnection(con);

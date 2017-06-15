@@ -26,12 +26,15 @@ public class AdminCreateBranch extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Model.adminCheckAuth("AdminCreateBranch.jsp",request,response);
+		if(request.getAttribute("createBranchStatus") == null) {
+			request.setAttribute("createBranchStatus", 0);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(Model.checkAuth(Model.Type.admin, request.getSession())){
 			Connection con = Model.getConnection(ds1);
-			regNo = request.getParameter("regNo");
+			regNo = request.getParameter("branchRegno");
 			bankName = request.getParameter("bankName");
 			postal = request.getParameter("postal");
 			country = request.getParameter("country");
@@ -42,9 +45,9 @@ public class AdminCreateBranch extends HttpServlet {
 				keepValues(request);
 			}else{
 				if(Model.createBranch(regNo, bankName, postal, country, street, phone, con)){
-					request.setAttribute("status", "Branch was created successfully");
+					request.setAttribute("createBranchStatus", 1);
 				}else{
-					request.setAttribute("status", "Error - Somthing went wrong");
+					request.setAttribute("createBranchStatus", -1);
 					keepValues(request);
 				}
 			}

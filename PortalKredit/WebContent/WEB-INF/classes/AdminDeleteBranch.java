@@ -31,7 +31,9 @@ public class AdminDeleteBranch extends HttpServlet {
 			session.setAttribute("branches", Model.getBranches(con));
 			
 			Model.cleanUpConnection(con);
-			
+			if(request.getAttribute("deleteBranchStatus") == null) {
+				request.setAttribute("deleteBranchStatus", 0);
+			}
 			request.getRequestDispatcher("AdminDeleteBranch.jsp").forward(request, response);
 		}
 		else{
@@ -48,12 +50,13 @@ public class AdminDeleteBranch extends HttpServlet {
 				request.setAttribute("status", "This branch still have open accounts");
 			}else{
 				if(Model.deleteBranch(regNo, con)){
-					request.setAttribute("status", "Branch " + regNo + " was deleted successfully");
+					request.setAttribute("deleteBranchStatus", 1);
 					
 				}else{
-					request.setAttribute("status", "Error on deleting branch " + regNo);
+					request.setAttribute("deleteBranchStatus", -1);
 				}
 			}
+			request.setAttribute("deleteBranch", regNo);
 			Model.cleanUpConnection(con);
 			doGet(request, response);
 		}

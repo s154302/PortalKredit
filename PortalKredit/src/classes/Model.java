@@ -1641,7 +1641,7 @@ public final class Model {
 			ps.setString(1, regNo);
 			ps.setString(2, bankName);
 			ps.setString(3, postal);
-			ps.setString(4, country);
+			ps.setString(4, country.toUpperCase());
 			ps.setString(5, street);
 			ps.setString(6, phone);
 			if(ps.executeUpdate() == 1){

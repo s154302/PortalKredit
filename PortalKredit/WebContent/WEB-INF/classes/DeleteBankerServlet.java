@@ -21,6 +21,7 @@ public class DeleteBankerServlet extends HttpServlet {
 	public DeleteBankerServlet(){
 		super();
 	}
+	
 	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	
@@ -33,7 +34,11 @@ public class DeleteBankerServlet extends HttpServlet {
 		request.setAttribute("list", bankerList);
 		
 		Model.adminCheckAuth("AdminDeleteBanker.jsp",request,response);
+		if(request.getAttribute("deleteBankerStatus") == null) {
+			request.setAttribute("deleteBankerStatus", 0);
+		}
 	}
+	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
@@ -45,14 +50,16 @@ public class DeleteBankerServlet extends HttpServlet {
 			response.sendRedirect("../index");
 		}
 	}
+	
 	private void deleteBanker(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		String bankerID = request.getParameter("username");
 		Connection con = Model.getConnection(ds1);
 		if(Model.deleteBanker(bankerID, con)){
-			request.setAttribute("status", bankerID + " was deleted");
+			request.setAttribute("deleteBankerStatus", 1);
 		}else{
-			request.setAttribute("status", bankerID + " couldn't be deleted.");
+			request.setAttribute("deleteBankerStatus", -1);
 		}
+		request.setAttribute("deleteBanker", bankerID);
 		Model.cleanUpConnection(con);
 		doGet(request, response);
 	}

@@ -22,9 +22,9 @@ function errorInput(identity) {
 
 function checkEmpty(identity) {
 	var id = identity;
-	var input = $("#" + id).val();
+	var input = $("#" + id).val().trim();
 
-	if (input == '') {
+	if (input === '') {
 		$("#" + id + "Form").addClass("has-danger");
 		$("#" + id).addClass("form-control-danger");
 		$("#" + id + "Help").removeClass("hidden-xs-up").html(
@@ -55,59 +55,10 @@ function numberError(identity) {
 	}
 }
 
-function createClientStatus() {
-	var status = $("#createClientBool").val();
 
-	if (status == 0) {
-		$("#createClientResult").addClass("hidden-xs-up");
-	} else if (status == 1) {
-		$("#createClientResult").removeClass("hidden-xs-up").html(
-				"<strong>Succes:</strong> Client was created succesfully.")
-				.addClass("alert alert-success");
 
-	} else if (status == -1) {
-		$("#createClientResult")
-				.removeClass("hidden-xs-up")
-				.html(
-						"<strong>Error:</strong> An error occurred. Please review input and try again.")
-				.addClass("alert alert-danger");
-	}
-}
 
-function createBankerStatus() {
-	var status = $("#createBankerBool").val();
 
-	if (status == 0) {
-		$("#createBankerResult").addClass("hidden-xs-up");
-	} else if (status == 1) {
-		$("#createBankerResult").removeClass("hidden-xs-up").html(
-				"<strong>Succes:</strong> Banker was created succesfully.")
-				.addClass("alert alert-success");
 
-	} else if (status == -1) {
-		$("#createBankerResult")
-				.removeClass("hidden-xs-up")
-				.html(
-						"<strong>Error:</strong> An error occurred. Please review input and try again.")
-				.addClass("alert alert-danger");
-	}
-}
 
-function createAdminStatus() {
-	var status = $("#createAdminBool").val();
 
-	if (status == 0) {
-		$("#createAdminResult").addClass("hidden-xs-up");
-	} else if (status == 1) {
-		$("#createAdminResult").removeClass("hidden-xs-up").html(
-				"<strong>Succes:</strong> Admin was created succesfully.")
-				.addClass("alert alert-success");
-
-	} else if (status == -1) {
-		$("#createAdminResult")
-				.removeClass("hidden-xs-up")
-				.html(
-						"<strong>Error:</strong> An error occurred. Please review input and try again.")
-				.addClass("alert alert-danger");
-	}
-}

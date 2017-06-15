@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
 
-<body>
+<body onload="deleteClientStatus()">
 	<jsp:include page="AdminNavbar.jsp" />
 
 	<div class="row pad-row">
@@ -35,15 +35,19 @@
 						</div>
 					</form>
 					<div class="pad-row">
+					<div class="form-control-feedback hidden-xs-up"
+						id="deleteClientResult" role="alert">
+						<input type="hidden" value="${deleteClientStatus}"
+							id="deleteClientBool"> <input type="hidden"
+							value="${deleteClient}" id="clientName">
+					</div>
 						<table class="table table-hover">
 							<thead>
 								<th></th>
 								<th></th>
 								<th></th>
 							</thead>
-
 							<tbody>
-
 								<c:forEach var="ob" items="${list}">
 									<tr data-toggle="collapse" data-target="#${ob.clientID}"
 										class="clickable">
@@ -72,17 +76,16 @@
 								</c:forEach>
 							</tbody>
 						</table>
-						<p>
-							${status}
-						</p>
-						
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
+	<script src="../assets/js/bootstrap-formhelpers.js"></script>
+	<script src="../assets/js/form-input.js"></script>
+	<script src="../assets/js/error-messages.js"></script>
 </body>
 </html>

@@ -8,50 +8,67 @@
 <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
 
-<body>
+<body onload="createBranchStatus()">
 	<jsp:include page="AdminNavbar.jsp" />
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary mb-3 text-center blue-outline">
 				<h1>Create branch</h1>
 				<div class="card-block">
-					<p style="color: red;">${status}</p>
-					
 					<form action="" method="post">
 						<div class="form-group" id="branchRegnoForm">
 							<input type="text" class="form-control" name="branchRegno"
 								id="branchRegno" placeholder="*Reg No" maxlength="4" required
-								value="${regNo}" oninput="numberError(this.id)">
+								oninput="numberError(this.id)">
 							<div
 								class="form-control-feedback alert alert-danger hidden-xs-up"
 								id="branchRegnoHelp"></div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" id="bankNameForm">
 							<input type="text" class="form-control" name="bankName"
-								placeholder="*Bank Name" maxlength="20" required
-								value="${bankName}">
+								id="bankName" placeholder="*Bank Name" maxlength="20" required
+								value="${bankName}" oninput="checkEmpty(this.id)">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="bankNameHelp"></div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" id="branchPostalForm">
 							<input type="text" class="form-control" name="postal"
-								placeholder="*Postal" required value="${postal}">
+								id="branchPostal" placeholder="*Postal" required
+								value="${postal}" oninput="numberError(this.id)">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="branchPostalHelp"></div>
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="country"
-								placeholder="*Country" maxlength="45" required
-								value="${country}">
+							<select class="form-control bfh-countries" data-country="Denmark"
+								name="country"></select>
 						</div>
 
-						<div class="form-group">
-							<input type="text" class="form-control" name="street"
-								placeholder="*Street" required value="${street}">
+						<div class="form-group" id="branchStreetForm">
+							<input type="text" class="form-control" name="street" id="branchStreet"
+								placeholder="*Street" required value="${street}" oninput="checkEmpty(this.id)">
+								<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="branchStreetHelp"></div>
 						</div>
 
-						<div class="form-group">
-							<input type="text" class="form-control bfh-phone" name="phone"
-								placeholder="*Phone No" required value="${phone}">
+						<div class="form-group" id="branchTelephoneForm">
+							<input type="text" class="form-control" name="branchTelephone"
+								placeholder="Phone Number" id="branchTelephone"
+								oninput="numberError(this.id)" maxlength="20">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="branchTelephoneHelp"></div>
+						</div>
+						
+						<div class="form-control-feedback hidden-xs-up"
+							id="createBranchResult" role="alert">
+							<input type="text" class="form-control hidden-xs-up"
+								value="${createBranchStatus}" id="createBranchBool">
 						</div>
 
 						<button class="btn btn-primary btn-block btn-action" type="submit"
@@ -66,5 +83,6 @@
 	<script src="../assets/js/bootstrap.min.js"></script>
 	<script src="../assets/js/bootstrap-formhelpers.js"></script>
 	<script src="../assets/js/form-input.js"></script>
+	<script src="../assets/js/error-messages.js"></script>
 </body>
 </html>
