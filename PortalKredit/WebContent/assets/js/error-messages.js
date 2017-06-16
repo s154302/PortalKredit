@@ -270,7 +270,24 @@ function deleteAccountType() {
 	}
 }
 
+function editClientStatus() {
+	var status = $("#editClientBool").val();
 
+	if (status == 0) {
+		$("#editClientResult").addClass("hidden-xs-up");
+	} else if (status == 1) {
+		$("#editClientResult").removeClass("hidden-xs-up").html(
+				"<strong>Success:</strong> Account type was created succesfully.")
+				.addClass("alert alert-success");
+
+	} else if (status == -1) {
+		$("#editClientResult")
+				.removeClass("hidden-xs-up")
+				.html(
+						"<strong>Error:</strong> An error occurred. Please review the input and try again.")
+				.addClass("alert alert-danger");
+	}
+}
 
 
 

@@ -1,4 +1,5 @@
 package banker;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,78 +18,72 @@ import classes.Model;
 @WebServlet("/banker/EditClient")
 public class BankerEditClientServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	public BankerEditClientServlet() {
 		super();
 	}
-	
+
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		
-		if(Model.checkAuth(Model.Type.banker, session)){
+
+		if (Model.checkAuth(Model.Type.banker, session)) {
 			request.getRequestDispatcher("EditClient.jsp").forward(request, response);
-		}
-		else{
+		} else {
 			request.getSession().invalidate();
 			response.sendRedirect("../index");
 		}
 	}
-	
+
 	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		
-		if(Model.checkAuth(Model.Type.banker, session)){
+
+		if (Model.checkAuth(Model.Type.banker, session)) {
 			editClient(request, response, session);
-			
-		}
-		else{
+
+		} else {
 			request.getSession().invalidate();
 			response.sendRedirect("../index");
 		}
-		
-		
-		
-		
 
 	}
-	
-	private void editClient(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
+
+	private void editClient(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+			throws IOException {
 		String clientID = (String) session.getAttribute("clientID");
-		String firstName = request.getParameter("firstName");
-		String lastName = request.getParameter("lastName");
-		String password = request.getParameter("password");
-		String email = request.getParameter("email"); 
-		String mobile = request.getParameter("mobile");  
-		String street = request.getParameter("street"); 
-		String bankerID = request.getParameter("bankerID"); 
-		String postal = request.getParameter("postal");
-		String country = request.getParameter("country"); 
-		
+		String firstName = request.getParameter("clientFirstName");
+		String lastName = request.getParameter("clientLastName");
+		String password = request.getParameter("clientPassword");
+		String email = request.getParameter("clientEmail");
+		String mobile = request.getParameter("clientTelephone");
+		String street = request.getParameter("street");
+		String bankerID = request.getParameter("clientBankerID");
+		String postal = request.getParameter("clientCity");
+		String country = request.getParameter("clientCountry");
+
 		Connection con = Model.getConnection(ds1);
 		try {
-			
-			if(!request.getParameter("password").isEmpty()){
+
+			if (!request.getParameter("clientPassword").isEmpty()) {
 				Model.changeClientPassword(clientID, password, con);
 			}
-			
-			Model.editClient(clientID, firstName, lastName, email,
-					mobile, street, bankerID, postal, country, con);
 
-			
+			Model.editClient(clientID, firstName, lastName, email, mobile, street, bankerID, postal, country, con);
+
 			session.setAttribute("clientID", clientID);
-			response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
 			session.setAttribute("user", Model.getBankerInfo((String) session.getAttribute("userID"), con));
-			
+			response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		} finally {
 			Model.cleanUpConnection(con);
 		}
 	}

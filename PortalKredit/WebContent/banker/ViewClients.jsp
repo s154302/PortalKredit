@@ -88,5 +88,5 @@
 	<script src="../assets/js/bootstrap.min.js"></script>
 	<script src="../assets/js/bootstrap-formhelpers.js"></script>
 	<script src="../assets/js/form-input.js"></script>
-	<script src="../assets/js/error-messages.js"></
+	<script src="../assets/js/error-messages.js"></script>
 </body>

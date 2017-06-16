@@ -12,61 +12,89 @@
 
 <body>
 	<jsp:include page="BankerNavbar.jsp"></jsp:include>
-	
-		<div class="row pad-row">
-		<div class="col-4 offset-4">
-			<div class="card card-outline-primary text-center blue-outline">
-				<table class="table table-hover">
-					<tbody colspan="4">
-						<tr>Name: ${client.fullName} <br></tr>
-						<tr>ClientID: ${client.clientID} <br></tr>
-						<tr>CPR: ${client.CPR} <br></tr>
-						<tr>BankerID: ${client.bankerID} <br></tr>
-						<tr>Email: ${client.email} <br></tr>
-						<tr>Mobile: ${client.phoneNo} <br></tr>
-						<tr>Street: ${client.street} <br></tr>
-						<tr>City: ${client.city} <br></tr>
-						<tr>Country: ${client.country}</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		</div>
-	
+
 	<div class="row pad-row">
-		<div class="col-4 offset-4">
-			<div class="card card-outline-primary mb-3 text-center blue-outline">
+		<div class="col-6 offset-3">
+			<div class="card card-outline-primary blue-outline">
+				<h1 class="pad-row text-center">${client.fullName}</h1>
+				<dl class="row">
+					<dt class="col-sm-3 offset-3">ClientID:</dt>
+					<dd class="col-sm-3" style="text-align: right">${client.clientID}</dd>
+
+					<dt class="col-sm-3 offset-3">CPR:</dt>
+					<dd class="col-sm-3" style="text-align: right">${client.CPR}</dd>
+
+					<dt class="col-sm-3 offset-3">BankerID:</dt>
+					<dd class="col-sm-3" style="text-align: right">${client.bankerID}</dd>
+
+					<dt class="col-sm-3 offset-3">Email:</dt>
+					<dd class="col-sm-3" style="text-align: right">${client.email}</dd>
+
+					<dt class="col-sm-3 offset-3">Mobile:</dt>
+					<dd class="col-sm-3" style="text-align: right">${client.phoneNo}</dd>
+
+					<dt class="col-sm-3 offset-3">Street:</dt>
+					<dd class="col-sm-3" style="text-align: right">${client.street}</dd>
+
+					<dt class="col-sm-3 offset-3">City:</dt>
+					<dd class="col-sm-3" style="text-align: right">${client.city}</dd>
+
+					<dt class="col-sm-3 offset-3">Country:</dt>
+					<dd class="col-sm-3" style="text-align: right">${client.country}</dd>
+				</dl>
 				<div class="card-block">
+					<div class="form-control-feedback hidden-xs-up"
+						id="editClientResult" role="alert">
+						<input type="text" class="form-control hidden-xs-up"
+							value="${editClientStatus}" id="editClientBool">
+					</div>
 					<form action="EditClient" method="post">
-						
-						<div class="form-group">
-							<input type="text" class="form-control" name="firstName"
-								placeholder="First Name" value="${client.firstName}">
+						<div class="form-group" id="clientFirstNameForm">
+							<input type="text" class="form-control" name="clientFirstName"
+								placeholder="*First Name" maxlength="45" id="clientFirstName"
+								oninput="errorInput(this.id)" value="${client.firstName}">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="clientFirstNameHelp"></div>
+						</div>
+
+						<div class="form-group" id="clientLastNameForm">
+							<input type="text" class="form-control" name="clientLastName"
+								placeholder="*Last Name" maxlength="45" id="clientLastName"
+								oninput="errorInput(this.id)" value="${client.lastName }">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="clientLastNameHelp"></div>
+						</div>
+
+						<div class="form-group" id="clientPasswordForm">
+							<input type="password" class="form-control" name="clientPassword"
+								id="clientPassword" placeholder="*Password"
+								oninput="checkEmpty(this.id)">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="clientPasswordHelp"></div>
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="lastName"
-								placeholder="Last Name" value="${client.lastName}">
+							<input type="email" class="form-control" name="clientEmail"
+								placeholder="E-mail" maxlength="45" value="${client.email }">
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="password"
-								placeholder="Password">
+							<input type="text" class="form-control bfh-phone"
+								data-country="createClientCountry" name="clientTelephone"
+								placeholder="Phone Number" value="${client.phoneNo }">
 						</div>
 
-						<div class="form-group">
-							<input type="email" class="form-control" name="email"
-								placeholder="E-mail" value="${client.email}">
-						</div>
-
-						<div class="form-group">
-							<input type="text" class="form-control" name="mobolie"
-								placeholder="Mobile" value="${client.phoneNo}">
-						</div>
-
-						<div class="form-group">
-							<input type="text" class="form-control" name="bankerID"
-								placeholder="Associated Banker" value="${client.bankerID}">
+						<div class="form-group" id="clientBankerIDForm">
+							<input type="text" class="form-control" name="clientBankerID"
+								id="clientBankerID" placeholder="*Associated Banker"
+								value="${client.bankerID}" maxlength="7"
+								oninput="checkEmpty(this.id)">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="clientBankerIDHelp"></div>
 						</div>
 
 						<div class="form-group">
@@ -74,14 +102,18 @@
 								placeholder="Address" value="${client.street}">
 						</div>
 
-						<div class="form-group">
-							<input type="text" class="form-control" name="postal"
-								placeholder="City Postal Code" value="${client.postal}">
+						<div class="form-group" id="clientCityForm">
+							<input type="text" class="form-control" name="clientCity"
+								id="clientCity" placeholder="*City Postal Code" maxlength="45"
+								oninput="numberError(this.id)" value="${client.postal}">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="clientCityHelp"></div>
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="country"
-								placeholder="Country" value="${client.country}">
+							<select class="form-control bfh-countries" data-country="Denmark"
+								id="createClientCountry" name="clientCountry"></select>
 						</div>
 
 						<button class="btn btn-primary btn-block btn-action" type="submit"
@@ -92,6 +124,9 @@
 		</div>
 	</div>
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
+	<script src="../assets/js/bootstrap-formhelpers.js"></script>
+	<script src="../assets/js/form-input.js"></script>
+	<script src="../assets/js/error-messages.js"></script>
 </body>

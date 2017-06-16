@@ -57,26 +57,33 @@ public class BankerAccountViewServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
-		if(Model.checkAuth(Model.Type.banker, session)){
-			accountTransactions(request, response, session);
-		}
-		else{
-			request.getSession().invalidate();
-			response.sendRedirect("../index");
-		}
-		// Determining whether the page is redirected to Edit Account ot Delete Account
+
+		// Determining whether the page is redirected to Edit Account or Delete Account
 		if(request.getParameter("EditAccount") != null){
+			System.out.println("itworks1");
 			response.sendRedirect(request.getContextPath() + "/banker/EditAccount");
 		
 		} else if(request.getParameter("DeleteAccount") != null){
+			System.out.println("itworks2");
 			response.sendRedirect(request.getContextPath() + "/banker/DeleteAccount");	
+		} else if(request.getParameter("oldTransactions") != null) {
+			System.out.println("itworks3");
+			if(Model.checkAuth(Model.Type.banker, session)){
+				accountTransactions(request, response, session);
+			}
+			else{
+				System.out.println("itworks");
+				request.getSession().invalidate();
+				response.sendRedirect("../index");
+			}
 		}
+		System.out.println("itworks4");
 		
 	}
 	
 	private void accountTransactions(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
 		Connection con = Model.getConnection(ds1);
-		
+		System.out.println("itworks");
 		// Finding old and new transactions from the DB
 		Account account = (Account)session.getAttribute("account");
 		ArrayList<Transaction> transactions = Model.getNewTransactions(account.getAccountNumber(), account.getRegNo(), con);
