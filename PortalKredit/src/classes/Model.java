@@ -1323,7 +1323,7 @@ public final class Model {
 
 	}
 	
-	//Used as a 'batch' to calculate the daily interest and add it to the db.account 'Interest' attribute
+	//Used as a 'batch' to calculate the daily and add it to the db.account 'Interest' attribute
 	public static boolean calculateInterestRates(Connection con){
 		Boolean status = false;
 		PreparedStatement ps = null;

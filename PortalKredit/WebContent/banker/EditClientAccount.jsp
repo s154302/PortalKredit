@@ -48,13 +48,12 @@
 								id="clientAccountNameHelp"></div>
 						</div>
 
-						<div class="form-group" id="clientAccountTypeForm">
-							<input type="text" class="form-control" name="clientAccountType"
-								id="clientAccountType" placeholder="*Account Type"
-								value="${account.accountType}" oninput="checkEmpty(this.id)">
-							<div
-								class="form-control-feedback alert alert-danger hidden-xs-up"
-								id="clientAccountTypeHelp"></div>
+						<div class="form-group">
+							<select class="form-control" name="clientAccountType" required>
+								<c:forEach var="acc" items="${accountType}">
+										<option value="${acc.name}">${acc.name}</option>
+									</c:forEach>
+							</select>
 						</div>
 
 						<div class="form-group" id="clientIDForm">

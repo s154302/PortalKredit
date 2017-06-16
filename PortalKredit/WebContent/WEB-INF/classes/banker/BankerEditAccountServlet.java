@@ -26,14 +26,16 @@ public class BankerEditAccountServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
-		
+		Connection con = Model.getConnection(ds1);
 		if(Model.checkAuth(Model.Type.banker, session)){
+			session.setAttribute("accountType", Model.getAccountTypes(con));
 			request.getRequestDispatcher("EditClientAccount.jsp").forward(request, response);
 		}
 		else{
 			request.getSession().invalidate();
 			response.sendRedirect("../index");
 		}
+		Model.cleanUpConnection(con);
 	}
 	
 	@Resource(name = "jdbc/exampleDS")
