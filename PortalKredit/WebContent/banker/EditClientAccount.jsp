@@ -50,9 +50,10 @@
 
 						<div class="form-group">
 							<select class="form-control" name="clientAccountType" required>
+
 								<c:forEach var="acc" items="${accountTypes}">
-									<option value="${acc.name}">${acc.name}</option>
-								</c:forEach>
+										<option value="${acc.name}">${acc.name}</option>
+									</c:forEach>
 							</select>
 						</div>
 
