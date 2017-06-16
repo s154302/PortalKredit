@@ -55,6 +55,28 @@ function numberError(identity) {
 	}
 }
 
+function decimalError(identity) {
+	var id = identity;
+	var input = $("#" + id).val();
+	var patt = /^[0][.][0-9]+$/;
+
+	if (patt.test(input)) {
+		$("#" + id + "Form").removeClass("has-danger");
+		$("#" + id).removeClass("form-control-danger");
+		$("#" + id + "Help").addClass("hidden-xs-up")
+	} else if (input != '') {
+		$("#" + id + "Form").addClass("has-danger");
+		$("#" + id).addClass("form-control-danger");
+		$("#" + id + "Help").removeClass("hidden-xs-up").html(
+				"<strong>Error:</strong> Please input a decimal less than 1 separated by a '.'.");
+	} else {
+		checkEmpty(id);
+	}
+}
+
+
+
+
 
 
 

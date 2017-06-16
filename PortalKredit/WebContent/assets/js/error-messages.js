@@ -165,13 +165,15 @@ function batch() {
 	console.log(status.substr(status.length - 1));
 	switch (status.substr(status.length - 1)) {
 	case "S":
-		message.html("<strong>Success:</strong> Operation was performed succesfully.").addClass("alert alert-success")
+		message
+				.html(
+						"<strong>Success:</strong> Operation was performed succesfully.")
+				.addClass("alert alert-success")
 		break;
 
 	case "F":
-		message.html(
-		"<strong>Error:</strong> An error has occurred.")
-		.addClass("alert alert-danger");
+		message.html("<strong>Error:</strong> An error has occurred.")
+				.addClass("alert alert-danger");
 		break;
 
 	default:
@@ -179,3 +181,113 @@ function batch() {
 	}
 
 }
+
+function deposit() {
+	var status = $("#status").val();
+	var message = $("#depositResult");
+	
+	if (status == 0) {
+		$("#depositResult").addClass("hidden-xs-up");
+	} else if (status == 1) {
+		$("#depositResult").removeClass("hidden-xs-up").html(
+				"<strong>Success:</strong> Deposit complete.").addClass(
+				"alert alert-success");
+	} else if (status == -1) {
+		$("#depositResult")
+				.removeClass("hidden-xs-up")
+				.html(
+						"<strong>Error:</strong> An error occurred.")
+				.addClass("alert alert-danger");
+	} else if(status === -2) {
+		$("#depositResult")
+		.removeClass("hidden-xs-up")
+		.html(
+				"<strong>Error:</strong> Incorrect password.")
+		.addClass("alert alert-danger");
+	}
+}
+
+function transaction() {
+	var status = $("#status").val();
+	var message = $("#transactionResult");
+	
+	if (status == 0) {
+		$("#transactionResult").addClass("hidden-xs-up");
+	} else if (status == 1) {
+		$("#transactionResult").removeClass("hidden-xs-up").html(
+				"<strong>Success:</strong> Payment complete.").addClass(
+				"alert alert-success");
+	} else if (status == -1) {
+		$("#transactionResult")
+				.removeClass("hidden-xs-up")
+				.html(
+						"<strong>Error:</strong> An error occurred.")
+				.addClass("alert alert-danger");
+	} else if(status === -2) {
+		$("#transactionResult")
+		.removeClass("hidden-xs-up")
+		.html(
+				"<strong>Error:</strong> Incorrect password.")
+		.addClass("alert alert-danger");
+	}
+}
+
+function createAccountType() {
+	var status = $("#createAccountTypeBool").val();
+
+	if (status == 0) {
+		$("#createAccountTypeResult").addClass("hidden-xs-up");
+	} else if (status == 1) {
+		$("#createAccountTypeResult").removeClass("hidden-xs-up").html(
+				"<strong>Success:</strong> Account type was created succesfully.")
+				.addClass("alert alert-success");
+
+	} else if (status == -1) {
+		$("#createAccountTypeResult")
+				.removeClass("hidden-xs-up")
+				.html(
+						"<strong>Error:</strong> An error occurred. Please review the input and try again.")
+				.addClass("alert alert-danger");
+	}
+}
+
+function deleteAccountType() {
+	var status = $("#deleteAccountTypeBool").val();
+
+	if (status == 0) {
+		$("#deleteAccountTypeResult").addClass("hidden-xs-up");
+	} else if (status == 1) {
+		$("#deleteAccountTypeResult").removeClass("hidden-xs-up").html(
+				"<strong>Success:</strong> Account type was created succesfully.")
+				.addClass("alert alert-success");
+
+	} else if (status == -1) {
+		$("#deleteAccountTypeResult")
+				.removeClass("hidden-xs-up")
+				.html(
+						"<strong>Error:</strong> An error occurred.")
+				.addClass("alert alert-danger");
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
