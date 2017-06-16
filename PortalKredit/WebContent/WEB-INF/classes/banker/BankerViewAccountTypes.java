@@ -28,6 +28,9 @@ public class BankerViewAccountTypes extends HttpServlet {
 			HttpSession session = request.getSession();
 			Connection con = Model.getConnection(ds1);
 			ArrayList<AccountType> accountTypes = Model.getAccountTypes(con);
+			if(request.getAttribute("deleteAccountTypeStatus") == null) {
+				request.setAttribute("deleteAccountTypeStatus", 0);
+			}
 			session.setAttribute("accountTypes", accountTypes);
 			Model.cleanUpConnection(con);
 			request.getRequestDispatcher("BankerViewAccountTypes.jsp").forward(request, response);
@@ -42,9 +45,9 @@ public class BankerViewAccountTypes extends HttpServlet {
 			Connection con = Model.getConnection(ds1);
 			String accountType = request.getParameter("accountType");
 			if(Model.deleteAccountType(accountType, con)){
-				request.setAttribute("status", accountType + " Deleted");
+				request.setAttribute("deleteAccountTypeStatus", 1);
 			}else{
-				request.setAttribute("status", accountType + " Could not be deleted - try again");
+				request.setAttribute("deleteAccountTypeStatus", -1);
 			}
 			request.getRequestDispatcher("BankerViewAccountTypes.jsp").forward(request, response);
 		}else{

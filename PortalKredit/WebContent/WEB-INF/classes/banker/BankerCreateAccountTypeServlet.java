@@ -35,6 +35,9 @@ public class BankerCreateAccountTypeServlet extends HttpServlet {
 		// Checking Authentication
 		if(Model.checkAuth(Model.Type.banker, session)){
 			request.getRequestDispatcher("CreateAccountType.jsp").forward(request, response);
+			if(request.getAttribute("createAccountTypeStatus") == null) {
+				request.setAttribute("createAccountTypeStatus", 0);
+			}
 		} else{
 			request.getSession().invalidate();
 			response.sendRedirect("../index");
@@ -56,9 +59,9 @@ public class BankerCreateAccountTypeServlet extends HttpServlet {
 		
 		// Checking status and redirecting accordingly
 		if(status){
-			request.setAttribute("createAccountTypeCreated", "Account Type and Interest Rate has been created");
+			request.setAttribute("createAccountTypeStatus", 1);
 		} else {
-			request.setAttribute("createAccountTypeDenied", "Account Type and Interest Rate could not be created");
+			request.setAttribute("createAccountTypeStatus", -1);
 		}
 		request.getRequestDispatcher("CreateAccountType.jsp").forward(request, response);
 

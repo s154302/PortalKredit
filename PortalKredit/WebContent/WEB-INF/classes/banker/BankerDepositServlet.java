@@ -31,7 +31,9 @@ public class BankerDepositServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		if(Model.checkAuth(Model.Type.banker, session)){
-		
+		if(request.getAttribute("status") == null) {
+			request.setAttribute("status", 0);
+		}
 		request.getRequestDispatcher("Deposit.jsp").forward(request, response);
 		}
 		else{
@@ -59,13 +61,13 @@ public class BankerDepositServlet extends HttpServlet {
 			
 			if(correctPw){
 				if(Model.deposit(accountNumber, regNo, con, Double.parseDouble(strAmount), currency)){
-					request.setAttribute("status", "Sussces");
+					request.setAttribute("status", 1);
 				}else{
-					request.setAttribute("status", "Error somthing went wrong");
+					request.setAttribute("status", -1);
 					request = keepInputs(request);
 				}
 			}else{
-				request.setAttribute("status", "Wrong password");
+				request.setAttribute("status", -2);
 				request = keepInputs(request);
 			}
 		}
