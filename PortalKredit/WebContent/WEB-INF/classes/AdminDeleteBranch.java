@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import classes.Controller;
+import classes.Model;
 
 /**
  * Servlet implementation class AdminCreateBranch
@@ -26,12 +26,14 @@ public class AdminDeleteBranch extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.admin, session)){
-			Connection con = Controller.getConnection(ds1);
-			session.setAttribute("branches", Controller.getBranches(con));
+		if(Model.checkAuth(Model.Type.admin, session)){
+			Connection con = Model.getConnection(ds1);
+			session.setAttribute("branches", Model.getBranches(con));
 			
-			Controller.cleanUpConnection(con);
-			
+			Model.cleanUpConnection(con);
+			if(request.getAttribute("deleteBranchStatus") == null) {
+				request.setAttribute("deleteBranchStatus", 0);
+			}
 			request.getRequestDispatcher("AdminDeleteBranch.jsp").forward(request, response);
 		}
 		else{
@@ -41,20 +43,21 @@ public class AdminDeleteBranch extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+		if(Model.checkAuth(Model.Type.admin, request.getSession())){
 			String regNo = request.getParameter("regNo");
-			Connection con = Controller.getConnection(ds1);
-			if(Controller.checkForOpenAccounts(regNo, con)){
+			Connection con = Model.getConnection(ds1);
+			if(Model.checkForOpenAccounts(regNo, con)){
 				request.setAttribute("status", "This branch still have open accounts");
 			}else{
-				if(Controller.deleteBranch(regNo, con)){
-					request.setAttribute("status", "Branch " + regNo + " was deleted successfully");
+				if(Model.deleteBranch(regNo, con)){
+					request.setAttribute("deleteBranchStatus", 1);
 					
 				}else{
-					request.setAttribute("status", "Error on deleting branch " + regNo);
+					request.setAttribute("deleteBranchStatus", -1);
 				}
 			}
-			Controller.cleanUpConnection(con);
+			request.setAttribute("deleteBranch", regNo);
+			Model.cleanUpConnection(con);
 			doGet(request, response);
 		}
 		else{

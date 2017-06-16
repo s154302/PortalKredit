@@ -13,51 +13,48 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Banker;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/Transaction")
 public class BankerTransactionServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	String sendAcc, reciAcc, stramount, strsendReg, strreciReg, currency, strmessage, strreciMessage,
-	password;
-	
+	String sendAcc, reciAcc, stramount, strsendReg, strreciReg, currency, strmessage, strreciMessage, password;
+
 	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
-	
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException{
-		response.setContentType("text/html");
-		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.banker, session)){
-		
-		request.getRequestDispatcher("Transaction.jsp").forward(request, response);
-		}
-		else{
-			request.getSession().invalidate();
-			response.sendRedirect("../index");
-		}
-	}
-	
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.banker, session)){
-			payment(request, response, session);
-		}
-		else{
-			request.getSession().invalidate();
-			response.sendRedirect("../index");
-		}
-		
 
-		
-		
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html");
+		HttpSession session = request.getSession();
+		if (Model.checkAuth(Model.Type.banker, session)) {
+			if (request.getAttribute("status") == null) {
+				request.setAttribute("status", 0);
+			}
+			request.getRequestDispatcher("Transaction.jsp").forward(request, response);
+		} else {
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
 	}
-	
-	//Used to keep the written input in the input fields
-	private HttpServletRequest keepInputs(HttpServletRequest request){
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html");
+		HttpSession session = request.getSession();
+		if (Model.checkAuth(Model.Type.banker, session)) {
+			payment(request, response, session);
+		} else {
+			request.getSession().invalidate();
+			response.sendRedirect("../index");
+		}
+
+	}
+
+	// Used to keep the written input in the input fields
+	private HttpServletRequest keepInputs(HttpServletRequest request) {
 		request.setAttribute("fromAccount", sendAcc);
 		request.setAttribute("amount", stramount);
 		request.setAttribute("currency", currency);
@@ -67,9 +64,11 @@ public class BankerTransactionServlet extends HttpServlet {
 		request.setAttribute("reciAcc", reciAcc);
 		return request;
 	}
-	private void payment(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException{
+
+	private void payment(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+			throws ServletException, IOException {
 		Banker banker = (Banker) session.getAttribute("user");
-		sendAcc= request.getParameter("fromAccount");
+		sendAcc = request.getParameter("fromAccount");
 		strsendReg = banker.getRegNo();
 		reciAcc = request.getParameter("reciAcc");
 		strreciReg = request.getParameter("reciReg");
@@ -79,29 +78,29 @@ public class BankerTransactionServlet extends HttpServlet {
 		strreciMessage = request.getParameter("reciMessage");
 		password = request.getParameter("password");
 		double amount = Double.parseDouble(stramount);
-		
-		Connection con = Controller.getConnection(ds1);
-		String userID = (String) session.getAttribute("userID");
-		Boolean correctPw = Controller.authenticate(userID, password, con, session);
 
-		if(correctPw){
-			Boolean status = Controller.transaction(sendAcc, reciAcc, amount, strsendReg, strreciReg,
-					currency, strmessage, strreciMessage, con);
-			
-			if(status){
-				request.setAttribute("status", "Payment complete");
-			}else{
-				request.setAttribute("status", "Payment incomplete - somthing went wrong");
-				request = keepInputs(request); 
-				
+		Connection con = Model.getConnection(ds1);
+		String userID = (String) session.getAttribute("userID");
+		Boolean correctPw = Model.authenticate(userID, password, con, session);
+
+		if (correctPw) {
+			Boolean status = Model.transaction(sendAcc, reciAcc, amount, strsendReg, strreciReg, currency, strmessage,
+					strreciMessage, con);
+
+			if (status) {
+				request.setAttribute("status", 1);
+			} else {
+				request.setAttribute("status", -1);
+				request = keepInputs(request);
+
 			}
-		}else{
-			request.setAttribute("status", "Payment incomplete - Wrong password");
-			request = keepInputs(request); 
+		} else {
+			request.setAttribute("status", -2);
+			request = keepInputs(request);
 		}
-		
-		Controller.cleanUpConnection(con);
+
+		Model.cleanUpConnection(con);
 		request.getRequestDispatcher("Transaction.jsp").forward(request, response);
-		
+
 	}
 }

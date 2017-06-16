@@ -11,12 +11,15 @@
 <link href="../assets/css/custom.css" rel="stylesheet">
 </head>
 
-<body>
+<body onload="createClientStatus()">
 	<jsp:include page="AdminNavbar.jsp" />
 	<jsp:include page="../CreateClient.jsp"></jsp:include>
+	
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
 	<script src="../assets/js/bootstrap-formhelpers.js"></script>
+	<script src="../assets/js/form-input.js"></script>
+	<script src="../assets/js/error-messages.js"></script>
 </body>
 </html>

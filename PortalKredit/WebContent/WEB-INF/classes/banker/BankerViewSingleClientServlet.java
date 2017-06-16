@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 import classes.Account;
 import classes.Client;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/ViewSingleClient")
 public class BankerViewSingleClientServlet extends HttpServlet {
@@ -34,16 +34,16 @@ public class BankerViewSingleClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
-		if(Controller.checkAuth(Controller.Type.banker,session)){
-			Connection con = Controller.getConnection(ds1);
+		if(Model.checkAuth(Model.Type.banker,session)){
+			Connection con = Model.getConnection(ds1);
 			String clientID = (String) session.getAttribute("clientID");
-			Client client = Controller.getClientInfo(clientID, con);
+			Client client = Model.getClientInfo(clientID, con);
 				
-			client.setAccounts(Controller.getAccounts(client.getClientID(), con));
+			client.setAccounts(Model.getAccounts(client.getClientID(), con));
 			session.setAttribute("accounts", client.getAccounts());
 			session.setAttribute("clientName", client.getFirstName());
 			
-			Controller.cleanUpConnection(con);
+			Model.cleanUpConnection(con);
 			request.getRequestDispatcher("ViewSingleClient.jsp").forward(request, response);
 		}
 		else{
@@ -57,7 +57,7 @@ public class BankerViewSingleClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			viewSingleClient(request, response, session);
 		}
 		else{
@@ -73,10 +73,10 @@ public class BankerViewSingleClientServlet extends HttpServlet {
 		
 		String accountNumber = request.getParameter("accountNumber");
 		String regNo = request.getParameter("regNo");
-		Connection con = Controller.getConnection(ds1);
-		Account account = Controller.getAccountInfo(accountNumber, regNo, con);
+		Connection con = Model.getConnection(ds1);
+		Account account = Model.getAccountInfo(accountNumber, regNo, con);
 		session.setAttribute("account", account);
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 		
 		response.sendRedirect(request.getContextPath() + "/banker/ViewClientAccount");
 		

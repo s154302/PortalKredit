@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Client;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/client/payments")
 public class ClientPaymentsServlet extends HttpServlet {
@@ -34,7 +34,7 @@ public class ClientPaymentsServlet extends HttpServlet {
 			throws ServletException, IOException{
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.client, session)){
+		if(Model.checkAuth(Model.Type.client, session)){
 		
 		request.getRequestDispatcher("payments.jsp").forward(request, response);
 		}
@@ -48,7 +48,7 @@ public class ClientPaymentsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.client, session)){
+		if(Model.checkAuth(Model.Type.client, session)){
 			payment(request, response, session);
 		}
 		else{
@@ -84,12 +84,13 @@ public class ClientPaymentsServlet extends HttpServlet {
 		double amount = Double.parseDouble(stramount);
 		Client client = (Client)session.getAttribute("user");
 		Boolean ownAccount = client.isInAccountList(sendAcc, strsendReg);
-		Connection con = Controller.getConnection(ds1);
+		Connection con = Model.getConnection(ds1);
+
 		String userID = (String) session.getAttribute("userID");
-		Boolean correctPw = Controller.authenticate(userID, password, con, session);
+		Boolean correctPw = Model.authenticate(userID, password, con, session);
 
 		if(correctPw && ownAccount){
-			Boolean status = Controller.transaction(sendAcc, reciAcc, amount, sendReg, reciReg,
+			Boolean status = Model.transaction(sendAcc, reciAcc, amount, sendReg, reciReg,
 					currency, strmessage, strreciMessage, con);
 			
 			if(status){
@@ -104,7 +105,7 @@ public class ClientPaymentsServlet extends HttpServlet {
 			request = keepInputs(request); 
 		}
 		
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 		request.getRequestDispatcher("payments.jsp").forward(request, response);
 		
 	}

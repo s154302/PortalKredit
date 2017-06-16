@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 import classes.Account;
 import classes.Banker;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/DeleteAccount")
 public class BankerDeleteAccountServlet extends HttpServlet {
@@ -32,7 +32,7 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			
 			request.getRequestDispatcher("DeleteAccount.jsp").forward(request, response);
 			
@@ -46,7 +46,7 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		Connection con = Controller.getConnection(ds1);
+		Connection con = Model.getConnection(ds1);
 		// Clicked button canceled
 		if(request.getParameter("cancel") != null){
 			response.sendRedirect(request.getContextPath() + "/banker/ViewClientAccount");
@@ -56,7 +56,7 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 			
 			String password = request.getParameter("password");
 			String bankerID = ((Banker)session.getAttribute("user")).getBankerID();
-			Boolean control = Controller.authenticate(bankerID, password, con, session);
+			Boolean control = Model.authenticate(bankerID, password, con, session);
 			
 			// authenticating the banker ID
 			if(control){
@@ -66,7 +66,7 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 				String accountNumber = account.getAccountNumber();
 				
 				// Deleting the account
-				Boolean isDeleted = Controller.deleteAccount(regNo, accountNumber, con);
+				Boolean isDeleted = Model.deleteAccount(regNo, accountNumber, con);
 				
 				if(isDeleted){
 					response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
@@ -82,7 +82,7 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 				request.getRequestDispatcher("DeleteAccount.jsp").forward(request, response);
 			}
 		}
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 	}
 
 

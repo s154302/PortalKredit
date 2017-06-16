@@ -12,49 +12,64 @@
 
 <body>
 	<jsp:include page="BankerNavbar.jsp"></jsp:include>
-	
-		<div class="row pad-row">
-		<div class="col-4 offset-4">
-			<div class="card card-outline-primary text-center blue-outline">
-				<table class="table table-hover">
-					<tbody colspan="4">
-						<tr>Name: ${account.accountName} <br></tr>
-						<tr>Reg: ${account.regNo} <br></tr>
-						<tr>Account: ${account.accountNumber} <br></tr>
-						<tr>Type: ${account.accountType} <br></tr>
-						<tr>Currency: ${account.currency} <br></tr>
-						<tr>Interest rate: ${account.interestRate} <br></tr>
-						<tr>Balance: ${account.balance}</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		</div>
-	
+
 	<div class="row pad-row">
-		<div class="col-4 offset-4">
-			<div class="card card-outline-primary mb-3 text-center blue-outline">
+		<div class="col-6 offset-3">
+			<div class="card card-outline-primary blue-outline">
+				<h1 class="text-center">Edit ${account.accountName}</h1>
+				<dl class="row">
+					<dt class="col-sm-3 offset-3">Reg. No.:</dt>
+					<dd class="col-sm-3" style="text-align: right">${account.regNo}</dd>
+
+					<dt class="col-sm-3 offset-3">Account:</dt>
+					<dd class="col-sm-3" style="text-align: right">${account.accountNumber}</dd>
+
+					<dt class="col-sm-3 offset-3">Type:</dt>
+					<dd class="col-sm-3" style="text-align: right">${account.accountType}</dd>
+
+					<dt class="col-sm-3 offset-3">Currency:</dt>
+					<dd class="col-sm-3" style="text-align: right">${account.currency}</dd>
+
+					<dt class="col-sm-3 offset-3">Interest rate:</dt>
+					<dd class="col-sm-3" style="text-align: right">${account.interestRate}</dd>
+
+					<dt class="col-sm-3 offset-3">Balance:</dt>
+					<dd class="col-sm-3" style="text-align: right">${account.balance}</dd>
+				</dl>
 				<div class="card-block">
 					<form action="EditAccount" method="post">
-						
-						<div class="form-group">
+
+						<div class="form-group" id="clientAccountNameForm">
 							<input type="text" class="form-control" name="clientAccountName"
-								placeholder="Account Name" value="${account.accountName}">
+								id="clientAccountName" placeholder="Account Name"
+								value="${account.accountName}" oninput="checkEmpty(this.id)">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="clientAccountNameHelp"></div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" id="clientAccountTypeForm">
 							<input type="text" class="form-control" name="clientAccountType"
-								placeholder="*Account Type" value="${account.accountType}">
+								id="clientAccountType" placeholder="*Account Type"
+								value="${account.accountType}" oninput="checkEmpty(this.id)">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="clientAccountTypeHelp"></div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" id="clientIDForm">
 							<input type="text" class="form-control" name="clientID"
-								placeholder="*Client's ID" value="${clientID}">
+								id="clientID" placeholder="*Client's ID" value="${clientID}"
+								oninput="checkEmpty(this.id)">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="clientIDHelp"></div>
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" name="clientCurrency"
-								placeholder="*Client's prefered Currency" value="${account.currency}">
+							<select class="form-control bfh-currencies"
+								id="createClientCountry" name="clientCurrency"
+								data-currency="${account.currency}"></select>
 						</div>
 
 						<button class="btn btn-primary btn-block btn-action" type="submit"
@@ -65,6 +80,9 @@
 		</div>
 	</div>
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
+	<script src="../assets/js/bootstrap-formhelpers.js"></script>
+	<script src="../assets/js/form-input.js"></script>
+	<script src="../assets/js/error-messages.js"></script>
 </body>

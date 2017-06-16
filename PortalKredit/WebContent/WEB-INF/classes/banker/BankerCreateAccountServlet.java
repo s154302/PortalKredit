@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Banker;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/CreateAccount")
 public class BankerCreateAccountServlet extends HttpServlet {
@@ -30,12 +30,12 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		
 		//Authenticating the user
-		if(Controller.checkAuth(Controller.Type.banker, session)){
-			Connection con = Controller.getConnection(ds1);
+		if(Model.checkAuth(Model.Type.banker, session)){
+			Connection con = Model.getConnection(ds1);
 			
 			//Setting accountTypes for dropdown
-			session.setAttribute("accountTypes", Controller.getAccountTypes(con));
-			Controller.cleanUpConnection(con);
+			session.setAttribute("accountTypes", Model.getAccountTypes(con));
+			Model.cleanUpConnection(con);
 			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
 		}
 		else{
@@ -51,7 +51,7 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			
 			createAccount(request, response);
 		
@@ -74,11 +74,11 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		String currency = request.getParameter("clientCurrency");
 		
 		request.getSession().setAttribute("clientID", clientID);
-		Connection con = Controller.getConnection(ds1);
+		Connection con = Model.getConnection(ds1);
 
 		try {
 			// Creating the account
-			Controller.createAccount(accountName, accountNumber, regNo, accountType, clientID, balance, currency, con);
+			Model.createAccount(accountName, accountNumber, regNo, accountType, clientID, balance, currency, con);
 			response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
 			
 		} catch (SQLException e) {
@@ -87,7 +87,7 @@ public class BankerCreateAccountServlet extends HttpServlet {
 			request.setAttribute("createAccountStatus", "Wrong value inserted");
 			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
 		}finally{
-			Controller.cleanUpConnection(con);
+			Model.cleanUpConnection(con);
 		}
 	}
 }

@@ -2,13 +2,13 @@
 	contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <html>
 <head>
-<title>Welcome</title>
+<title>Create Banker</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/custom.css">
 </head>
 
-<body>
+<body onload="createBankerStatus()">
 	<jsp:include page="AdminNavbar.jsp" />
 	<div class="row pad-row">
 		<div class="col-4 offset-4">
@@ -16,19 +16,31 @@
 				<h1>Create Banker</h1>
 				<div class="card-block">
 					<form action="" method="post">
-						<div class="form-group">
+						<div class="form-group" id="bankerFirstNameForm">
 							<input type="text" class="form-control" name="bankerFirstName"
-								placeholder="*First Name" maxlength="45">
+								placeholder="*First Name" maxlength="45" id="bankerFirstName"
+								oninput="errorInput(this.id)">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="bankerFirstNameHelp"></div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" id="bankerLastNameForm">
 							<input type="text" class="form-control" name="bankerLastName"
-								placeholder="*Last Name" maxlength="45">
+								placeholder="*Last Name" maxlength="45" id="bankerLastName"
+								oninput="errorInput(this.id)">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="bankerLastNameHelp"></div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" id="bankerPasswordForm">
 							<input type="password" class="form-control" name="bankerPassword"
-								placeholder="*Password">
+								id="bankerPassword" placeholder="*Password"
+								oninput="checkEmpty(this.id)">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="bankerPasswordHelp"></div>
 						</div>
 
 						<div class="form-group">
@@ -36,28 +48,42 @@
 								placeholder="E-mail" maxlength="45">
 						</div>
 
-						<div class="form-group">
-							<input type="text" class="form-control bfh-phone"
-								name="bankerTelephone" placeholder="Phone Number">
+						<div class="form-group" id="bankerTelephoneForm">
+							<input type="text" class="form-control" name="bankerTelephone"
+								placeholder="Phone Number" id="bankerTelephone"
+								oninput="numberError(this.id)" maxlength="20">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="bankerTelephoneHelp"></div>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group id=bankerRegForm">
 							<input type="text" class="form-control" name="bankerReg"
+								id="bankerReg" oninput="numberError(this.id)"
 								placeholder="*Registration Number">
+							<div
+								class="form-control-feedback alert alert-danger hidden-xs-up"
+								id="bankerRegHelp"></div>
 						</div>
-						<p>
-							${status}
-						</p>
+
+						<div class="form-control-feedback hidden-xs-up"
+							id="createBankerResult" role="alert">
+							<input type="text" class="form-control hidden-xs-up"
+								value="${createBankerStatus}" id="createBankerBool">
+						</div>
 
 						<button class="btn btn-primary btn-block btn-action" type="submit"
-							value="createClient">Create Banker</button>
+							value="createBanker">Create Banker</button>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
+	<script src="../assets/js/bootstrap-formhelpers.js"></script>
+	<script src="../assets/js/form-input.js"></script>
+	<script src="../assets/js/error-messages.js"></script>
 </body>
 </html>

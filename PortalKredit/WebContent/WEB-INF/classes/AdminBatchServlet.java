@@ -1,3 +1,4 @@
+
 import java.io.IOException;
 import java.sql.Connection;
 
@@ -9,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import classes.Controller;
+import classes.Model;
 
 /*
  * Servlet implementation class CreateAdminServlet
@@ -17,61 +18,61 @@ import classes.Controller;
 @WebServlet("/AdminBatch")
 public class AdminBatchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    @Resource(name = "jdbc/exampleDS")
-	private DataSource ds1;
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
-			checkButtons(request,response);
-		}
-		else{
+	@Resource(name = "jdbc/exampleDS")
+	private DataSource ds1;
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		if (Model.checkAuth(Model.Type.admin, request.getSession())) {
+			checkButtons(request, response);
+		} else {
 			request.getSession().invalidate();
 			response.sendRedirect("../index");
 		}
-	
-	}
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		
-		Controller.adminCheckAuth("AdminBatch.jsp",request,response);
-	}
-	private void checkButtons(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-		Connection con = Controller.getConnection(ds1);
-		if(request.getParameter("exchangeRate") != null) {
-			if(Controller.updateExchangeRates(con)){
-				request.setAttribute("status", "Updated exchange rates");
-			}else{
-				request.setAttribute("status", "Updating exchange rates failed");
-			}
 
-		} else if(request.getParameter("dInterestRate") != null) {
-			if(Controller.calculateInterestRates(con)){
-				request.setAttribute("status", "Daily interest updated");
-			}else{
-				request.setAttribute("status", "Updating daily interest failed");
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		Model.adminCheckAuth("AdminBatch.jsp", request, response);
+	}
+
+	private void checkButtons(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		Connection con = Model.getConnection(ds1);
+		// TODO change to include exchangerate
+		if (request.getParameter("exchangeRate") != null) {
+			Model.updateExchangeRates(con);
+			request.setAttribute("status", "exchangeU");
+		} else if (request.getParameter("dInterestRate") != null) {
+			if (Model.calculateInterestRates(con)) {
+				request.setAttribute("status", "dInterestRateS");
+			} else {
+				request.setAttribute("status", "dInterestRateF");
 			}
-		} else if(request.getParameter("yInterestRate") != null) {
-			if(Controller.giveAnualInterest(con)){
-				request.setAttribute("status", "Yearly interest updated");
-			}else{
-				request.setAttribute("status", "Updating yearly interest failed");
+		} else if (request.getParameter("yInterestRate") != null) {
+			if (Model.giveAnualInterest(con)) {
+				request.setAttribute("status", "yInterestRateS");
+			} else {
+				request.setAttribute("status", "yInterestRateU");
 			}
-		} else if(request.getParameter("backupTrsansactions") != null){
-			if(Controller.backupTransactions(con)){
-				request.setAttribute("status", "Transactions moved to backup");
-			}else{
-				request.setAttribute("status", "Backuping transactions failed");
-			}		
-		} else if(request.getParameter("insertExchangeRate") != null) {
-			if(Controller.insertExchangeRates(con)){
-				request.setAttribute("status", "New Exchange rates inserted");
-			}else{
-				request.setAttribute("status", "Failed to insert new exchange rates");
+		} else if (request.getParameter("backupTransactions") != null) {
+			if (Model.backupTransactions(con)) {
+				request.setAttribute("status", "backupTransactionsS");
+			} else {
+				request.setAttribute("status", "backupTransactionsF");
 			}
+		} else if (request.getParameter("insertExchangeRate") != null) {
+			Model.insertExchangeRates(con);
+			request.setAttribute("status", "exchangeI");
+
 		}
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 		doGet(request, response);
 	}
-	
 
 }
+

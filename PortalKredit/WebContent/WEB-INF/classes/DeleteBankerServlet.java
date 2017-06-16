@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import classes.Banker;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/AdminDeleteBanker")
 public class DeleteBankerServlet extends HttpServlet {
@@ -21,23 +21,28 @@ public class DeleteBankerServlet extends HttpServlet {
 	public DeleteBankerServlet(){
 		super();
 	}
+	
 	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Connection con = Controller.getConnection(ds1);
-		ArrayList<Banker> bankerList = Controller.getBankerList(con);
-		Controller.cleanUpConnection(con);
+		Connection con = Model.getConnection(ds1);
+		ArrayList<Banker> bankerList = Model.getBankerList(con);
+		Model.cleanUpConnection(con);
 		request.setAttribute("list", bankerList);
 		
-		Controller.adminCheckAuth("AdminDeleteBanker.jsp",request,response);
+		Model.adminCheckAuth("AdminDeleteBanker.jsp",request,response);
+		if(request.getAttribute("deleteBankerStatus") == null) {
+			request.setAttribute("deleteBankerStatus", 0);
+		}
 	}
+	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+		if(Model.checkAuth(Model.Type.admin, request.getSession())){
 			deleteBanker(request,response);
 		}
 		else{
@@ -45,15 +50,17 @@ public class DeleteBankerServlet extends HttpServlet {
 			response.sendRedirect("../index");
 		}
 	}
+	
 	private void deleteBanker(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		String bankerID = request.getParameter("username");
-		Connection con = Controller.getConnection(ds1);
-		if(Controller.deleteBanker(bankerID, con)){
-			request.setAttribute("status", bankerID + " was deleted");
+		Connection con = Model.getConnection(ds1);
+		if(Model.deleteBanker(bankerID, con)){
+			request.setAttribute("deleteBankerStatus", 1);
 		}else{
-			request.setAttribute("status", bankerID + " couldn't be deleted.");
+			request.setAttribute("deleteBankerStatus", -1);
 		}
-		Controller.cleanUpConnection(con);
+		request.setAttribute("deleteBanker", bankerID);
+		Model.cleanUpConnection(con);
 		doGet(request, response);
 	}
 

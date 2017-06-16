@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import classes.Controller;
+import classes.Model;
 
 /*
  * Servlet implementation class CreateAdminServlet
@@ -31,7 +31,7 @@ public class AdminFrontpageServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		Controller.adminCheckAuth("AdminControl.jsp",request,response);
+		Model.adminCheckAuth("AdminControl.jsp",request,response);
 
 	}
 
