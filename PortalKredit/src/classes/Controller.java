@@ -1335,7 +1335,7 @@ public final class Controller {
 					.prepareStatement("UPDATE \"DTUGRP16\".\"ACCOUNT\" SET \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" = "
 							+ "\"DTUGRP16\".\"ACCOUNT\".\"INTEREST\" + "
 							+ "(SELECT INTERESTRATE FROM \"DTUGRP16\".\"ACCOUNTTYPE\" WHERE \"DTUGRP16\".\"ACCOUNT\".\"ACCOUNTTYPE\" = \"DTUGRP16\".\"ACCOUNTTYPE\".\"ACCOUNTTYPE\")"
-							+ "/365.25*\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\"");
+							+ "*(\"DTUGRP16\".\"ACCOUNT\".\"BALANCE\"+ \"DTUGRP16\".\"ACCOUNT\".\"INTEREST\")/365.25");
 			ps.executeUpdate();
 			status = true;
 		} catch (Exception e) {
@@ -1370,7 +1370,7 @@ public final class Controller {
 
 
 	}
-
+	//updates the info of a client in the database as a banker
 	public static boolean editClient(String clientID, String firstName, String lastName, String email, String mobile,
 			String street, String bankerID, String postal, String country, Connection con) {
 		PreparedStatement ps = null;
@@ -1400,7 +1400,7 @@ public final class Controller {
 		}
 	}
 
-
+	//when a client edits his own info 
 	public static boolean clientEditClient(String clientID, String email, String mobile, String street, String postal,
 			Connection con) {
 		PreparedStatement ps = null;
@@ -1424,7 +1424,7 @@ public final class Controller {
 		cleanUpResult(null, ps);
 		}
 	}
-
+	// Changing password of a client
 	public static boolean changeClientPassword(String clientID, String password, Connection con) throws SQLException {
 		PreparedStatement ps = null;
 		try{
