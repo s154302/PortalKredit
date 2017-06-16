@@ -17,18 +17,18 @@
 		</div>
 		<div class="btn-group-vertical">
 			<form class="form-inline" action="AdminBatchServlet" method="post">
-				<button class="btn btn-warning btn-block" type="submit"
+				<button class="btn btn-primary btn-block" type="submit"
 					name="exchangeRate">Update Exchange Rates</button>
 
-				<button class="btn btn-warning btn-block" type="submit"
+				<button class="btn btn-primary btn-block" type="submit"
 					name="insertExchangeRate">Insert Exchange Rates</button>
 
-				<button class="btn btn-warning btn-block" type="submit"
+				<button class="btn btn-primary btn-block" type="submit"
 					name="dInterestRate">Update Daily Interest Rates</button>
 
-				<button class="btn btn-warning btn-block" type="submit"
+				<button class="btn btn-primary btn-block" type="submit"
 					name="yInterestRate">Update Yearly Interest Rates</button>
-				<button class="btn btn-warning btn-block" type="submit"
+				<button class="btn btn-primary btn-block" type="submit"
 					name="backupTransactions">Backup transactions</button>
 			</form>
 		</div>
