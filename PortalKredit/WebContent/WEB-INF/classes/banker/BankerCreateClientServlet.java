@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 import org.mindrot.jbcrypt.BCrypt;
 
 import classes.Banker;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/CreateClient")
 public class BankerCreateClientServlet extends HttpServlet {
@@ -30,7 +30,7 @@ public class BankerCreateClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			Banker banker = (Banker) session.getAttribute("user");
 			session.setAttribute("username", banker.getBankerID());
 			request.getRequestDispatcher("CreateClient.jsp").forward(request, response);
@@ -48,7 +48,7 @@ public class BankerCreateClientServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			createClient(request,response);
 		}
 		else{
@@ -76,9 +76,9 @@ public class BankerCreateClientServlet extends HttpServlet {
 		String postal = request.getParameter("clientCity");
 		String country = request.getParameter("clientCountry");
 
-		Connection con = Controller.getConnection(ds1);
+		Connection con = Model.getConnection(ds1);
 		
-			boolean status = Controller.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
+			boolean status = Model.createClient(firstName, lastName, hashed, CPR, email, mobile, street, bankerID,
 					postal, country, con);
 
 			if(status){
@@ -88,13 +88,13 @@ public class BankerCreateClientServlet extends HttpServlet {
 				request.setAttribute("status", "Client wasn't created due to an error");
 			}
 			Banker banker = (Banker) request.getSession().getAttribute("user");
-			banker.setClients(Controller.getClients(banker.getBankerID(), con));
+			banker.setClients(Model.getClients(banker.getBankerID(), con));
 			request.getSession().setAttribute("user", banker);
 
 			
 			response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
 		
-			Controller.cleanUpConnection(con);
+			Model.cleanUpConnection(con);
 		
 	}
 }

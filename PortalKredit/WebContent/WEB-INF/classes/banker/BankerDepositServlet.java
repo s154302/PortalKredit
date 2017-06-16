@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Banker;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/Deposit")
 public class BankerDepositServlet extends HttpServlet {
@@ -30,8 +30,10 @@ public class BankerDepositServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
-		
+		if(Model.checkAuth(Model.Type.banker, session)){
+		if(request.getAttribute("status") == null) {
+			request.setAttribute("status", 0);
+		}
 		request.getRequestDispatcher("Deposit.jsp").forward(request, response);
 		}
 		else{
@@ -44,8 +46,8 @@ public class BankerDepositServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
-		Connection con = Controller.getConnection(ds1);
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		Connection con = Model.getConnection(ds1);
+		if(Model.checkAuth(Model.Type.banker, session)){
 			Banker banker = (Banker)session.getAttribute("user");
 			accountNumber = request.getParameter("reciAcc");
 			regNo = banker.getRegNo();
@@ -53,19 +55,19 @@ public class BankerDepositServlet extends HttpServlet {
 			currency = request.getParameter("currency");
 			userId = (String) session.getAttribute("userID");
 			password = request.getParameter("password");
-			Boolean correctPw = Controller.authenticate(userId, password, con, session);
+			Boolean correctPw = Model.authenticate(userId, password, con, session);
 			
 			
 			
 			if(correctPw){
-				if(Controller.deposit(accountNumber, regNo, con, Double.parseDouble(strAmount), currency)){
-					request.setAttribute("status", "Sussces");
+				if(Model.deposit(accountNumber, regNo, con, Double.parseDouble(strAmount), currency)){
+					request.setAttribute("status", 1);
 				}else{
-					request.setAttribute("status", "Error somthing went wrong");
+					request.setAttribute("status", -1);
 					request = keepInputs(request);
 				}
 			}else{
-				request.setAttribute("status", "Wrong password");
+				request.setAttribute("status", -2);
 				request = keepInputs(request);
 			}
 		}
@@ -74,7 +76,7 @@ public class BankerDepositServlet extends HttpServlet {
 			response.sendRedirect("../index");
 		}
 		
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 		request.getRequestDispatcher("Deposit.jsp").forward(request, response);
 		
 	}

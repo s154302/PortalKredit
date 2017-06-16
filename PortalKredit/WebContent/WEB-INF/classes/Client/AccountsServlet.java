@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 import classes.Account;
 import classes.Client;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/client/accounts")
 public class AccountsServlet extends HttpServlet {
@@ -32,13 +32,13 @@ public class AccountsServlet extends HttpServlet {
 			throws ServletException, IOException{
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.client, session)){
+		if(Model.checkAuth(Model.Type.client, session)){
 		Client client = (Client) session.getAttribute("user");
-		Connection con = Controller.getConnection(ds1);
-		client.setAccounts(Controller.getAccounts(client.getClientID(), con));
+		Connection con = Model.getConnection(ds1);
+		client.setAccounts(Model.getAccounts(client.getClientID(), con));
 		session.setAttribute("accounts", client.getAccounts());
 
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 		request.getRequestDispatcher("accounts.jsp").forward(request, response);
 		}
 		else{
@@ -51,7 +51,7 @@ public class AccountsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession();
-		if(Controller.checkAuth(Controller.Type.client, session)){
+		if(Model.checkAuth(Model.Type.client, session)){
 			accountInfo(request, response, session);
 		}
 		else{
@@ -66,10 +66,10 @@ public class AccountsServlet extends HttpServlet {
 	private void accountInfo(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException{
 		String accountNumber = request.getParameter("accountNumber");
 		String regNo = request.getParameter("regNo");
-		Connection con = Controller.getConnection(ds1);
-		Account account = Controller.getAccountInfo(accountNumber, regNo, con);
+		Connection con = Model.getConnection(ds1);
+		Account account = Model.getAccountInfo(accountNumber, regNo, con);
 		session.setAttribute("account", account);
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 		response.sendRedirect("accountView");
 	}
 	

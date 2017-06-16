@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import classes.Account;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/banker/EditAccount")
 public class BankerEditAccountServlet extends HttpServlet {
@@ -27,7 +27,7 @@ public class BankerEditAccountServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			request.getRequestDispatcher("EditClientAccount.jsp").forward(request, response);
 		}
 		else{
@@ -43,7 +43,7 @@ public class BankerEditAccountServlet extends HttpServlet {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		
-		if(Controller.checkAuth(Controller.Type.banker, session)){
+		if(Model.checkAuth(Model.Type.banker, session)){
 			editAccount(request, response, session);
 		}
 		else{
@@ -60,13 +60,13 @@ public class BankerEditAccountServlet extends HttpServlet {
 		String accountType = request.getParameter("clientAccountType");
 		String clientID = request.getParameter("clientID");
 		String currency = request.getParameter("clientCurrency");
-		Connection con = Controller.getConnection(ds1);
-		Controller.editAccount(accountName, account.getAccountNumber(), account.getRegNo(), 
+		Connection con = Model.getConnection(ds1);
+		Model.editAccount(accountName, account.getAccountNumber(), account.getRegNo(), 
 				accountType, clientID, account.getBalance(), currency, con);
-		account = Controller.getAccountInfo(account.getAccountNumber(), account.getRegNo(), con);
+		account = Model.getAccountInfo(account.getAccountNumber(), account.getRegNo(), con);
 
 		session.setAttribute("account", account);
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 		response.sendRedirect(request.getContextPath() + "/banker/ViewClientAccount");
 	}
 }

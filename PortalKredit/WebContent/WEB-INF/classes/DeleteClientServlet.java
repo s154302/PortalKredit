@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import classes.Client;
-import classes.Controller;
+import classes.Model;
 
 @WebServlet("/AdminDeleteClient")
 public class DeleteClientServlet extends HttpServlet {
@@ -21,25 +21,28 @@ public class DeleteClientServlet extends HttpServlet {
 	public DeleteClientServlet(){
 		super();
 	}
+	
 	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Connection con= Controller.getConnection(ds1);
-		ArrayList<Client> clientList = Controller.getClientList(con);
+		Connection con= Model.getConnection(ds1);
+		ArrayList<Client> clientList = Model.getClientList(con);
 		request.setAttribute("list", clientList);
 
-		Controller.cleanUpConnection(con);
-		Controller.adminCheckAuth("AdminDeleteClient.jsp", request, response);
-		
+		Model.cleanUpConnection(con);
+		Model.adminCheckAuth("AdminDeleteClient.jsp", request, response);
+		if(request.getAttribute("deleteClientStatus") == null) {
+			request.setAttribute("deleteClientStatus", 0);
+		}
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		if(Controller.checkAuth(Controller.Type.admin, request.getSession())){
+		if(Model.checkAuth(Model.Type.admin, request.getSession())){
 		
 			deleteClient(request,response);
 		
@@ -50,25 +53,27 @@ public class DeleteClientServlet extends HttpServlet {
 		}
 		
 	}
+	
 	private void deleteClient(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		String search = request.getParameter("search-client");
 		String delete = request.getParameter("username");
-		Connection con= Controller.getConnection(ds1);
+		Connection con= Model.getConnection(ds1);
 		
 		if(search != null) {
-			ArrayList<Client> clientList = Controller.searchClient(request.getParameter("search-term"), con);
+			ArrayList<Client> clientList = Model.searchClient(request.getParameter("search-term"), con);
 			request.setAttribute("list", clientList);
 			request.getRequestDispatcher("AdminDeleteClient.jsp").forward(request, response);
 		}
 		if(delete != null) {
-			if(Controller.deleteClient(delete, con)){
-				request.setAttribute("status", delete + " was deleted.");
+			if(Model.deleteClient(delete, con)){
+				request.setAttribute("deleteClientStatus", 1);
 			}else{
-				request.setAttribute("status", delete + " couldn't be deleted");
+				request.setAttribute("deleteClientStatus", -1);
 			}
+			request.setAttribute("deleteClient", delete);
 			doGet(request, response);
 		}
-		Controller.cleanUpConnection(con);
+		Model.cleanUpConnection(con);
 	}
 	
 

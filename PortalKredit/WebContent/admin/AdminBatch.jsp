@@ -7,13 +7,16 @@
 <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 <link href="../assets/css/custom.css" rel="stylesheet">
 </head>
-<body>
+<body onload="batch()">
 	<jsp:include page="AdminNavbar.jsp"></jsp:include>
 
 	<div class="center-text col-4 offset-4 batch">
+		<div class="form-control-feedback hidden-xs-up text-center" id="batchResult"
+			role="alert">
+			<input type="hidden" value="${status}" id="status">
+		</div>
 		<div class="btn-group-vertical">
 			<form class="form-inline" action="AdminBatchServlet" method="post">
-				<p style="color: red">${status}</p>
 				<button class="btn btn-primary btn-block" type="submit"
 					name="exchangeRate">Update Exchange Rates</button>
 
@@ -26,13 +29,16 @@
 				<button class="btn btn-primary btn-block" type="submit"
 					name="yInterestRate">Update Yearly Interest Rates</button>
 				<button class="btn btn-primary btn-block" type="submit"
-					name="backupTrsansactions">Backup transactions</button>
+					name="backupTransactions">Backup transactions</button>
 			</form>
 		</div>
 	</div>
-
-</body>
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
+	<script src="../assets/js/bootstrap-formhelpers.js"></script>
+	<script src="../assets/js/form-input.js"></script>
+	<script src="../assets/js/error-messages.js"></script>
+</body>
+
 </html>

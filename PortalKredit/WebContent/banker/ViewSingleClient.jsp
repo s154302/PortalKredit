@@ -11,49 +11,56 @@
 
 <body>
 	<jsp:include page="BankerNavbar.jsp"></jsp:include>
-		<div class="row pad-row">
+	<div class="row pad-row">
 		<div class="col-4 offset-4">
 			<div class="card card-outline-primary text-center blue-outline">
-				<p style="color:green;"> ${deleteStatus}</p>
 				<h1>${clientName}'s Accounts</h1>
 				<div class="card-block">
+					<form action="CreateAccount" method="get">
+						<button class="btn btn-primary btn-block btn-action" type="submit">Create
+							Account</button>
+					</form>
 					<table class="table table-hover">
 						<thead>
 							<tr>
 								<th>Account Number</th>
-								<th> Balance</th>
+								<th>Account Name</th>
+								<th>Balance</th>
 							</tr>
 						</thead>
 
 						<tbody>
 
-							<c:forEach var="ob" items="${accounts}">
-								<tr data-toggle="collapse" data-target="#${ob.accountNumber}"
+							<c:forEach var="account" items="${accounts}">
+								<tr data-toggle="collapse" data-target="#${account.accountNumber}"
 									class="clickable">
-									<td><c:out value="${ob.accountNumber}" /></td>
-									<td><c:out value="${ob.balance}" /></td>
+									<td><c:out value="${account.accountNumber}" /></td>
+									<td><c:out value="${account.accountName}" /></td>
+									<td><c:out value="${account.balance}" /></td>
 								</tr>
 								<tr>
-									<td colspan="2">
-										<div id="${ob.accountNumber}" class="collapse">
+									<td colspan="3">
+										<div id="${account.accountNumber}" class="collapse">
 											<ul>
-												<li>Date: ${ob.transactions[0].dateOfTransaction} Amount: ${ob.transactions[0].amount}</li>
-												<li>Date: ${ob.transactions[1].dateOfTransaction} Amount: ${ob.transactions[1].amount}</li>
-												<li>Date: ${ob.transactions[2].dateOfTransaction} Amount: ${ob.transactions[2].amount}</li>
+												<li>Date: ${account.transactions[0].dateOfTransaction}
+													Amount: ${account.transactions[0].amount}</li>
+												<li>Date: ${account.transactions[1].dateOfTransaction}
+													Amount: ${account.transactions[1].amount}</li>
+												<li>Date: ${account.transactions[2].dateOfTransaction}
+													Amount: ${account.transactions[2].amount}</li>
 											</ul>
 											<form action="" method="post">
-												<input type="hidden" name="accountNumber" value="${ob.accountNumber}"/>
-												<input type="hidden" name="regNo" value="${ob.regNo}"/>	
+												<input type="hidden" name="accountNumber"
+													value="${account.accountNumber}" /> <input type="hidden"
+													name="regNo" value="${account.regNo}" />
 												<button class="btn btn-primary btn-block btn-action"
-													type="submit" value="${ob.accountNumber}">View Account</button>
+													type="submit" value="${account.accountNumber}">View
+													Account</button>
 											</form>
 										</div>
 									</td>
 								</tr>
 							</c:forEach>
-								<form class="btn btn-primary btn-block btn-action" action="CreateAccount" method="get">
-      								<button class="btn btn-primary btn-block btn-action" type="submit">Create Account</button>
-    							</form>
 						</tbody>
 					</table>
 				</div>
@@ -62,6 +69,9 @@
 		</div>
 	</div>
 	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="../assets/js/bootstrap.min.js"></script>
+	<script src="../assets/js/bootstrap-formhelpers.js"></script>
+	<script src="../assets/js/form-input.js"></script>
+	<script src="../assets/js/error-messages.js"></script>
 </body>
