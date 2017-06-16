@@ -70,7 +70,7 @@ public class BankerCreateAccountServlet extends HttpServlet {
 		String regNo = banker.getRegNo();
 		String accountType = request.getParameter("clientAccountType");
 		String clientID = (String) request.getSession().getAttribute("clientID");
-		double balance = Double.parseDouble(request.getParameter("clientBalance"));
+		String balance = (request.getParameter("clientBalance"));
 		String currency = request.getParameter("clientCurrency");
 		
 		request.getSession().setAttribute("clientID", clientID);
@@ -78,15 +78,14 @@ public class BankerCreateAccountServlet extends HttpServlet {
 
 		try {
 			// Creating the account
-			Model.createAccount(accountName, accountNumber, regNo, accountType, clientID, balance, currency, con);
-			response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
-			
-		} catch (SQLException e) {
+			Model.createAccount(accountName, accountNumber, regNo, accountType, clientID, Double.parseDouble(balance), currency, con);
+			request.setAttribute("createAccountStatus", 1);
+		} catch (Exception e) {
 			// Catching error and informing the user
 			e.printStackTrace();
-			request.setAttribute("createAccountStatus", "Wrong value inserted");
-			request.getRequestDispatcher("CreateAccount.jsp").forward(request, response);
+			request.setAttribute("createAccountStatus", -1);
 		}finally{
+			doGet(request, response);
 			Model.cleanUpConnection(con);
 		}
 	}
