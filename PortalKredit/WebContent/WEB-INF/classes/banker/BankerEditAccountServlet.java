@@ -28,7 +28,7 @@ public class BankerEditAccountServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		Connection con = Model.getConnection(ds1);
 		if(Model.checkAuth(Model.Type.banker, session)){
-			session.setAttribute("accountType", Model.getAccountTypes(con));
+			session.setAttribute("accountTypes", Model.getAccountTypes(con));
 			request.getRequestDispatcher("EditClientAccount.jsp").forward(request, response);
 		}
 		else{

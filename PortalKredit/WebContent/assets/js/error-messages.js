@@ -289,9 +289,43 @@ function editClientStatus() {
 	}
 }
 
+function deleteAccountStatus() {
+	var status = $("#deleteAccountBool").val();
+	console.log(status);
+	if (status == 0) {
+		$("#deleteAccountResult").addClass("hidden-xs-up");
+	} else if (status == 1) {
+		$("#deleteAccountResult")
+				.removeClass("hidden-xs-up")
+				.html(
+						"<strong>Error:</strong> Incorrect password.");
 
+	} else if (status == -1) {
+		$("#deleteAccountResult")
+				.removeClass("hidden-xs-up")
+				.html(
+						"<strong>Error:</strong> An error occurred. This account cannot be deleted.");
+	}
+}
 
+function createAccountStatus() {
+	var status = $("#createAccountBool").val();
 
+	if (status == 0) {
+		$("#createAccountResult").addClass("hidden-xs-up");
+	} else if (status == 1) {
+		$("#createAccountResult").removeClass("hidden-xs-up").html(
+				"<strong>Success:</strong> Account was created successfully.")
+				.addClass("alert alert-success");
+
+	} else if (status == -1) {
+		$("#createAccountResult")
+				.removeClass("hidden-xs-up")
+				.html(
+						"<strong>Error:</strong> An error occurred. Please review input and try again.")
+				.addClass("alert alert-danger");
+	}
+}
 
 
 

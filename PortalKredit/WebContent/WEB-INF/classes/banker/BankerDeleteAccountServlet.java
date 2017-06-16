@@ -47,7 +47,7 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		
 		Connection con = Model.getConnection(ds1);
-		// Clicked button canceled
+		// Clicked button cancel
 		if(request.getParameter("cancel") != null){
 			response.sendRedirect(request.getContextPath() + "/banker/ViewClientAccount");
 		
@@ -72,13 +72,13 @@ public class BankerDeleteAccountServlet extends HttpServlet {
 					response.sendRedirect(request.getContextPath() + "/banker/ViewSingleClient");
 				
 				} else {
-					request.setAttribute("deleteStatus", "This account cannot be deleted");
+					request.setAttribute("deleteStatus", -1);
 					request.getRequestDispatcher("DeleteAccount.jsp").forward(request, response);
 				}
 			
 				// If control did not accept
 			} else {
-				request.setAttribute("deleteStatus", "Wrong Password");
+				request.setAttribute("deleteStatus", 1);
 				request.getRequestDispatcher("DeleteAccount.jsp").forward(request, response);
 			}
 		}
