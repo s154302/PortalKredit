@@ -56,7 +56,7 @@ public class BankerEditClientServlet extends HttpServlet {
 	}
 
 	private void editClient(HttpServletRequest request, HttpServletResponse response, HttpSession session)
-			throws IOException {
+			throws IOException, ServletException {
 		String clientID = (String) session.getAttribute("clientID");
 		String firstName = request.getParameter("clientFirstName");
 		String lastName = request.getParameter("clientLastName");
@@ -70,7 +70,6 @@ public class BankerEditClientServlet extends HttpServlet {
 
 		Connection con = Model.getConnection(ds1);
 		try {
-
 			if (!request.getParameter("clientPassword").isEmpty()) {
 				Model.changeClientPassword(clientID, password, con);
 			}
@@ -79,11 +78,13 @@ public class BankerEditClientServlet extends HttpServlet {
 
 			session.setAttribute("clientID", clientID);
 			session.setAttribute("user", Model.getBankerInfo((String) session.getAttribute("userID"), con));
-			response.sendRedirect(request.getContextPath() + "/banker/ViewClients");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			request.setAttribute("editClientStatus", 1);
+		} catch (Exception e) {
+
+			request.setAttribute("editClientStatus", -1);
 			e.printStackTrace();
 		} finally {
+			doGet(request, response);
 			Model.cleanUpConnection(con);
 		}
 	}

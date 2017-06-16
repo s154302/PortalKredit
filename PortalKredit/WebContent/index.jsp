@@ -7,9 +7,23 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/css/custom.css" rel="stylesheet">
+<script type="text/javascript">
+	function loginError() {
+		var correctPassword = $("#passBool").val();
+		console.log(correctPassword);
+		if (correctPassword == 1) {
+			$("#loginError").removeClass("hidden-xs-up").html(
+					"<strong>Error:</strong> Incorrect Password");
+		} else if (correctPassword == 0) {
+			$("#loginError").addClass("hidden-xs-up");
+		} else {
+			$("#loginError").addClass("hidden-xs-up");
+		}
+	}
+</script>
 </head>
 
-<body onload="loginError();">
+<body onload="loginError()">
 	<div class="card" style="background-color: #505060;">
 		<div class="row">
 			<div class="col-md-12">
@@ -43,10 +57,10 @@
 									width="17" height="15" alt=""> Log in
 							</button>
 						</div>
-						<div class="alert alert-danger hidden-xs-up" role="alert"
-							id="loginError">
-							<input type="text" class="form-control hidden-xs-up"
-								value="${loginStatus}" id="passBool">
+						<div class="form-control-feedback alert alert-danger hidden-xs-up"
+							role="alert" id="loginError">
+							<input type="hidden" class="form-control" id="passBool"
+								value="${loginStatus}">
 						</div>
 					</form>
 				</div>
@@ -57,6 +71,5 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="assets/js/bootstrap.min.js"></script>
-	<script src="assets/js/index.js"></script>
 </body>
 </html>

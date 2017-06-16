@@ -277,7 +277,7 @@ function editClientStatus() {
 		$("#editClientResult").addClass("hidden-xs-up");
 	} else if (status == 1) {
 		$("#editClientResult").removeClass("hidden-xs-up").html(
-				"<strong>Success:</strong> Account type was created succesfully.")
+				"<strong>Success:</strong> Client has been edited succesfully.")
 				.addClass("alert alert-success");
 
 	} else if (status == -1) {

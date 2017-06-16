@@ -10,7 +10,7 @@
 </head>
 
 
-<body>
+<body onload="editClientStatus()">
 	<jsp:include page="BankerNavbar.jsp"></jsp:include>
 
 	<div class="row pad-row">
@@ -48,6 +48,7 @@
 						<input type="text" class="form-control hidden-xs-up"
 							value="${editClientStatus}" id="editClientBool">
 					</div>
+
 					<form action="EditClient" method="post">
 						<div class="form-group" id="clientFirstNameForm">
 							<input type="text" class="form-control" name="clientFirstName"

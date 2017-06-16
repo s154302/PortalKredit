@@ -40,7 +40,7 @@ public final class Model {
 			if(con!=null){
 				con.close();
 			}
-
+			
 		}catch(SQLException e){
 			
 		}
@@ -537,9 +537,7 @@ public final class Model {
 		
 		return true;
 		} catch(SQLException e){
-			e.printStackTrace();
-			return false;
-			
+			throw(e);			
 		}finally{
 			cleanUpResult(null,ps);
 		}
@@ -1369,7 +1367,7 @@ public final class Model {
 	}
 	//updates the info of a client in the database as a banker
 	public static boolean editClient(String clientID, String firstName, String lastName, String email, String mobile,
-			String street, String bankerID, String postal, String country, Connection con) {
+			String street, String bankerID, String postal, String country, Connection con) throws SQLException {
 		PreparedStatement ps = null;
 		try{
 		ps = con.prepareStatement(
@@ -1389,8 +1387,7 @@ public final class Model {
 		ps.executeUpdate();
 		return true;
 		}catch(SQLException e){
-			e.printStackTrace();
-			return false;
+			throw(e);
 		}
 		finally{
 		cleanUpResult(null, ps);

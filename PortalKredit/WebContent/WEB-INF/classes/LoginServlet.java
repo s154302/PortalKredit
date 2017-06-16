@@ -1,5 +1,4 @@
 
-
 import java.io.IOException;
 import java.sql.Connection;
 
@@ -21,26 +20,28 @@ import classes.Model;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    public LoginServlet() {
-        super();
-    }
+	public LoginServlet() {
+		super();
+	}
 
-    @Resource(name = "jdbc/exampleDS")
+	@Resource(name = "jdbc/exampleDS")
 	private DataSource ds1;
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		response.setContentType("text/html");
 		HttpSession session = request.getSession(true);
 		String userID = request.getParameter("userID");
 		String password = request.getParameter("password");
 		boolean st = false;
-		
-		Connection con= Model.getConnection(ds1);
-		
+
+		Connection con = Model.getConnection(ds1);
+
 		st = Model.authenticate(userID, password, con, session);
-		
-		if(st) {
+
+		if (st) {
 			session.setAttribute("userID", userID);
-			switch((Model.Type)session.getAttribute("type")){
+			switch ((Model.Type) session.getAttribute("type")) {
 			case client:
 				session.setAttribute("user", Model.getClientInfo(userID, con));
 				response.sendRedirect(request.getContextPath() + "/client/accounts");
@@ -56,21 +57,18 @@ public class LoginServlet extends HttpServlet {
 			default:
 				break;
 			}
-			request.setAttribute("loginStatus", 1);
+			request.setAttribute("loginStatus", 0);
 			Model.cleanUpConnection(con);
 		} else {
-			request.setAttribute("loginStatus", 0);
-			System.out.println(request.getAttribute("loginStatus"));
-			request.setAttribute("userID", userID);
-			request.getRequestDispatcher("index.jsp").forward(request, response);
-		}
-		
-		
-	}
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		if(request.getAttribute("loginStatus") == null) {
 			request.setAttribute("loginStatus", 1);
-		}	
+			request.setAttribute("userID", userID);
+			doGet(request, response);
+		}
+
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
 
