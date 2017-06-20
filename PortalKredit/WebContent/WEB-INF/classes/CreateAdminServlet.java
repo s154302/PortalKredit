@@ -51,7 +51,7 @@ public class CreateAdminServlet extends HttpServlet {
 	private void createAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		String adminID = request.getParameter("adminID");
 		String adminPassword = request.getParameter("adminPassword");
-		String hashed = BCrypt.hashpw(adminPassword, BCrypt.gensalt(14));
+		String hashed = BCrypt.hashpw(adminPassword, BCrypt.gensalt(10));
 		
 		Connection con = Model.getConnection(ds1);
 		boolean status = Model.createAdmin(adminID, hashed, con);

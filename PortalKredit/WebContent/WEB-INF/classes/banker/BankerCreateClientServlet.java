@@ -68,7 +68,7 @@ public class BankerCreateClientServlet extends HttpServlet {
 		String firstName = request.getParameter("clientFirstName");
 		String lastName = request.getParameter("clientLastName");
 		String password = request.getParameter("clientPassword");
-		String hashed = BCrypt.hashpw(password, BCrypt.gensalt(14));
+		String hashed = BCrypt.hashpw(password, BCrypt.gensalt(10));
 		String CPR = request.getParameter("clientCPR");
 		String email = request.getParameter("clientEmail");
 		String mobile = request.getParameter("clientTelephone");
